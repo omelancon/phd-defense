@@ -5,7 +5,7 @@ author: Your Name
 
 # Src {layout=title}
 
-A Lattice deck.
+A Lattice deck!
 
 # First idea
 
