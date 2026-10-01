@@ -1,0 +1,4 @@
+lattice-slides/
+.lattice-slides.rev
+src/.lattice-cache
+.venv/
