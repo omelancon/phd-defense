@@ -55,7 +55,7 @@ $(STAMP): $(REV) $(firstword $(MAKEFILE_LIST))
 	@echo "$$($(VENV)/bin/lattice --version) installed in $(VENV)"
 
 clean:
-	rm -rf src/talk.html .lattice-cache
+	rm -rf src/talk.html src/.lattice-cache
 
 cleanall: clean
 	rm -rf "$(VENV)" "$(LATTICE_DIR)" "$(REV)"
