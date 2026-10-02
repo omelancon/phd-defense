@@ -46,8 +46,8 @@ steps:
 ```
 
 {#sum-to-n-facts .reveal}
-- `i` starts at $0$
-- `i` stays a non-negative integer
+- `i` starts at $1$
+- `i` stays a positive integer
 - `sum` starts at $0$
 - `sum` stays non-negative
 - `sum-to-n` returns a non-negative integer
