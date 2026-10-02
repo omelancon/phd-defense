@@ -23,13 +23,13 @@ STAMP   := $(VENV)/.built
 
 .PHONY: all open lattice-slides venv clean cleanall
 
-all: src/talk.html
+all: src/main.html
 
 open: all
-	open src/talk.html &
+	open src/main.html &
 
-src/talk.html: venv src/talk.md
-	. $(VENV)/bin/activate && lattice build src/talk.md
+src/main.html: venv $(wildcard src/*.md)
+	. $(VENV)/bin/activate && lattice build src/main.md
 
 # Always runs: clone, or fast-forward main to origin. Then records the fingerprint in $(REV),
 # touching the file only when it differs so that the venv is not rebuilt for nothing. The
@@ -64,7 +64,7 @@ $(STAMP): $(REV)
 	@echo "$$($(VENV)/bin/lattice --version) installed in $(VENV)"
 
 clean:
-	rm -rf src/talk.html src/.lattice-cache
+	rm -rf src/main.html src/.lattice-cache
 
 cleanall: clean
 	rm -rf "$(VENV)" "$(LATTICE_DIR)" "$(REV)" "$(REV).tmp"

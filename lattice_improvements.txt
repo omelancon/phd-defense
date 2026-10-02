@@ -1,0 +1,46 @@
+Lattice improvements wanted
+===========================
+
+1. Named segments in code blocks
+--------------------------------
+
+Need: point at a location in a code block (arrows, highlights) without relying on
+exact line numbers and token positions.
+
+Today the only handles are `.lt-line[data-line="N"]` and Pygments token spans, so a
+target such as the `0` of `(i 0)` is written `.lt-line[data-line="2"] > :nth-child(10)`.
+Any edit to the source file silently shifts these targets.
+There is also no way to target a segment that spans several tokens, such as the whole
+expression `(i 0)`: each arrow points at a single token.
+
+Wanted: the ability to wrap a segment of the code in an element with an id, so that an
+arrow can say `to: i-init`. It must work when the code is read from a file
+(`code {file="programs/sum-to-n.scm"}`).
+
+Possible design:
+- markers in the source file itself, inside comments, stripped from the displayed
+  code, e.g. `#|@i-init|# (i 0) #|@end|#`, so the file stays the single source of truth.
+  
+The ids should follow the usual rules (unique on the slide, checked at build time).
+
+
+2. Anchors for arrow endpoints
+------------------------------
+
+Need: choose where an arrow leaves its `from` element and where it enters its `to`
+element: a side (left, right, top, bottom) or a precise angle.
+
+Today (checked in components/visual.py, runtime/components/arrow.js and spec 8.9):
+- with `from`, both ends sit where the line between the two box centers crosses the
+  box edges; nothing chooses the side;
+- `angle` exists but only without `from`: it sets the direction from the target toward
+  a free tail.
+To make every arrow leave from the left of its bullet, src/background.md puts an empty
+<span class="tail"></span> at the start of each item, shifted left by a <style> rule,
+and points `from` at it. This works but puts HTML in the bullets.
+
+Wanted, per arrow and per step:
+      from_anchor: left        # left, right, top, bottom, center, or an angle in degrees
+      to_anchor: bottom
+so that the endpoint is the middle of that side (or the point of the box edge at that
+angle from its center), and the curve leaves and enters in a matching direction.
