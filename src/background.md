@@ -123,7 +123,9 @@ steps:
 
 {.reveal}
 ::: callout {kind=info}
-Not specific to Scheme
+We use Scheme throughout
+
+But same for other languages
 :::
 ::::
 :::::
