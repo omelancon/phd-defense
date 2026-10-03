@@ -19,6 +19,7 @@
 {.reveal}
 - type check elimination
 - bound check elimination
+- other dynamic checks...
 ::::
 :::::
 
@@ -87,18 +88,52 @@ reveal 10, facts-arrow 5  # n-test
 
 ::::::
 
-::::: detour {#sum-to-n-usage label="Why is that useful?" key=w at=3 badge=step}
+::::::: detour {#sum-to-n-usage label="Why is that useful?" key=w at=3 badge=step}
 # Why is that useful?
 
-:::: columns
-::: column {width=2fr}
-```code {lang=scheme file="programs/sum-to-n-usage.scm"}
+::::: columns
+:::: column {width=1fr}
+```code-morph {#usage-morph lang=scheme room=fit}
+versions:
+  - {file: programs/sum-to-n-usage.scm, label: Scheme}
+  - {file: programs/sum-to-n-usage-checked.scm, label: "Scheme, vector-ref expanded"}
+  - {file: programs/sum-to-n-usage-unchecked.scm, label: "Scheme, checks removed"}
+  - {file: programs/sum-to-n-usage.py, lang: python, label: Python}
 ```
-:::
-::: column {width=3fr}
-123
+::::
+:::: column {width=1fr}
+{.reveal}
+```arrow {#usage-arrow color=detour curve=0.2 from_anchor=left}
+steps:
+  - from: '#usage-facts > li:nth-child(1)'
+    to: access
+    to_anchor: 330
+  - from: '#usage-facts > li:nth-child(2)'
+    to: int-check
+    to_anchor: right
+  - from: '#usage-facts > li:nth-child(3)'
+    to: nonneg-check
+    to_anchor: right
+```
+
+{#usage-facts .reveal}
+- `(sum-to-n 3)` is used for array access
+- check that `index` is an integer <span style="color: var(--lt-good)">&#10004;</span>
+- check that `index` is non&#8209;negative <span style="color: var(--lt-good)">&#10004;</span>
+
+{.reveal}
+::: callout {kind=info}
+Not specific to Scheme
 :::
 ::::
-
-
 :::::
+
+```timeline
+reveal 2                          # index used for array access, arrow at (vector-ref v index)
+usage-morph 1, reveal 3, usage-arrow 1   # vector-ref expanded; arrow at (integer? index)
+reveal 4, usage-arrow 2           # non-negative, arrow at (>= index 0)
+usage-morph 2                     # the two checks removed
+usage-morph 3, reveal 5           # the same program in Python
+```
+
+:::::::

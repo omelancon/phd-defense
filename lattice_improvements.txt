@@ -1,5 +1,5 @@
-Lattice improvements wanted
-===========================
+Lattice improvements wanted for the PhD defense deck
+====================================================
 
 1. Named segments in code blocks
 --------------------------------
@@ -8,19 +8,24 @@ Need: point at a location in a code block (arrows, highlights) without relying o
 exact line numbers and token positions.
 
 Today the only handles are `.lt-line[data-line="N"]` and Pygments token spans, so a
-target such as the `0` of `(i 0)` is written `.lt-line[data-line="2"] > :nth-child(10)`.
-Any edit to the source file silently shifts these targets.
+target such as the `0` of `(i 0)` is written `.lt-line[data-line="2"] > :nth-child(10)`
+(see src/background.md). Any edit to the source file silently shifts these targets.
 There is also no way to target a segment that spans several tokens, such as the whole
 expression `(i 0)`: each arrow points at a single token.
 
 Wanted: the ability to wrap a segment of the code in an element with an id, so that an
 arrow can say `to: i-init`. It must work when the code is read from a file
-(`code {file="programs/sum-to-n.scm"}`).
+(`code {file="programs/sum-to-n.scm"}`), which is the case here.
 
-Possible design:
-- markers in the source file itself, inside comments, stripped from the displayed
+Possible designs:
+- an option on the code block that names segments by matching text, for example
+      marks:
+        i-init: "(i 0)"                       # first occurrence
+        i-step: {text: "(+ i 1)", line: 5}    # disambiguated by line
+  the build wraps the matched characters in <span id="i-init" class="lt-mark">, even
+  when the match crosses Pygments token boundaries (split and re-open token spans);
+- or markers in the source file itself, inside comments, stripped from the displayed
   code, e.g. `#|@i-init|# (i 0) #|@end|#`, so the file stays the single source of truth.
-  
 The ids should follow the usual rules (unique on the slide, checked at build time).
 
 

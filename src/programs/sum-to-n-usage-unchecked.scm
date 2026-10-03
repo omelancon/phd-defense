@@ -5,4 +5,6 @@
         (loop (+ i 1) (+ sum i)))))
 
 (let ((index (sum-to-n 3)))
-  (display #|@access|# (vector-ref v index) #|@end|#))
+  (display (if (< index (vector-length v))
+               (##vector-ref v index)
+               (fail))))
