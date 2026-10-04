@@ -7,37 +7,37 @@
 ```code {lang=scheme file="programs/sum-to-n.scm"}
 ```
 
-::::: columns
-:::: column {width=1fr}
+::: columns
+::: column {width=1fr}
 ::detour-badge{ref=sum-to-n-assert}
 {.reveal}
 - fails if `n` is not a number
 - returns a non-negative integer
-::::
-:::: column {width=1fr}
+::: /column
+::: column {width=1fr}
 ::detour-badge{ref=sum-to-n-usage}
 {.reveal}
 - type check elimination
 - bound check elimination
 - other dynamic checks...
-::::
-:::::
+::: /column
+::: /columns
 
-:::::: detour {#sum-to-n-assert label="What can we assert about this function?" key=q at=1 badge=step}
+::: detour {#sum-to-n-assert label="What can we assert about this function?" key=q at=1 badge=step}
 # What can we assert about this function?
 
-::::: columns
-:::: column {width=2fr}
+::: columns
+::: column {width=2fr}
 ```code {lang=scheme file="programs/sum-to-n.scm"}
 ```
-::::
-:::: column {width=3fr}
+::: /column
+::: column {width=3fr}
 {.reveal}
-:::group
+::: group
 **To the human eye**
 
 $\sum_{i=1}^{n} i \geqslant 0$
-:::
+::: /group
 
 {.reveal}
 **A more methodical approach**
@@ -71,8 +71,8 @@ steps:
 {#sum-to-n-conclusion .reveal}
 - `sum-to-n` returns a non-negative integer
 - `sum-to-n` fails if `n` is not a number
-::::
-:::::
+::: /column
+::: /columns
 
 ```timeline
 reveal 1                  # To the human eye
@@ -86,13 +86,13 @@ reveal 9, facts-arrow 4   # result
 reveal 10, facts-arrow 5  # n-test
 ```
 
-::::::
+::: /detour
 
-::::::: detour {#sum-to-n-usage label="Why is that useful?" key=w at=3 badge=step}
+::: detour {#sum-to-n-usage label="Why is that useful?" key=w at=3 badge=step}
 # Why is that useful?
 
-::::: columns
-:::: column {width=1fr}
+::: columns
+::: column {width=1fr}
 ```code-morph {#usage-morph lang=scheme room=fit}
 versions:
   - {file: programs/sum-to-n-usage.scm, label: Scheme}
@@ -100,8 +100,8 @@ versions:
   - {file: programs/sum-to-n-usage-unchecked.scm, label: "Scheme, checks removed"}
   - {file: programs/sum-to-n-usage.py, lang: python, label: Python}
 ```
-::::
-:::: column {width=1fr}
+::: /column
+::: column {width=1fr}
 {.reveal}
 ```arrow {#usage-arrow color=detour curve=0.2 from_anchor=left}
 steps:
@@ -126,9 +126,9 @@ steps:
 We use Scheme throughout
 
 But same for other languages
-:::
-::::
-:::::
+::: /callout
+::: /column
+::: /columns
 
 ```timeline
 reveal 2                          # index used for array access, arrow at (vector-ref v index)
@@ -138,4 +138,4 @@ usage-morph 2                     # the two checks removed
 usage-morph 3, reveal 5           # the same program in Python
 ```
 
-:::::::
+::: /detour
