@@ -41,7 +41,7 @@ versions:
   - lift `vector?` out of the loop
   - fixnum arithmetic
   - vector access known to be safe
-  - can this be removed?
+  - can this test be removed?
 ::: /column
 ::: /columns
 
