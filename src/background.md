@@ -40,7 +40,7 @@ versions:
   {.reveal}
   - lift `vector?` out of the loop
   - fixnum arithmetic
-  - vector access known to be safe
+  - removed bound checks
   - can this test be removed?
 ::: /column
 ::: /columns
