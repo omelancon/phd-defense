@@ -27,6 +27,9 @@ versions:
   - file: programs/background-findv-optimized.scm
     label: "redundant checks removed"
     highlight: vref
+  - file: programs/background-findv-optimized.scm
+    label: "redundant checks removed"
+    highlight: ref-fix
 ```
 ::: /column
 ::: column {width=4fr}
@@ -38,6 +41,7 @@ versions:
   - lift `vector?` out of the loop
   - fixnum arithmetic
   - vector access known to be safe
+  - can this be removed?
 ::: /column
 ::: /columns
 

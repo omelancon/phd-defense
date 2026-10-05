@@ -8,6 +8,6 @@
       (fail)))
 
 (let ((arg (findv v odd?)))
-  (if (fixnum? arg)
+  (if #|@ref-fix|#(fixnum? arg)#|@end|#
       #|@vref|#(##vector-ref v arg)#|@end|#
       (fail)))
