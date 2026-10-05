@@ -1,8 +1,0 @@
-(define (sum-to-n n)
-  (let loop ((i 1) (sum 0))
-    (if (> i n)
-        sum
-        (loop (+ i 1) (+ sum i)))))
-
-(let ((index (sum-to-n 3)))
-  (display #|@access|# (vector-ref v index) #|@end|#))
