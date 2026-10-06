@@ -66,16 +66,33 @@ reveal ..end, findv-morph ..end        # each sub-bullet with its highlight
 
 # Abstract interpretation of `findv` {#findv-absint}
 
+:::columns
+:::column {#findv-ai-src width=1fr}
+```code-morph {#findv-ai-morph lang=scheme room=fit}
+versions:
+  - file: programs/background-findv-expanded.scm
+    label: "expanded operators"
+  - file: programs/background-findv-absint.scm
+    label: "expanded operators"
+    highlight: [vec-check, bound-check]
+```
+:::/column
+:::column {#findv-ai-cfg width=0}
 ```abstract-interp-anim {#findv-ai program="programs/findv-absint.bbv" height=470}
 direction: TB
-show: [label, context]
+show: [label, context, code]
 panel: [worklist, history]
 history: [L.i]
 prims: {pred: {args: [any, any], result: bool}}
 vector_bounds: false
 thresholds: [sign, maxfix-1, maxfix]
 ```
+:::/column
+:::/columns
 
-::: notes
-`##vector-length` returns at most maxfix, so after `i < len` the index is at most maxfix-1 and `(fx+? i 1)` cannot overflow: its overflow check disappears, `fixnum?` always succeeds, and the generic and flonum additions are never reached. The call `(pred v i)` is the opaque test `pred` here.
-:::
+```timeline
+width findv-ai-src=0 findv-ai-cfg=1fr       # the code makes room for the analysis
+findv-ai ..end                              # the analysis, one frame per step
+width findv-ai-src=1fr findv-ai-cfg=0
+findv-ai-morph +1   # back to the code: the checks it proved redundant
+```
