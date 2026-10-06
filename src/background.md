@@ -78,10 +78,11 @@ versions:
 ```
 :::/column
 :::column {#findv-ai-cfg width=0}
-```abstract-interp-anim {#findv-ai program="programs/findv-absint.bbv" height=470}
-direction: TB
+```abstract-interp-anim {#findv-ai program="programs/findv-absint.bbv"}
+direction: LR
 show: [label, context, code]
 panel: [worklist, history]
+panel_at: below
 history: [L.i]
 prims: {pred: {args: [any, any], result: bool}}
 vector_bounds: false
