@@ -45,11 +45,22 @@ versions:
 ::: /column
 ::: /columns
 
+```arrow {#why}
+steps:
+  - null
+  - {to: vec-check, angle: 315, length: 260, label: "checked at every iteration"}
+  - {to: fix-check, angle: 315, label: "index arithmetic will always be on small integers"}
+  - {to: ref-vec, angle: 45, length: 220, label: "already checked in findv"}
+  - {to: ref-hi, angle: 45, label: "findv known to return valid index"}
+  - null
+```
+
 ```timeline
 reveal 1                               # the program
 reveal +1, findv-morph +1              # expanded operators, what they add highlighted
 reveal +1, findv-morph +1              # the redundant checks
-reveal +1, findv-morph +1              # redundant checks removed, nothing highlighted
+why ..+4                               # why four of them are redundant, one arrow each
+reveal +1, findv-morph +1, why end     # redundant checks removed, nothing highlighted
 reveal ..end, findv-morph ..end        # each sub-bullet with its highlight
 ```
 
