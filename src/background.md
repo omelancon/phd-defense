@@ -15,7 +15,7 @@ versions:
     highlight: changed
   - file: programs/background-findv-expanded.scm
     label: "expanded operators"
-    highlight: [vec-check, fix-check, flo-check, ref-vec, ref-lo, ref-hi]
+    highlight: [vec-check, fix-check, ovf-check, flo-check, ref-vec, ref-lo, ref-hi]
   - file: programs/background-findv-optimized.scm
     label: "redundant checks removed"
   - file: programs/background-findv-optimized.scm
@@ -40,7 +40,7 @@ versions:
   {.reveal}
   - lift `vector?` out of the loop
   - fixnum arithmetic
-  - removed bound checks
+  - eliminated bound checks
   - can this test be removed?
 ::: /column
 ::: /columns
@@ -52,3 +52,19 @@ reveal +1, findv-morph +1              # the redundant checks
 reveal +1, findv-morph +1              # redundant checks removed, nothing highlighted
 reveal ..end, findv-morph ..end        # each sub-bullet with its highlight
 ```
+
+# Abstract interpretation of `findv` {#findv-absint}
+
+```abstract-interp-anim {#findv-ai program="programs/findv-absint.bbv" height=470}
+direction: TB
+show: [label, context]
+panel: [worklist, history]
+history: [L.i]
+prims: {pred: {args: [any, any], result: bool}}
+vector_bounds: false
+thresholds: [sign, maxfix-1, maxfix]
+```
+
+::: notes
+`##vector-length` returns at most maxfix, so after `i < len` the index is at most maxfix-1 and `(fx+? i 1)` cannot overflow: its overflow check disappears, `fixnum?` always succeeds, and the generic and flonum additions are never reached. The call `(pred v i)` is the opaque test `pred` here.
+:::

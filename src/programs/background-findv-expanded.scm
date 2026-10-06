@@ -1,12 +1,12 @@
 (define (findv v pred)
   (let loop ((i 0))
     (cond
-      ((>= i (if #|@vec-check|#(vector? v)#|@end|#
-                 (##vector-length v)
-                 (fail)))
+      ((>= i (if #|@vec-check|#(vector? v)#|@end|# (##vector-length v)
+                             (fail)))
        #f)
       ((pred v i) i)
-      (else (loop (cond (#|@fix-check|#(fixnum? i)#|@end|# (fx+ i 1))
+      (else (loop (cond (#|@fix-check|#(fixnum? i)#|@end|#
+                         (or #|@ovf-check|#(fx+? i 1)#|@end|# (##+ i 1)))
                         (#|@flo-check|#(flonum? i)#|@end|# (fl+ i 1.0))
                         (else (##+ i 1))))))))
 

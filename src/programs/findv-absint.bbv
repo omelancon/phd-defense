@@ -1,0 +1,25 @@
+; findv with its operators expanded (previous slide), as basic blocks for abstract interpretation.
+; The call (pred v i) is written as the opaque test pred(v, i), declared in the slide's prims, so
+; that the drawing stays small; it tells nothing about v or i.
+; ##vector-length returns at most maxfix, so i < len keeps i + 1 a fixnum: the overflow check of
+; fx+? always succeeds, the fixnum? test too, and the generic and flonum additions are never reached.
+function findv(v)
+A:  goto L(i=0)
+L:  if vector?(v) goto M else goto K
+K:  fail
+M:  len = ##vector-length(v)
+    if >=(i, len) goto N else goto P
+N:  return #f
+P:  if pred(v, i) goto R else goto S
+R:  return i
+S:  if fixnum?(i) goto T else goto U
+T:  i2 = fx+?(i, 1)
+    if i2 goto T2 else goto O
+T2: goto L(i=i2)
+O:  i3 = ##+(i, 1)
+    goto L(i=i3)
+U:  if flonum?(i) goto W else goto X
+W:  i4 = fl+(i, 1.0)
+    goto L(i=i4)
+X:  i5 = ##+(i, 1)
+    goto L(i=i5)
