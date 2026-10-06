@@ -10,4 +10,4 @@
 (let ((arg (findv v odd?)))
   (if (and (fixnum? arg)
            #|@bound-check|#(fx>= arg 0) (fx< arg (##vector-length v))#|@end|#)
-      (##vector-ref v arg) (fail)))1
+      (##vector-ref v arg) (fail)))
