@@ -1,3 +1,9 @@
+# Abstract Interpretation {layout=title}
+
+# Union of Incoming Contexts {#union-of-incoming-contexts}
+
+# Narrowing of Outgoing Contexts {#narrowing-of-outgoing-contexts}
+
 # Abstract Interpretation of `findv` {#findv-absint}
 
 :::columns
