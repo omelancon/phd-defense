@@ -1,0 +1,9 @@
+; Abstract interpretation overview (background): a diamond CFG, one branch (A) and one join point (D).
+; A checks x, B or C stores y accordingly, and D returns the stored y.
+function abs(x)
+A:  if <(x, 0) goto B else goto C
+B:  y = -(0, x)
+    goto D
+C:  y = x
+    goto D
+D:  return y

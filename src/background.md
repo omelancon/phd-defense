@@ -2,19 +2,58 @@
 
 # Abstract Interpretation Overview {.small}
 
+:::columns
+:::column {width=2fr}
+{.reveal}
 - Technique for sound approximation of program semantics.
-- Executes the program on abstract values instead of concrete values.
+- Executes the program on abstract values.
+  {.reveal}
   - Abstract values represent sets of concrete values.
 
+{.reveal}
 **Algorithm sketch:**
+
+{.reveal}
 - Start from an entry point with a generic context.
 - Propagate abstract values through the control-flow graph.
+  {.reveal}
   - A block's context is *at least* the union of its predecessors'.
   - Branches narrow contexts flowing to their successors.
 - Repeat until a fixed point is reached.
 
+{.reveal}
 **Dynamic languages**
-- Wide range of possible run-time behaviors. Hence the approximation is often coarse.
+
+{.reveal}
+- Wide range of possible run-time behaviors: approximation is often coarse.
+:::/column
+:::column {width=1fr}
+```bbv-cfg {#overview-cfg program="programs/overview-diamond.bbv" height=430}
+```
+:::/column
+:::/columns
+
+```arrow {#overview-parts}
+steps:
+  - null
+  - {to: overview-cfg.A, to_anchor: top, angle: 120, length: 90, label: "entry point"}
+  - null
+  - {to: overview-cfg.D, to_anchor: left, angle: 200, length: 90, label: "join point"}
+  - {to: overview-cfg.A, to_anchor: right, angle: 290, length: 80, label: "branch point"}
+  - null
+```
+
+```timeline
+reveal 1                          # sound approximation
+reveal 2                          # abstract values
+reveal 3                          # sets of concrete values
+reveal 5, overview-parts 1        # "Algorithm sketch" with its first point: the entry point
+reveal 6, overview-parts 2        # propagate through the CFG
+reveal 7, overview-parts 3        # union at the join point
+reveal 8, overview-parts 4        # narrowing at the branch point
+reveal 9, overview-parts end      # fixed point
+reveal 11                         # "Dynamic languages" with its point
+```
 
 
 # Union of Incoming Contexts {#union-of-incoming-contexts}
