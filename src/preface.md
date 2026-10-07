@@ -45,6 +45,15 @@ steps:
   - null
 ```
 
+```arrow {#cfg-parts}
+steps:
+  - null
+  - {to: "[data-instance=\"preface/avg-graph\"] .lt-bbv-node[data-vid='4']", to_anchor: 200, length: 60, label: "basic block"}
+  - {to: "[data-instance=\"preface/avg-graph\"] .lt-bbv-edge.k-goto", to_anchor: left, length: 60, label: "jump"}
+  - {to: "[data-instance=\"preface/avg-graph\"] .lt-bbv-node[data-vid='2']", to_anchor: left, length: 40, label: "branch"}
+  - null
+```
+
 ```timeline
 reveal 1                  # dynamic languages
 reveal 2                  # dynamic behaviour
@@ -53,6 +62,8 @@ types 1..5                # what each `+` receives, one arrow per step
 reveal 4, types end, avg-code 1   # all the operators that decide at run time
 reveal 5                  # removing the checks
 width avg-src=0 dyn-notes=0 avg-cfg=2fr cfg-notes=3fr, reveal 6   # the CFG replaces the code
+cfg-parts 1..3            # basic block, jump, branch: one arrow per step
+reveal 7, cfg-parts end   # the arrow goes away with the next bullet
 reveal ..end
 ```
 
