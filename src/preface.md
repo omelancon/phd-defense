@@ -48,9 +48,9 @@ steps:
 ```arrow {#cfg-parts}
 steps:
   - null
-  - {to: "[data-instance=\"preface/avg-graph\"] .lt-bbv-node[data-vid='4']", to_anchor: 200, length: 60, label: "basic block"}
-  - {to: "[data-instance=\"preface/avg-graph\"] .lt-bbv-edge.k-goto", to_anchor: left, length: 60, label: "jump"}
-  - {to: "[data-instance=\"preface/avg-graph\"] .lt-bbv-node[data-vid='2']", to_anchor: left, length: 40, label: "branch"}
+  - {to: avg-graph.B, to_anchor: 200, length: 60, label: "basic block"}
+  - {to: avg-graph.A->L, to_anchor: left, length: 60, label: "jump"}
+  - {to: avg-graph.L, to_anchor: left, length: 40, label: "branch"}
   - null
 ```
 
