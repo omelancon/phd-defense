@@ -137,18 +137,20 @@ reveal ..end, findv-morph ..end        # each sub-bullet with its highlight
 
 {.reveal}
 :::group
-## 1. Background on Abstract interpretation
-An existing program analysis technique and its pitfalls.
+## 0. Background on Abstract interpretation
+An existing program analysis technique and why it fails?
 :::
 
 {.reveal}
 :::group
-## 2. Static Basic Block Versioning
-A novel technique that unifies abstract interpretation and code duplication.
+## 1. Static Basic Block Versioning (SBBV)
+- Main: A technique that unifies abstract interpretation and code duplication.
+- Minor: Extended contexts for vector support.
 :::
 
 {.reveal}
 :::group
-## 3. Lambda Versioning
-An interprocedural extension to Static Basic Block Versioning.
+## 2. Lambda Versioning (ΛV)
+- Main: An extension of SBBV for interprocedural/whole-program analysis.
+- Minor: Exploration of merge heuristics for Baisc Block Versioning.
 :::
