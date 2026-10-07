@@ -1,0 +1,6 @@
+; Narrowing of outgoing contexts (background), type check: x can be anything,
+; and fixnum? tells each branch more about it.
+function g(x)
+A:  if fixnum?(x) goto B else goto C
+B:  return x
+C:  fail

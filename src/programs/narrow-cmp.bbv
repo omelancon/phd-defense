@@ -1,0 +1,6 @@
+; Narrowing of outgoing contexts (background), comparison: x is a nonnegative integer,
+; and the test x <= 10 tells each branch more about it.
+function f(x: fx | bg [0, ∞))
+A:  if <=(x, 10) goto B else goto C
+B:  return x
+C:  return #f

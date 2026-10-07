@@ -85,6 +85,43 @@ The context at the entry of C is the union of what A and B send it. Thresholds 0
 
 # Narrowing of Outgoing Contexts {#narrowing-of-outgoing-contexts}
 
+:::columns
+:::column {#narrow-cmp-col width=2fr}
+```abstract-interp-anim {#narrow-cmp program="programs/narrow-cmp.bbv" height=420}
+show: [label, context, code]
+```
+:::/column
+:::column {#narrow-type-col width=0}
+```abstract-interp-anim {#narrow-type program="programs/narrow-type.bbv" height=420}
+show: [label, context, code]
+```
+:::/column
+:::column {width=3fr}
+{.reveal}
+- gain information at conditional branches
+  {.reveal}
+  - arithmetic comparisons
+  - type checks
+:::/column
+:::/columns
+
+```timeline
+reveal 1                                  # the idea
+narrow-cmp 1                              # A: x is a nonnegative integer
+narrow-cmp 2, reveal 2                    # x <= 10 holds: x in [0, 10] in B
+narrow-cmp 3                              # x <= 10 fails: x in [11, ∞) in C
+narrow-cmp ..end                          # B and C, then the fixed point
+width narrow-cmp-col=0 narrow-type-col=2fr   # the second example replaces the first
+narrow-type 1                             # A: x can be anything
+narrow-type 2, reveal 3                   # fixnum?(x) holds: x is a fixnum in B
+narrow-type 3                             # fixnum?(x) fails: x is anything but a fixnum in C
+narrow-type ..end                         # B and C, then the fixed point
+```
+
+::: notes
+A test tells each branch something new. On the true branch of x <= 10, x is in [0, 10] (so also a fixnum); on the false branch it is in [11, ∞). On the true branch of fixnum?(x), x is a fixnum; on the false branch, anything but a fixnum.
+:::
+
 # Abstract Interpretation of `findv` {#findv-absint}
 
 :::columns
