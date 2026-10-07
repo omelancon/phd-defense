@@ -1,4 +1,4 @@
-# Abstract interpretation of `findv` {#findv-absint}
+# Abstract Interpretation of `findv` {#findv-absint}
 
 :::columns
 :::column {#findv-ai-src width=1fr}
@@ -11,7 +11,7 @@ versions:
     highlight: [vec-check, fix-check, ovf-check, flo-check, ref-vec, ref-lo, ref-hi, ref-fix]
   - file: programs/background-findv-absint.scm
     label: "expanded operators"
-    highlight: [vec-check, bound-check]
+    highlight: [vec-check, bound-check, ref-fix]
 ```
 :::/column
 :::column {#findv-ai-cfg width=0}
@@ -20,7 +20,7 @@ direction: LR
 show: [label, context, code]
 panel: [worklist, history]
 panel_at: below
-history: [L.i]
+history: [S.i]
 prims: {pred: {args: [any, any], result: bool}}
 vector_bounds: false
 thresholds: [sign, maxfix-1, maxfix]
