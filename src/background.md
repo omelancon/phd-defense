@@ -67,9 +67,10 @@ union-ai 6                # C receives {1} from B: union
 union-ai 7..9             # C sends [0, 1] to B, B computes [1, 2]
 union-lattice 3..4        # on the lattice: [0, 1] ∪ [1, 2]
 union-lattice 5, maxfix-note 1   # widening to [0, maxfix-1], and what maxfix is
+maxfix-note end
 union-ai 10               # C receives [1, 2] from B: union with widening
 union-ai 11..13           # C sends [0, maxfix-1] to B, B computes [1, maxfix]
-union-lattice 6, maxfix-note end   # on the lattice: [0, maxfix-1] ∪ [1, maxfix]
+union-lattice 6           # on the lattice: [0, maxfix-1] ∪ [1, maxfix]
 union-lattice 7
 union-ai 14               # C receives [1, maxfix] from B: union
 union-ai 15..17           # C sends [0, maxfix] to B, B computes [1, maxfix+1]
