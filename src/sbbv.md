@@ -43,6 +43,8 @@ show: [label]
 :::column {#poly-sbbv-col width=0}
 ```bbv-anim {#poly-sbbv program="programs/polynomial.bbv" algorithm=sbbv heuristic=arithmetic limit=3 direction=LR height=480}
 show: [label, context, code]
+paths:
+  - input: {x: fl}
 ```
 :::/column
 :::/columns
@@ -66,6 +68,12 @@ steps:
   - null
 ```
 
+```arrow {#poly-flonum}
+steps:
+  - null
+  - {to: poly-sbbv.D1, to_anchor: bottom, angle: 290, length: 90, label: "(flonum? x) checked only once"}
+```
+
 ```timeline
 poly-morph 1                                        # expand the operators
 reveal 1                                            # the CFG of the expanded program
@@ -81,7 +89,8 @@ poly-sbbv 12..17                                    # E and F queue J3 and J4
 poly-sbbv 18, poly-versions 5                       # over the limit: J4 will be merged
 poly-sbbv 19, poly-versions 6                       # the generic and overflow versions merge into J5
 poly-sbbv 20, poly-versions end
-poly-sbbv ..end                                     # the rest of the specialization
+poly-sbbv ..end-1                                   # the rest of the specialization
+poly-sbbv end, poly-flonum 1                        # the path of a flonum x: one flonum? test
 ```
 
 ::: notes
