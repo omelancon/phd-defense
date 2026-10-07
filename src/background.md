@@ -117,21 +117,17 @@ steps:
 ```
 
 ```timeline
-union-ai 1..5             # A sends {0} to C, C sends it to B, B computes i + 1
+union-ai 1..6             # C receives {1} from B: union
 union-lattice 1..2        # on the lattice: {0} ∪ {1}
-union-ai 6                # C receives {1} from B: union
-union-ai 7..9             # C sends [0, 1] to B, B computes [1, 2]
+union-ai 7..10            # C receives [1, 2] from B: union with widening
 union-lattice 3..4        # on the lattice: [0, 1] ∪ [1, 2]
 union-lattice 5, maxfix-note 1   # widening to [0, maxfix-1], and what maxfix is
-maxfix-note end
-union-ai 10               # C receives [1, 2] from B: union with widening
-union-ai 11..13           # C sends [0, maxfix-1] to B, B computes [1, maxfix]
+maxfix-note end            
+union-ai 11..14           # C receives [1, maxfix] from B: union
 union-lattice 6           # on the lattice: [0, maxfix-1] ∪ [1, maxfix]
 union-lattice 7
-union-ai 14               # C receives [1, maxfix] from B: union
-union-ai 15..17           # C sends [0, maxfix] to B, B computes [1, maxfix+1]
+union-ai 15..18           # C receives [1, maxfix+1] from B: union with widening
 union-lattice 8..10       # on the lattice: [0, maxfix] ∪ [1, maxfix+1], then widening
-union-ai 18               # C receives [1, maxfix+1] from B: union with widening
 union-ai ..end            # one more round changes nothing: the fixed point, [0, ∞)
 ```
 

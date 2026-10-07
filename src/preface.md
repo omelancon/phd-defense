@@ -152,5 +152,5 @@ reveal ..end, findv-morph ..end        # each sub-bullet with its highlight
 :::group
 ## Lambda Versioning (ΛV)
 - Main: An extension of SBBV for interprocedural/whole-program analysis.
-- <small>Minor: Exploration of merge heuristics for Baisc Block Versioning.</small>
+- <small>Minor: Exploration of merge heuristics for Basic Block Versioning.</small>
 :::
