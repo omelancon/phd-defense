@@ -1,5 +1,22 @@
 # Abstract Interpretation {layout=title}
 
+# Abstract Interpretation Overview {.small}
+
+- Technique for sound approximation of program semantics.
+- Executes the program on abstract values instead of concrete values.
+  - Abstract values represent sets of concrete values.
+
+**Algorithm sketch:**
+- Start from an entry point with a generic context.
+- Propagate abstract values through the control-flow graph.
+  - A block's context is *at least* the union of its predecessors'.
+  - Branches narrow contexts flowing to their successors.
+- Repeat until a fixed point is reached.
+
+**Dynamic languages**
+- Wide range of possible run-time behaviors. Hence the approximation is often coarse.
+
+
 # Union of Incoming Contexts {#union-of-incoming-contexts}
 
 :::columns

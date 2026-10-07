@@ -26,7 +26,3 @@ Requests for the Lattice developers, from the defense deck.
 2. The panel of abstract-interp-anim at `panel_at: right` is capped at 40% of the width, so a
    widening chain such as `∇ [0, maxfix-1]` wraps inside its chip. An option for the panel width (or
    letting the history list take the room it needs) would allow the panel beside a narrow CFG.
-
-3. abstract-interp-anim shows a fixnum with no known interval as `fx (-∞, ∞)` (slide "Narrowing of
-   Outgoing Contexts", true branch of `fixnum?(x)`). A fixnum is bounded, so `fx` alone, or
-   `fx [minfix, maxfix]`, would read better; `(-∞, ∞)` suits only `fx | bg` or an unknown integer.
