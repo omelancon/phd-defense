@@ -1,0 +1,10 @@
+; average.scm (preface) as basic blocks: the loop and its exit, generic arithmetic.
+function average(lst)
+A:  goto L(rest=lst, sum=0, n=0)
+L(rest, sum, n):  if null?(rest) goto R else goto B
+R:  return /(sum, n)
+B:  x = car(rest)
+    rest2 = cdr(rest)
+    sum2 = +(sum, x)
+    n2 = +(n, 1)
+    goto L(rest=rest2, sum=sum2, n=n2)

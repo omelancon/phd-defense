@@ -1,17 +1,16 @@
 # Preface {#preface .small}
 
 :::columns
-:::column {#fib-src width=2fr}
+:::column {#avg-src width=2fr}
 
-```code-steps {#fib-code lang=scheme file="programs/fib.scm"}
+```code-steps {#avg-code lang=scheme file="programs/average.scm"}
 steps:
-  - plus                      # `+` alone
-  - [le, plus, sub1, sub2]    # every arithmetic and comparison operator
+  - [sum-add, n-add, div, cdr] # every operator with extra work
 ```
 :::/column
-:::column {#fib-cfg width=0}
+:::column {#avg-cfg width=0}
 
-```bbv-cfg {#fib-graph program="programs/fib.bbv" height=510}
+```bbv-cfg {#avg-graph program="programs/average.bbv" height=510}
 ```
 :::/column
 :::column {#dyn-notes width=3fr}
@@ -20,7 +19,7 @@ steps:
 - *Dynamic*: behaviour decided at run time
 - Example: `+` on integers, floats, mixed arithmetic (even strings in some languages)
 - Run-time decisions: extra work in every operator
-- Goal: remove these dynamic checks, for efficiency without losing expressiveness
+- Goal: remove these dynamic checks, for efficiency without losing safety
 :::/column
 :::column {#cfg-notes width=0}
 {.reveal}
@@ -35,13 +34,25 @@ steps:
 :::/column
 :::/columns
 
+```arrow {#types to_anchor=right}
+steps:
+  - null
+  - {to: n-add, to_anchor: 330, angle: 330, length: 260, label: "n counts elements: always a fixnum (small integer)"}
+  - {to: elem, angle: 330, length: 150, label: "an element of the list: depends on the caller"}
+  - {to: ints, angle: 345, length: 250, label: "here, integers (fixnums)"}
+  - {to: flos, angle: 345, length: 190, label: "here, floating-point numbers (flonums)"}
+  - {to: sum-add, angle: 330, length: 150, label: "fixnum + fixnum, flonum + flonum, or even 0 + 36.6"}
+  - null
+```
+
 ```timeline
 reveal 1                  # dynamic languages
 reveal 2                  # dynamic behaviour
-reveal 3, fib-code 1      # `+`: highlight its expression
-reveal 4, fib-code 2      # all the operators that decide at run time
+reveal 3                  # `+`: highlight the two additions
+types 1..5                # what each `+` receives, one arrow per step
+reveal 4, types end, avg-code 1   # all the operators that decide at run time
 reveal 5                  # removing the checks
-width fib-src=0 dyn-notes=0 fib-cfg=2fr cfg-notes=3fr, reveal 6   # the CFG replaces the code
+width avg-src=0 dyn-notes=0 avg-cfg=2fr cfg-notes=3fr, reveal 6   # the CFG replaces the code
 reveal ..end
 ```
 
