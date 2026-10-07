@@ -1,0 +1,28 @@
+Requests for the Lattice developers, from the defense deck.
+
+1. A stepping Graphviz diagram (slide "Union of Incoming Contexts", src/background.md)
+
+   Need: the interval lattice of thesis figure 2 beside the abstract interpretation, with nodes and
+   edges highlighted step by step (operands of a union, its result, the widening edge).
+   Today: `dot` is static, and `graph-anim` only draws circles laid out by Lattice (no boxes, no
+   dashed or dotted edges, no "..." stubs, no ranks chosen by the author). The deck therefore ships a
+   local plugin, `hasse-anim` (src/lattice_plugins.py, src/plugins/), that lays out a .dot file once
+   and sets a state per node and edge per position.
+   Wanted syntax, roughly what the plugin does:
+
+     ```dot-anim {#lat file="figures/interval-lattice.dot" height=470}
+     steps:
+       - null
+       - nodes: {s0: active, s1: active}
+         caption: "{0} ∪ {1}"
+       - nodes: {i01: done}
+         edges: {s0->i01: path}
+     ```
+
+   with the theme states of graph-anim, deltas between steps, DOT `class="hidden"` for elements
+   drawn only when a step names them, and its nodes and edges as arrow parts (`lat.mf1`,
+   `lat.i02->mf1`), as the plugin already provides.
+
+2. The panel of abstract-interp-anim at `panel_at: right` is capped at 40% of the width, so a
+   widening chain such as `∇ [0, maxfix-1]` wraps inside its chip. An option for the panel width (or
+   letting the history list take the room it needs) would allow the panel beside a narrow CFG.

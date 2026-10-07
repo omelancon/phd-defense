@@ -1,0 +1,7 @@
+; Union of incoming contexts (background): A and B both jump to C, and C loops back to B.
+; A starts i at 0, B adds 1; the context of C is the union of what A and B send it.
+function count()
+A:  goto C(i=0)
+B:  i2 = +(i, 1)
+    goto C(i=i2)
+C:  goto B

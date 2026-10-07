@@ -1,0 +1,25 @@
+/* `hasse-anim` (local plugin): a static Graphviz drawing whose nodes and edges change state. */
+.hasse-anim{display:flex;flex-direction:column;gap:8px;min-height:0;flex:1;color:var(--lt-edge)}
+.hs-canvas{display:flex;min-height:0}
+.hs-canvas svg{width:100%;height:100%;overflow:visible}
+.hasse-anim text{font-family:var(--lt-font-code);fill:var(--lt-ink)}
+.hs-node path,.hs-node polygon,.hs-node ellipse{fill:var(--lt-bg);stroke:var(--lt-edge);stroke-width:1.4}
+.hs-edge path{stroke:var(--lt-edge);stroke-width:1.4}
+.hs-edge polygon{fill:var(--lt-edge);stroke:var(--lt-edge)}
+.hs-animate .hs-node path,.hs-animate .hs-node polygon,.hs-animate .hs-node text,
+.hs-animate .hs-edge path,.hs-animate .hs-edge polygon,.hs-animate .hs-node,.hs-animate .hs-edge{
+  transition:fill .3s,stroke .3s,stroke-width .3s,opacity .3s}
+/* nodes */
+.hs-node[data-st=operand] path,.hs-node[data-st=operand] polygon{fill:var(--lt-active);stroke:var(--lt-active)}
+.hs-node[data-st=operand] text{fill:var(--lt-on-strong);font-weight:700}
+.hs-node[data-st=union] path,.hs-node[data-st=union] polygon{fill:var(--lt-hl-bg);stroke:var(--lt-warn);stroke-width:2.2;stroke-dasharray:5 3}
+.hs-node[data-st=result] path,.hs-node[data-st=result] polygon{fill:var(--lt-good);stroke:var(--lt-good)}
+.hs-node[data-st=result] text{fill:var(--lt-on-strong);font-weight:700}
+.hs-node[data-st=past] path,.hs-node[data-st=past] polygon{stroke:var(--lt-warn);stroke-width:2.2}
+.hs-node[data-st=dim],.hs-edge[data-st=dim]{opacity:.3}
+.hs-node[data-st=hidden],.hs-edge[data-st=hidden]{opacity:0}
+/* edges */
+.hs-edge[data-st=union] path,.hs-edge[data-st=past] path{stroke:var(--lt-warn);stroke-width:3}
+.hs-edge[data-st=widen] path{stroke:var(--lt-warn);stroke-width:3;stroke-dasharray:7 5}
+.hs-edge[data-st=union] polygon,.hs-edge[data-st=widen] polygon,.hs-edge[data-st=past] polygon{fill:var(--lt-warn);stroke:var(--lt-warn)}
+.hs-caption{font-size:20px;color:var(--lt-muted);min-height:1.5em;font-style:italic;text-align:center}

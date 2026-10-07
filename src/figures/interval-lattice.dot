@@ -1,0 +1,58 @@
+// The lattice of integer intervals, as thesis figure 2, with the fixnum thresholds of the
+// "Union of Incoming Contexts" slide (0, 1, maxfix-1, maxfix) instead of the 8, 32 and 64-bit ones.
+// Drawn bottom to top; node names are the ones the slide's `hasse-anim` steps refer to.
+digraph lattice {
+  graph [rankdir=BT, nodesep=0.22, ranksep=0.34, splines=true];
+  node  [shape=box, style="rounded,filled", fillcolor=white, fontname="Courier", fontsize=15,
+         height=0.34, margin="0.10,0.04"];
+  edge  [dir=none, penwidth=1.2];
+
+  bot  [label="∅"];
+  s0   [label="{0}"];
+  s1   [label="{1}"];
+  s2   [label="{2}"];
+  i01  [label="[0, 1]"];
+  i12  [label="[1, 2]"];
+  i02  [label="[0, 2]"];
+  mf1  [label="[0, maxfix-1]"];
+  mf1b [label="[1, maxfix]"];
+  mf   [label="[0, maxfix]"];
+  mfpb [label="[1, maxfix+1]"];
+  mfp  [label="[0, maxfix+1]"];
+  pos  [label="[0, ∞)"];
+  top  [label="(-∞, ∞)"];
+
+  // the parts of the lattice that are not drawn
+  node [shape=plaintext, style="", label="···", fontsize=14, height=0.2, width=0.3];
+  u1l; u1r; u2l; u2r; u3l; u3r; u4l; u5l; u5r;
+  node [shape=point, width=0.02, label=""];
+  j1; j2;
+
+  bot -> {s0 s2};
+  bot -> {u1l u1r} [style=dashed];
+  s0 -> i01;  s1 -> i01;  s1 -> i12;  s2 -> i12;
+  s0 -> u2l [style=dashed];  s2 -> u2r [style=dashed];
+  i01 -> i02;  i12 -> i02;
+  i01 -> u3l [style=dashed];  i12 -> u3r [style=dashed];
+  i02 -> j1 [style=dotted, weight=20];
+  j1 -> {mf1 mf1b} [style=dashed];
+  mf1 -> mf;  mf1b -> mf;  mf1b -> mfpb;
+  mf -> mfp;  mfpb -> mfp;
+  mf1 -> u4l [style=dashed];  mf -> u5l [style=dashed];  mfpb -> u5r [style=dashed];
+  mfp -> j2 [style=dotted];
+  j2 -> pos [style=dotted];
+  pos -> top [style=dotted, minlen=2];
+
+  bot -> s1 [weight=20];
+  // left to right order within a rank
+  {rank=same; u1l -> s0 -> s1 -> s2 -> u1r [style=invis]}
+  {rank=same; u2l -> i01 -> i12 -> u2r [style=invis]}
+  {rank=same; u3l -> i02 -> u3r [style=invis]}
+  {rank=same; u4l -> mf -> mfpb [style=invis]}
+  {rank=same; u5l -> mfp -> u5r [style=invis]}
+  {rank=same; mf1 -> mf1b [style=invis]}
+
+  // unions with widening: drawn when the slide reaches them
+  i02:w -> mf1:s [class="hidden", dir=forward, style=dashed, constraint=false, arrowsize=0.8];
+  mfp:w -> pos:s [class="hidden", dir=forward, style=dashed, constraint=false, arrowsize=0.8];
+}

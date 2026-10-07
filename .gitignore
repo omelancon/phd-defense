@@ -3,3 +3,4 @@ lattice-slides/
 src/.lattice-cache
 .venv/
 src/*.html
+__pycache__/
