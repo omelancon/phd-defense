@@ -1,0 +1,23 @@
+; polynomial.scm (SBBV, first example) with its operators expanded, as basic blocks.
+; * tests the type of x once (both operands are x); + does not test the constant 1.
+; J is the join point after *: it receives y from the four ways of computing x * x
+; (fixnum, fixnum with overflow, flonum, generic).
+function polynomial(x)
+A:  if fixnum?(x) goto B else goto D
+B:  y = fx*?(x, x)
+    if y goto J else goto C
+C:  y = ##*(x, x)
+    goto J
+D:  if flonum?(x) goto E else goto F
+E:  y = fl*(x, x)
+    goto J
+F:  y = ##*(x, x)
+    goto J
+J(y):  if fixnum?(y) goto K else goto M
+K:  r = fx+?(y, 1)
+    if r goto R else goto L
+R:  return r
+L:  return ##+(y, 1)
+M:  if flonum?(y) goto N else goto P
+N:  return fl+(y, 1.0)
+P:  return ##+(y, 1)

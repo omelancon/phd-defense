@@ -1,0 +1,11 @@
+(define (polynomial x)
+  (let ((y (cond (#|@x-fix|#(fixnum? x)#|@end|#
+                  (or (fx*? x x)
+                      (##* x x)))
+                 (#|@x-flo|#(flonum? x)#|@end|# (fl* x x))
+                 (else (##* x x)))))
+    (cond ((fixnum? y)
+           (or (fx+? y 1)
+               (##+ y 1)))
+          ((flonum? y) (fl+ y 1.0))
+          (else (##+ y 1)))))
