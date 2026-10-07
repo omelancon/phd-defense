@@ -35,6 +35,11 @@ versions:
 ```bbv-cfg {#poly-cfg program="programs/polynomial.bbv" height=500}
 ```
 :::/column
+:::column {#poly-follow-col width=0}
+```bbv-cfg {#poly-follow program="programs/polynomial.bbv" follow=poly-sbbv height=480}
+show: [label]
+```
+:::/column
 :::column {#poly-sbbv-col width=0}
 ```bbv-anim {#poly-sbbv program="programs/polynomial.bbv" algorithm=sbbv heuristic=arithmetic limit=3 direction=LR height=480}
 show: [label, context, code]
@@ -65,7 +70,7 @@ steps:
 poly-morph 1                                        # expand the operators
 reveal 1                                            # the CFG of the expanded program
 poly-morph 2, poly-join 1                           # the tests of x in *, and the union at the join point J
-width poly-src=0 poly-cfg-col=0 poly-sbbv-col=1fr, poly-join end, poly-morph 3   # SBBV replaces the CFG, highlight off
+width poly-src=0 poly-cfg-col=0 poly-follow-col=1fr poly-sbbv-col=5fr, poly-join end, poly-morph 3   # SBBV, with the source CFG following, replaces the code and the CFG; highlight off
 poly-sbbv 1..3                                      # A specialized, B dequeued
 poly-sbbv 4, poly-versions 1                        # B queues the first version of J
 poly-sbbv 5, poly-versions 2
