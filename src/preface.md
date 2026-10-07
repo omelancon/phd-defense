@@ -40,7 +40,7 @@ steps:
   - {to: n-add, to_anchor: 330, angle: 330, length: 260, label: "n counts elements: always a fixnum (small integer)"}
   - {to: elem, angle: 330, length: 150, label: "an element of the list: depends on the caller"}
   - {to: ints, angle: 345, length: 250, label: "here, integers (fixnums)"}
-  - {to: flos, angle: 345, length: 190, label: "here, floating-point numbers (flonums)"}
+  - {to: flos, angle: 345, length: 190, label: "here, floats (flonums)"}
   - {to: sum-add, angle: 330, length: 150, label: "fixnum + fixnum, flonum + flonum, or even 0 + 36.6"}
   - null
 ```
