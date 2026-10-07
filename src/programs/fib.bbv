@@ -1,0 +1,10 @@
+; fib.scm (preface) as basic blocks: one block per test or call, generic arithmetic.
+function fib(n)
+A:  if <=(n, 1) goto B else goto C
+B:  return n
+C:  n1 = -(n, 1)
+    call fib(n1) -> D
+D:  r1 = #res
+    n2 = -(n, 2)
+    call fib(n2) -> E
+E:  return +(r1, #res)

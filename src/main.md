@@ -7,6 +7,7 @@ author: Olivier Melançon
 
 ## — Olivier Melançon
 
+::include{file="preface.md"}
 ::include{file="background.md"}
 ::include{file="sbbv.md"}
 ::include{file="lv.md"}
