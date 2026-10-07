@@ -6,6 +6,9 @@
 versions:
   - file: programs/background-findv-expanded.scm
     label: "expanded operators"
+  - file: programs/background-findv-expanded.scm
+    label: "expanded operators"
+    highlight: [vec-check, fix-check, ovf-check, flo-check, ref-vec, ref-lo, ref-hi, ref-fix]
   - file: programs/background-findv-absint.scm
     label: "expanded operators"
     highlight: [vec-check, bound-check]
@@ -26,6 +29,7 @@ thresholds: [sign, maxfix-1, maxfix]
 :::/columns
 
 ```timeline
+findv-ai-morph +1
 width findv-ai-src=0 findv-ai-cfg=1fr       # the code makes room for the analysis
 findv-ai ..end                              # the analysis, one frame per step
 width findv-ai-src=1fr findv-ai-cfg=0

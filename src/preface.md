@@ -132,3 +132,23 @@ why ..+4                               # why four of them are redundant, one arr
 reveal +1, findv-morph +1, why end     # redundant checks removed, nothing highlighted
 reveal ..end, findv-morph ..end        # each sub-bullet with its highlight
 ```
+
+# Table of Content
+
+{.reveal}
+:::group
+## 1. Background on Abstract interpretation
+An existing program analysis technique and its pitfalls.
+:::
+
+{.reveal}
+:::group
+## 2. Static Basic Block Versioning
+A novel technique that unifies abstract interpretation and code duplication.
+:::
+
+{.reveal}
+:::group
+## 3. Lambda Versioning
+An interprocedural extension to Static Basic Block Versioning.
+:::
