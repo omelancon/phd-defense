@@ -9,5 +9,5 @@
 
 (let ((arg (findv v odd?)))
   (if (and #|@ref-fix|#(fixnum? arg)#|@end|#
-           #|@bound-check|#(fx>= arg 0) (fx< arg (##vector-length v))#|@end|#)
+           #|@bound-check|#(fx< arg (##vector-length v))#|@end|#)
       (##vector-ref v arg) (fail)))

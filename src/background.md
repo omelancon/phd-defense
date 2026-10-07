@@ -34,4 +34,27 @@ width findv-ai-src=0 findv-ai-cfg=1fr       # the code makes room for the analys
 findv-ai ..end                              # the analysis, one frame per step
 width findv-ai-src=1fr findv-ai-cfg=0
 findv-ai-morph +1   # back to the code: the checks it proved redundant
+findv-ai-arrows 1   # the check removable by Static Basic Block Versioning
+findv-ai-arrows 2   # the check removable by Lambda Versioning
+findv-ai-arrows 3   # the check removable by vector-extended contexts
+```
+
+```arrow {#findv-ai-arrows curve=0}
+steps:
+  - null
+  - to: vec-check
+    to_anchor: top
+    angle: 15
+    length: 340
+    label: "removable by Static Basic Block Versioning"
+  - to: ref-fix
+    to_anchor: right
+    angle: 0
+    length: 300
+    label: "removable by Lambda Versioning"
+  - to: bound-check
+    to_anchor: right
+    angle: 0
+    length: 260
+    label: "removable by vector-extended contexts"
 ```
