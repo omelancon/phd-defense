@@ -77,7 +77,7 @@ steps:
   - nodes: {i01: result}
     edges: {s0->i01: union, s1->i01: union}
     caption: "{0} ∪ {1} = [0, 1]"
-  - nodes: {s0: past, s1: null, i01: operand, i12: operand}
+  - nodes: {s0: operand, s1: null, i01: past, i12: operand}
     edges: {s1->i01: null}
     caption: "[0, 1] ∪ [1, 2]"
   - nodes: {i02: union}
@@ -86,13 +86,13 @@ steps:
   - nodes: {i02: past, mf1: result}
     edges: {i02->mf1: widen}
     caption: "2 is not a threshold: widened to [0, maxfix-1]"
-  - nodes: {i01: past, i12: null, mf1: operand, mf1b: operand}
+  - nodes: {i01: past, i12: null, mf1: past, mf1b: operand}
     edges: {i12->i02: null}
     caption: "[0, maxfix-1] ∪ [1, maxfix]"
   - nodes: {mf: result}
     edges: {mf1->mf: union, mf1b->mf: union}
     caption: "[0, maxfix-1] ∪ [1, maxfix] = [0, maxfix]"
-  - nodes: {mf1: past, mf1b: null, mf: operand, mfpb: operand}
+  - nodes: {mf1: past, mf1b: null, mf: past, mfpb: operand}
     edges: {mf1b->mf: null}
     caption: "[0, maxfix] ∪ [1, maxfix+1]"
   - nodes: {mfp: union}
@@ -158,14 +158,14 @@ show: [label, context, code]
 :::/columns
 
 ```timeline
-reveal 1                                  # the idea
+reveal 1..2                                  # the idea
 narrow-cmp 1                              # A: x is a nonnegative integer
-narrow-cmp 2, reveal 2                    # x <= 10 holds: x in [0, 10] in B
+narrow-cmp 2                              # x <= 10 holds: x in [0, 10] in B
 narrow-cmp 3                              # x <= 10 fails: x in [11, ∞) in C
 narrow-cmp ..end                          # B and C, then the fixed point
-width narrow-cmp-col=0 narrow-type-col=2fr   # the second example replaces the first
+width narrow-cmp-col=0 narrow-type-col=2fr, reveal 3   # the second example replaces the first
 narrow-type 1                             # A: x can be anything
-narrow-type 2, reveal 3                   # fixnum?(x) holds: x is a fixnum in B
+narrow-type 2                            # fixnum?(x) holds: x is a fixnum in B
 narrow-type 3                             # fixnum?(x) fails: x is anything but a fixnum in C
 narrow-type ..end                         # B and C, then the fixed point
 ```
