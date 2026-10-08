@@ -181,7 +181,7 @@ vp-morph 1                                          # expand vector-length, vect
 reveal 1                                            # the CFG of the expanded program
 vp-morph 2, vp-absint 1                             # the vector? test of vector-ref: abstract interpretation removes it
 vp-morph 3, vp-absint 2                             # the vector? test of vector-length, at the loop head: it stays
-width vp-src=0 vp-cfg-col=0 vp-follow-col=1fr vp-sbbv-col=5fr, vp-absint end, vp-morph 4   # SBBV, with the source CFG following, replaces the code and the CFG; highlight off
+width vp-src=0 vp-cfg-col=0 vp-follow-col=1fr vp-sbbv-col=10fr, vp-absint end, vp-morph 4   # SBBV, with the source CFG following, replaces the code and the CFG; highlight off
 vp-sbbv 1..2                                        # A specialized, L1 queued
 vp-heads 1                                          # the first version of the loop head
 vp-sbbv 3..4                                        # L1 specialized: its vector? test stays
