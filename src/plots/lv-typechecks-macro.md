@@ -1,25 +1,19 @@
 # ΛV Results: Type Checks, Macro Benchmarks {#plot-lv-typechecks-macro .small}
 
 :::columns
-:::column {#lv-typechecks-macro-inl width=1fr}
+:::column {width=1fr}
 ```plot {backend=vega source="thesis_plots.py:lv_typechecks_macro_inlined" width=4.6 height=2.55}
 ```
 :::/column
-:::column {#lv-typechecks-macro-hyp width=0}
+:::column {width=1fr}
 ```plot {backend=vega source="thesis_plots.py:lv_typechecks_macro_hyperfunction" width=4.6 height=2.55}
 ```
 :::/column
 :::/columns
 
-{.reveal}
 - `arithmetic`: about half of the type checks gone at limit 3, little gain after
 - What remains: values read from lists and vectors, not tracked by the contexts
 - `arithmetic` beats `similarity`, which beats `random`; same with hyperfunctions
-
-```timeline
-width lv-typechecks-macro-hyp=1fr     # the hyperfunction panel slides in beside the inlined one
-reveal 1..end
-```
 
 ::: notes
 Thesis Figure 19. Lower is better. Solid lines: ΛV; dashed: SBBV (left panel only). Macro

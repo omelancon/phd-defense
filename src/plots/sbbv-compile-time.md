@@ -6,7 +6,6 @@
 ```
 :::/column
 :::column {width=2fr}
-{.reveal}
 - Compile time relative to compilation without SBBV
 - Grows roughly linearly with the limit
 - Steeper in Gambit (8.4× at limit 20, macro): a module is one C function, duplication strains the C compiler

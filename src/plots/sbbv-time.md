@@ -6,7 +6,6 @@
 ```
 :::/column
 :::column {width=2fr}
-{.reveal}
 - Execution time relative to compilation without SBBV (y axis starts at 0.6)
 - Gambit, macro: fastest at limit 2 (89%), then about 93%
 - Bigloo, macro: about 91% from limit 1

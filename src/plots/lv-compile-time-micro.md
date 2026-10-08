@@ -1,25 +1,19 @@
 # ΛV Results: Compile Time, Micro Benchmarks {#plot-lv-compile-time-micro .small}
 
 :::columns
-:::column {#lv-compile-time-micro-inl width=1fr}
+:::column {width=1fr}
 ```plot {backend=vega source="thesis_plots.py:lv_compile_time_micro_inlined" width=4.6 height=2.55}
 ```
 :::/column
-:::column {#lv-compile-time-micro-hyp width=0}
+:::column {width=1fr}
 ```plot {backend=vega source="thesis_plots.py:lv_compile_time_micro_hyperfunction" width=4.6 height=2.55}
 ```
 :::/column
 :::/columns
 
-{.reveal}
 - Time of the versioning algorithm only, relative to SBBV at limit 1
 - Linear: +1.5 per version inlined, +1.1 with hyperfunctions, +0.35 for SBBV
 - `random` grows faster: the heuristic matters for compile time too
-
-```timeline
-width lv-compile-time-micro-hyp=1fr     # the hyperfunction panel slides in beside the inlined one
-reveal 1..end
-```
 
 ::: notes
 Thesis Figure 20. Lower is better. Compile time here is the execution of the ΛV (or SBBV)

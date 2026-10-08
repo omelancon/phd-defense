@@ -1,25 +1,19 @@
 # ΛV Results: Type Checks, Micro Benchmarks {#plot-lv-typechecks-micro .small}
 
 :::columns
-:::column {#lv-typechecks-micro-inl width=1fr}
+:::column {width=1fr}
 ```plot {backend=vega source="thesis_plots.py:lv_typechecks_micro_inlined" width=4.6 height=2.55}
 ```
 :::/column
-:::column {#lv-typechecks-micro-hyp width=0}
+:::column {width=1fr}
 ```plot {backend=vega source="thesis_plots.py:lv_typechecks_micro_hyperfunction" width=4.6 height=2.55}
 ```
 :::/column
 :::/columns
 
-{.reveal}
 - ΛV (solid) against SBBV (dashed): type checks executed, relative to no versioning
 - `arithmetic`: 2 to 4% of checks left at limit 7, optimal code for `fib`, `fact20`, `ack`...
 - SBBV plateaus near 47%; hyperfunctions remove as many checks as inlining
-
-```timeline
-width lv-typechecks-micro-hyp=1fr     # the hyperfunction panel slides in beside the inlined one
-reveal 1..end
-```
 
 ::: notes
 Thesis Figure 18. Lower is better. Solid lines: Lambda Versioning; dashed: SBBV, reimplemented

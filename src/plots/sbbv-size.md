@@ -6,7 +6,6 @@
 ```
 :::/column
 :::column {width=2fr}
-{.reveal}
 - Executable size relative to compilation without SBBV
 - Low limits shrink programs: Gambit at limit 1, Bigloo up to limit 4
 - Then size grows with the limit: 5× (Gambit) and 1.7× (Bigloo) at limit 20 on macro benchmarks

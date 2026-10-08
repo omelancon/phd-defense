@@ -6,7 +6,6 @@
 ```
 :::/column
 :::column {width=2fr}
-{.reveal}
 - Gambit and Bigloo, R7RS benchmarks: checks executed, relative to no optimization
 - No BBV: the compilers' own optimizations
 - Limit 1, abstract interpretation: fewer checks
