@@ -140,6 +140,10 @@ reveal ..end
 :::column {#ex-col width=0}
 ```bbv-anim {#ex-lv program="programs/polynomial-square.bbv" algorithm=lv heuristic=arithmetic limit=3 entry=main direction=TB height=500}
 show: [label, context, code]
+paths:
+  - reads: [fl]
+  - reads: [fx]
+    overflow: never
 ```
 :::/column
 :::/columns
@@ -168,6 +172,9 @@ steps:
   - null
   - {to: "ex-lv.A1->B1", angle: 100, length: 70, label: "indices define an ordering on which caller and callee agree"}
   - {to: "ex-lv.A1->B5", angle: 80, length: 70, label: "the same return point can be passed at multiple indices (due to merge)"}
+  - null
+  - {to: ex-lv.M1, to_anchor: 200, angle: 235, length: 150, label: "flonum input"}
+  - {to: ex-lv.M1, to_anchor: 200, angle: 235, length: 150, label: "fixnum input"}
 ```
 
 ```arrow {#ex-idx-u}
@@ -226,8 +233,11 @@ ex-lv 31..52                    # the merge, then polynomial is specialized
 ex-lv 53, ex-notes 17           # J1 is an exit site of polynomial
 ex-notes 18                     # so main gets the return point N1
 ex-notes 19
-ex-lv ..end                     # the rest of the run
+ex-lv ..end-2                   # the rest of the run, up to the done frame
 ex-idx-u 1                      # the four exit sites of square, with their followers
 ex-idx-u end, ex-notes 20       # the return edge of index 0
 ex-notes 21                     # B5 is passed at two indices
+ex-notes 22
+ex-lv end-1, ex-notes 23        # path: (read) returns a flonum
+ex-lv end, ex-notes 24          # path: (read) returns a fixnum, no overflow
 ```
