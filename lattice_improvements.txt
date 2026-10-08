@@ -27,16 +27,214 @@ Requests for the Lattice developers, from the defense deck.
    widening chain such as `∇ [0, maxfix-1]` wraps inside its chip. An option for the panel width (or
    letting the history list take the room it needs) would allow the panel beside a narrow CFG.
 
-3. Long SBBV runs in direction=LR become unreadable (slide "SBBV: Behavior with loops", src/sbbv.md)
+3. Wrapping the ranks of a versioning drawing onto several bands (`rank_wrap`), for bbv-anim and
+   bbv-cfg, in both directions
 
-   Need: vector-print.bbv has 13 ranks along the loop (L, B, C, I, J, N, D, G, M, ...), so with
-   direction=LR the drawing is about 7 times wider than tall; at height=480 in a 5fr column it fills
-   about a quarter of its box, and the node text is tiny. show: [label, context] barely helps, since
-   the number of ranks, not the node width, sets the scale.
-   Today: nothing folds the chain; wrap= only wraps versions within a rank.
-   Wanted: an option that wraps the ranks of an LR drawing onto several bands (say `rank_wrap=7`:
-   ranks 1..7 on a first band, 8..13 on a second, edges between bands routed down), or a layout that
-   uses the height of the box when the drawing is much wider than tall.
+   Summary. A versioning drawing (bbv-anim, bbv-cfg) puts every origin block of a function on a
+   rank (a row with direction=TB, a column with direction=LR) and packs the versions of that block
+   along the rank. A function with many ranks therefore gives a drawing much longer than wide (TB)
+   or much wider than tall (LR), and since the drawing scales to fit its box, the node text shrinks
+   until it cannot be read. This asks for an option that cuts the ranks of a function into
+   consecutive groups, the bands, and lays the bands side by side (TB) or one under the other (LR),
+   so that the drawing takes the shape of its box.
+
+   How the layout works today (src/lattice/bbv/layout.py, Lattice 0.31). block_ranks gives each
+   block a rank from a Graphviz layout of the source CFG. layout_frames places rank r of a function
+   at a fixed offset along the "across" axis (y in TB, x in LR), the sum of the extents of ranks
+   0..r-1 plus GAP_RANK (44 px) each, and centres the versions of the rank along the "along" axis
+   within the function's extent, which is the widest rank over all frames. Functions sit side by
+   side along the "along" axis, FUNCTION_GAP (64 px) apart. The drawing box is the union over all
+   frames, and the runtime scales it to fit the component (up to 430 px high without `height=`).
+   `wrap=` already wraps the versions of one rank onto several lines; nothing wraps the ranks.
+
+   Test case A: a loop, SBBV, LR. The program, vector-print.bbv:
+
+     function vprint(v)
+     A:  goto L(i=0)
+     L:  if vector?(v) goto B else goto K
+     K:  fail
+     B:  len = ##vector-length(v)
+         if <(i, len) goto C else goto R
+     R:  return #f
+     C:  if vector?(v) goto I else goto F
+     I:  if fixnum?(i) goto J else goto F
+     J:  if fx>=(i, 0) goto N else goto F
+     N:  len2 = ##vector-length(v)
+         if fx<(i, len2) goto D else goto F
+     F:  fail
+     D:  e = ##vector-ref(v, i)
+         t = display(e)
+         if fixnum?(i) goto G else goto H
+     G:  i2 = fx+?(i, 1)
+         if i2 goto M else goto O
+     M:  goto L(i=i2)
+     O:  i3 = ##+(i, 1)
+         goto L(i=i3)
+     H:  if flonum?(i) goto W else goto X
+     W:  i4 = fl+(i, 1.0)
+         goto L(i=i4)
+     X:  i5 = ##+(i, 1)
+         goto L(i=i5)
+
+   The block, in a column about 1050 px wide:
+
+     ```bbv-anim {#vp program="vector-print.bbv" algorithm=sbbv heuristic=arithmetic limit=2 intervals=true vector_bounds=false direction=LR height=480}
+     show: [label, context, code]
+     thresholds: [0, 1, maxfix-1, maxfix]
+     ```
+
+   One function, 10 ranks, 74 frames. The drawing box is 2753 x 488 px (5.6 times wider than
+   tall), so it is drawn at scale 0.38 and the 13 px code font shows at about 5 px.
+
+   Test case B: recursion, Lambda Versioning, two functions. The program, fib-call.bbv (the
+   classic fib with its operators expanded, called as (fib (read))):
+
+     function main()
+     M:  n = read()
+         call fib(n) -> N
+     N:  return #res
+
+     function fib(n)
+     A:  if fixnum?(n) goto B else goto C
+     B:  if fx<=(n, 1) goto R else goto D
+     C:  if ##<=(n, 1) goto R else goto D
+     R:  return n
+     D:  if fixnum?(n) goto E else goto F
+     E:  n1 = fx-?(n, 1)
+         if n1 goto H else goto I
+     F:  if flonum?(n) goto G else goto I
+     G:  n1 = fl-(n, 1.0)
+         goto H
+     I:  n1 = ##-(n, 1)
+         goto H
+     H:  call fib(n1) -> J
+     J:  a = #res
+         if fixnum?(n) goto K else goto L
+     K:  n2 = fx-?(n, 2)
+         if n2 goto P else goto Q
+     L:  if flonum?(n) goto O else goto Q
+     O:  n2 = fl-(n, 2.0)
+         goto P
+     Q:  n2 = ##-(n, 2)
+         goto P
+     P:  call fib(n2) -> S
+     S:  b = #res
+         if fixnum?(a) goto T else goto V
+     T:  if fixnum?(b) goto U else goto V
+     U:  r = fx+?(a, b)
+         if r goto W else goto Z
+     W:  return r
+     V:  if flonum?(a) goto X else goto Z
+     X:  if flonum?(b) goto Y else goto Z
+     Y:  return fl+(a, b)
+     Z:  return ##+(a, b)
+
+   The block, at full slide width (about 1136 x 430 px of room):
+
+     ```bbv-anim {#fib program="fib-call.bbv" algorithm=lv heuristic=arithmetic limit=3 entry=main direction=LR}
+     show: [label, context, code]
+     ```
+
+   fib has 15 ranks, main 2; the run has 231 frames and ends with 56 versions. With direction=TB
+   the box is 1850 x 2738 (scale 0.16, text about 2 px); with direction=LR it is 5116 x 1128 (scale
+   0.22, text about 3 px). Unlike case A, the LR drawing is not thin: up to six versions share a
+   rank, so its band is already tall, and stacking LR bands makes it taller still.
+
+   Estimates. The figures below come from layout_frames' own constants and rank extents (maximum
+   over all frames), with the ranks of the largest function cut into N consecutive groups balanced
+   on their extent, the bands one band gap (FUNCTION_GAP) apart and the box size given above.
+   Scale is min(room width / box width, room height / box height); "text" is the 13 px code font
+   at that scale.
+
+     case  direction  bands  box (px)      scale  text
+     A     LR         1      2753 x 488    0.38   5.0 px   (today)
+     A     LR         2      1412 x 888    0.54   7.0 px
+     A     LR         3      1111 x 1288   0.37   4.8 px
+     A     TB         1       814 x 1484   0.32   4.2 px
+     A     TB         2      1522 x 806    0.60   7.7 px   (best)
+     A     TB         3      2230 x 664    0.47   6.1 px
+     B     LR         1      5116 x 1128   0.22   2.9 px   (today)
+     B     LR         2      2642 x 1696   0.25   3.3 px
+     B     TB         1      1850 x 2738   0.16   2.0 px
+     B     TB         2      2889 x 1438   0.30   3.9 px   (best)
+     B     TB         3      3905 x 1222   0.29   3.8 px
+     B, show: [label, context]:
+     B     LR         1      3088 x 872    0.37   4.8 px
+     B     TB         3      2351 x 822    0.48   6.3 px   (best)
+
+   So: wrapping is worth 40 to 60 % on case A and 35 % on case B; the best band count depends on
+   the drawing and the box, and for B it is TB columns, not LR bands, that help. Case B stays small
+   even then; that is a matter of node content and version count, not of this feature.
+
+   Today: no option folds the ranks. `wrap=` only wraps versions within a rank, `direction` picks
+   one of two shapes, `show:` narrows the nodes but leaves the rank count, `height=` cannot help
+   when the width is the limit, and clicking a version to enlarge it is fine for a reader but not
+   for an audience.
+
+   Wanted syntax:
+
+     ```bbv-anim {#vp ... direction=LR rank_wrap=2}
+     ```
+     ```bbv-anim {#fib ... direction=TB}
+     rank_wraps: {fib: 2}          # per function, as limits: is to limit
+     ```
+     ```bbv-anim {#fib ... direction=TB rank_wrap=auto}
+     ```
+
+   - `rank_wrap` (integer >= 1, or `auto`; default 1, today's layout) applies to every drawn
+     function; `rank_wraps: {FUNCTION: N | auto}` overrides it per function. Same options on
+     bbv-cfg, so that a CFG following an animation can match its shape.
+   - `rank_flow` (`restart`, the default, or `snake`): with `restart` every band reads in the same
+     direction (left to right in LR, top to bottom in TB), like lines of text; with `snake` every
+     second band runs backwards, which makes the edges between bands short at the cost of the
+     reading direction.
+
+   Layout rules:
+
+   a. Cut. The ranks of a function, in rank order, are cut into N groups of consecutive ranks, so
+      that the bands have about the same extent across (the sum of their rank extents, maximum over
+      all frames). A rank is never split. N is clamped to the number of ranks.
+   b. Static. The cut is computed once for the whole run, like the rank offsets today, so a version
+      never changes band between frames and the runtime still only replays positions.
+   c. Placement. In TB the bands of a function are columns side by side, left to right, each as
+      wide as its widest rank; in LR they are bands one under the other, each as tall as its widest
+      rank. The bands of one function stay together, with a gap between them smaller than
+      FUNCTION_GAP (or the same gap plus a faint separator) so that they read as one function; the
+      function's header sits above its first band. Functions keep their order (`functions:`).
+   d. Edges inside a band are drawn as today.
+   e. Forward edges between bands (from rank r in band i to a rank in band j > i): they leave the
+      source on its usual side, run along a gutter outside the band (TB: below the last rank of
+      band i, then across to the top of band j; LR: past the right end of band i, then down to the
+      left end of band j) and enter the target on its usual side, without crossing nodes. With
+      `snake` the gutter is the near end of the two bands. Edge labels (#t, #f, return indices)
+      stay at the middle of the drawn curve, as today.
+   f. Back edges: today they use a lane beside the function. With bands, a back edge within one
+      band keeps a lane beside that band; a back edge from band j to an earlier band i runs in the
+      gutters back to band i (in case A, the loop edges from M, O, W and X back to L: L is on
+      rank 1, in the first band, while M, O, W and X are on the last rank). Several back edges keep
+      nested lanes, as today.
+   g. Call and return edges (ΛV) between functions are unchanged; they start and end at the nodes
+      wherever their bands put them.
+   h. `wrap=` still wraps versions within a rank, inside its band.
+   i. `auto` picks the N (1 to the number of ranks, at most 6) that maximizes the scale. The build
+      does not know the component's box (columns change width with `width` cues), so the build
+      takes a target aspect: the `height` given (or 430 px) and the slide's content width, or an
+      explicit `fit_aspect=W:H`. A stretch goal: lay out every N at build time and let the runtime
+      pick by the measured box, changing only between steps, never while a step animates.
+
+   Must keep working: arrows at versions and edges (`fib.A1`, `vp.L1->B1:true`), whose boxes come
+   from the drawn nodes; the LT046 check of when a version is drawn; `paths:` frames (the path
+   simply follows the edges through the gutters); a `bbv-cfg` following a `bbv-anim`; clicking a
+   block to enlarge it; the panel and its placement; PDF export.
+
+   Diagnostics: `rank_wrap` below 1 or not an integer or `auto` is an error; `rank_wrap` larger
+   than the number of ranks is clamped with a warning; a `rank_wraps` key that is not a function of
+   the program is an error.
+
+   Acceptance: on case A with direction=LR rank_wrap=2 and on case B with direction=TB
+   rank_wraps: {fib: 2}, the drawing box comes within about 10 % of the estimates above (1412 x 888
+   and 2889 x 1438); no two nodes overlap in any frame; no edge between bands crosses a node; every
+   version keeps its band across frames; and rank_wrap=1 reproduces today's positions exactly.
 
 4. Paths through a Lambda Versioning run, from a program entry with no arguments, with the types
    returned by read() (slide "Example: polynomial and square", phd_these/src/lv.md)
