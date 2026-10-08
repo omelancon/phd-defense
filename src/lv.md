@@ -166,6 +166,36 @@ steps:
   - {to: ex-lv.J1, to_anchor: right, angle: 340, length: 120, label: "as exit sites are found in polynomial"}
   - {to: ex-lv.N1, to_anchor: bottom, angle: 250, length: 230, label: "specialized return points are created"}
   - null
+  - {to: "ex-lv.A1->B1", angle: 100, length: 70, label: "indices define an ordering on which caller and callee agree"}
+  - {to: "ex-lv.A1->B5", angle: 80, length: 70, label: "the same return point can be passed at multiple indices (due to merge)"}
+```
+
+```arrow {#ex-idx-u}
+steps:
+  - null
+  - {to: ex-lv.U1, to_anchor: bottom, angle: 328, length: 181}
+  - null
+```
+
+```arrow {#ex-idx-w follow=ex-idx-u}
+steps:
+  - null
+  - {to: ex-lv.W1, to_anchor: bottom, angle: 308, length: 127}
+  - null
+```
+
+```arrow {#ex-idx-x follow=ex-idx-u}
+steps:
+  - null
+  - {to: ex-lv.X1, to_anchor: bottom, angle: 266, length: 98, label: "exit contexts are assigned indices"}
+  - null
+```
+
+```arrow {#ex-idx-z follow=ex-idx-u}
+steps:
+  - null
+  - {to: ex-lv.Z1, to_anchor: bottom, angle: 227, length: 137}
+  - null
 ```
 
 ```timeline
@@ -195,6 +225,9 @@ ex-notes 16
 ex-lv 31..52                    # the merge, then polynomial is specialized
 ex-lv 53, ex-notes 17           # J1 is an exit site of polynomial
 ex-notes 18                     # so main gets the return point N1
-ex-notes end
+ex-notes 19
 ex-lv ..end                     # the rest of the run
+ex-idx-u 1                      # the four exit sites of square, with their followers
+ex-idx-u end, ex-notes 20       # the return edge of index 0
+ex-notes 21                     # B5 is passed at two indices
 ```
