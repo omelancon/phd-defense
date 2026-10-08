@@ -2,15 +2,29 @@
 
 # Overview of Static Basic Block Versioning
 
+{.reveal}
 **Abstract interpretation and dynamic languages**
+
+{.reveal}
 - Tug of war between union and narrowing operations
 - Inputs exist that produce wide ranges of behaviors
 - Union *wins* over narrowing
 
+{.reveal}
 **Core idea**
+
+{.reveal}
 - Delay the union operation
 - Duplicate basic blocks for different contexts
 - When a version limit is reached, perform a *merge*
+
+```timeline
+reveal 2
+reveal 3
+reveal 4
+reveal 6
+reveal ..end
+```
 
 # SBBV: A first example {#sbbv-first-example}
 
