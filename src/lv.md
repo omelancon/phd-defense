@@ -102,3 +102,30 @@ sq-exits 7, sq-morph +1                               # the test in polynomial t
 width sq-src=0 sq-notes=5fr sq-col=6fr, sq-sbbv end-3, sq-exits end, sq-morph +1, reveal 1   # the code collapses; first bullet
 reveal ..end
 ```
+
+# Core idea of Lambda Versioning {.small}
+
+{.reveal}
+**Core idea**
+
+{.reveal}
+- Transform the source program into one with **multi-entry/multi-return functions**
+- Context at call sites propagate information to generate specialized entry points
+- Entry points track the exit sites they can reach
+- When a specialized exit site is discovered/removed, its call sites are notified and updated
+
+{.reveal}
+**Algorithm sketch**
+
+{.reveal}
+- Extend SBBV with multi-source recahability algorithm that associates entry points and exit sites
+- When a new exit site is found, generate a specialized return point for each of its call sites
+- When a merge removes an exit site, remove the corresponding return points from its call sites
+- Entry points and exit sites duplication is governed by the same version limit as SBBV
+
+```timeline
+reveal +2
+reveal ..5
+reveal +2
+reveal ..end
+```
