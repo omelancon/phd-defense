@@ -7,7 +7,7 @@
           (else (loop #|@fx-add|#(fx+ i 1)#|@end|#))))
       (fail)))
 
-(let ((arg (findv v odd?)))
+(let ((arg (findv v pred)))
   (if #|@ref-fix|#(fixnum? arg)#|@end|#
       #|@vref|#(##vector-ref v arg)#|@end|#
       (fail)))

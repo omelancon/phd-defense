@@ -70,7 +70,7 @@ reveal ..end
 # Program Analysis of Dynamic Languages
 
 {.reveal}
-This Scheme program looks for the first odd number in a vector.
+This Scheme program looks for the first element that satisfies a predicate in a vector.
 
 ::: columns
 ::: column {width=5fr}
