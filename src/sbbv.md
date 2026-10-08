@@ -95,7 +95,3 @@ poly-sbbv ..end-2                                   # the rest of the specializa
 poly-sbbv +1, poly-spec-paths +1                    # the path of a flonum x: one flonum? test
 poly-sbbv +1, poly-spec-paths +1
 ```
-
-::: notes
-After expansion, * tests x once and dispatches to fx*? (with its overflow fallback), fl* or the generic ##*. The four results meet at J: their union is "any number", so the + after it must test y again. SBBV keeps one version of J per incoming context, up to the limit of 3; when F queues a fourth one, the arithmetic heuristic merges the two contexts that may hold a bignum (overflow and generic), and the fixnum and flonum versions keep precise types for +.
-:::
