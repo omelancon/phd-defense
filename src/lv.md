@@ -129,3 +129,72 @@ reveal ..5
 reveal +2
 reveal ..end
 ```
+
+# Example: polynomial and square {#lv-example .small}
+
+:::columns
+:::column {#ex-src width=1fr}
+```code {#ex-code lang=scheme file="programs/polynomial-square-call.scm"}
+```
+:::/column
+:::column {#ex-col width=0}
+```bbv-anim {#ex-lv program="programs/polynomial-square.bbv" algorithm=lv heuristic=arithmetic limit=3 entry=main direction=TB height=500}
+show: [label, context, code]
+```
+:::/column
+:::/columns
+
+```arrow {#ex-notes}
+steps:
+  - null
+  - {to: ex-lv.M1, to_anchor: right, angle: 340, length: 120, label: "polynomial called with argument of type any"}
+  - {to: ex-lv.A1, to_anchor: right, angle: 340, length: 120, label: "entry site created for x: any"}
+  - null
+  - {to: ex-lv.A1, to_anchor: right, angle: 340, length: 120, label: "square called with argument of type any"}
+  - {to: ex-lv.S1, to_anchor: bottom, angle: 250, length: 110, label: "entry site created for x: any"}
+  - null
+  - {to: ex-lv.A1, to_anchor: bottom, angle: 290, length: 180, label: "no return point created yet because no exit site discovered in square"}
+  - null
+  - {to: ex-lv.U1, to_anchor: bottom, angle: 250, length: 110, label: "fixnum-specialized exit site created in square"}
+  - {to: ex-lv.B1, to_anchor: bottom, angle: 290, length: 110, label: "fixnum-specialized return point created"}
+  - null
+  - {to: ex-lv.W1, to_anchor: bottom, angle: 290, length: 110, label: "overflow exit site created in square"}
+  - {to: ex-lv.B2, to_anchor: bottom, angle: 290, length: 130, label: "bignum-specialized return point created"}
+  - null
+  - {to: ex-lv.B1, to_anchor: bottom, angle: 290, length: 110, label: "return points are merged as per SBBV"}
+  - null
+  - {to: ex-lv.J1, to_anchor: right, angle: 340, length: 120, label: "as exit sites are found in polynomial"}
+  - {to: ex-lv.N1, to_anchor: bottom, angle: 250, length: 230, label: "specialized return points are created"}
+  - null
+```
+
+```timeline
+width ex-src=0 ex-col=1fr       # the code collapses; the ΛV run takes the whole width
+ex-lv 1..2                      # M1 queued, then dequeued
+ex-lv 3, ex-notes 1             # M1 specialized: polynomial called with x: any
+ex-notes 2                      # the entry point A1
+ex-notes 3
+ex-lv 4..5                      # A1 dequeued, S1 created
+ex-lv 6, ex-notes 4             # A1 specialized: square called with x: any
+ex-notes 5                      # the entry point S1
+ex-notes 6
+ex-lv 7..10                     # S1, T1 specialized
+ex-lv 11, ex-notes 7            # no exit site of square yet, so no return point at A1
+ex-notes 8
+ex-lv 12..14                    # U1 is the first exit site
+ex-lv 15, ex-notes 9            # B1 added for the fixnum exit U1
+ex-notes 10                     # the return point B1
+ex-notes 11
+ex-lv 16..18                    # W1, the overflow exit site
+ex-lv 19, ex-notes 12           # B2 added for the overflow exit W1
+ex-notes 13                     # the return point B2
+ex-notes 14
+ex-lv 20..29                    # X1 and Z1 add B3 and B4
+ex-lv 30, ex-notes 15           # B is over the limit: return points merge as in SBBV
+ex-notes 16
+ex-lv 31..52                    # the merge, then polynomial is specialized
+ex-lv 53, ex-notes 17           # J1 is an exit site of polynomial
+ex-notes 18                     # so main gets the return point N1
+ex-notes end
+ex-lv ..end                     # the rest of the run
+```

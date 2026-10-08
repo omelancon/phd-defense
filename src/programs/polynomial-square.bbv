@@ -1,0 +1,32 @@
+; polynomial-square.scm with its operators expanded, as basic blocks, called from the top level:
+; (polynomial (read)). The argument of the call is unknown.
+; square: * tests the type of x once (both operands are x), as in square.bbv.
+; polynomial: y is the result of (square x); + tests y and x, as in the expanded source.
+function main()
+M:  x = read()
+    call polynomial(x) -> N
+N:  return #res
+
+function polynomial(x)
+A:  call square(x) -> B
+B:  y = #res
+    if fixnum?(y) goto C else goto F
+C:  if fixnum?(x) goto D else goto F
+D:  r = fx+?(y, x)
+    if r goto R else goto E
+R:  return r
+E:  return ##+(y, x)
+F:  if flonum?(y) goto G else goto J
+G:  if flonum?(x) goto H else goto J
+H:  return fl+(y, x)
+J:  return ##+(y, x)
+
+function square(x)
+S:  if fixnum?(x) goto T else goto V
+T:  y = fx*?(x, x)
+    if y goto U else goto W
+U:  return y
+W:  return ##*(x, x)
+V:  if flonum?(x) goto X else goto Z
+X:  return fl*(x, x)
+Z:  return ##*(x, x)
