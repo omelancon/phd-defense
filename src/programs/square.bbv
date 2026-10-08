@@ -1,0 +1,12 @@
+; square.scm with * expanded, as basic blocks (framing example of the lambda versioning chapter).
+; * tests the type of x once (both operands are x). A fixnum x gives a fixnum, or a bignum on
+; overflow; a flonum x gives a flonum. Each way of computing x * x returns from its own exit site.
+function square(x)
+A:  if fixnum?(x) goto B else goto D
+B:  y = fx*?(x, x)
+    if y goto R else goto C
+R:  return y
+C:  return ##*(x, x)
+D:  if flonum?(x) goto E else goto F
+E:  return fl*(x, x)
+F:  return ##*(x, x)

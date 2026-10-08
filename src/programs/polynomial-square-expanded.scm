@@ -1,0 +1,15 @@
+(define (polynomial x)
+  (let ((y (square x)))
+    (cond (#|@y-fix|#(and (fixnum? y) (fixnum? x))#|@end|#
+           (or (fx+? y x)
+               (##+ y x)))
+          ((and (flonum? y) (flonum? x))
+           (fl+ y x))
+          (else (##+ y x)))))
+
+(define (square x)
+  (cond ((fixnum? x)
+         (or (fx*? x x)
+             (##* x x)))
+        ((flonum? x) (fl* x x))
+        (else (##* x x))))
