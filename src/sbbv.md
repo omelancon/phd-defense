@@ -1,4 +1,6 @@
-# Static Basic Block Versioning {layout=title}
+# Static Basic Block Versioning {#sbbv-title layout=title}
+
+Unifying abstract interpretation and code duplication
 
 # Overview of Static Basic Block Versioning
 
@@ -220,4 +222,63 @@ vp-sbbv 74, vp-paths 1                              # path: the unrolled first i
 vp-sbbv 75, vp-paths 2                              # path: the hot loop, after the merges
 vp-paths 3                                          # its loop head has no vector? check
 vp-sbbv 73, vp-paths end                            # back to the final graph, no highlight
+```
+
+# SBBV: Back to findv {#sbbv-back-to-findv}
+
+:::columns
+:::column {#fv-src width=1fr}
+```code-morph {#fv-morph lang=scheme room=fit}
+versions:
+  - file: programs/background-findv-expanded.scm
+    label: "expanded operators"
+  - file: programs/background-findv-expanded.scm
+    label: "expanded operators"
+    highlight: [vec-check]
+  - file: programs/background-findv-expanded.scm
+    label: "expanded operators"
+    highlight: [ref-vec, ref-fix]
+```
+:::/column
+:::column {#fv-follow-col width=0}
+```bbv-cfg {#fv-follow program="programs/findv-absint.bbv" follow=fv-sbbv height=480}
+show: [label]
+prims: {pred: {args: [any, any], result: bool}}
+```
+:::/column
+:::column {#fv-sbbv-col width=0}
+```bbv-anim {#fv-sbbv program="programs/findv-absint.bbv" algorithm=sbbv heuristic=arithmetic limit=2 intervals=true vector_bounds=false direction=LR height=480}
+show: [label, context, code]
+prims: {pred: {args: [any, any], result: bool}}
+thresholds: [sign, maxfix-1, maxfix]
+paths:
+  - versions: [L6, M4, N1, P3, S3, R3, T3, T2.3]
+```
+:::/column
+:::/columns
+
+```arrow {#fv-goal}
+steps:
+  - null
+  - {to: vec-check, to_anchor: top, angle: 15, length: 340, label: "reminder: goal is to eliminate this test"}
+  - null
+  - {to: ref-fix, to_anchor: right, angle: 15, length: 340, label: "next goal: eliminate these checks!"}
+```
+
+```arrow {#fv-spec}
+steps:
+  - null
+  - {to: fv-sbbv.S3, to_anchor: bottom, angle: 290, length: 110, label: "fixnum arithmetic only"}
+  - {to: fv-sbbv.T3, to_anchor: bottom, angle: 290, length: 110, label: "no overflow"}
+  - {to: fv-sbbv.L6, to_anchor: bottom, angle: 290, length: 110, label: "vector? eliminated in hot loop"}
+  - null
+```
+
+```timeline
+fv-morph 1, fv-goal 1                                              # the test to eliminate, highlighted
+width fv-src=0 fv-follow-col=1fr fv-sbbv-col=7fr, fv-goal +1     # SBBV, with the source CFG following, replaces the code
+fv-sbbv ..end-1                                                      # the whole run of SBBV on findv
+fv-spec 1, fv-sbbv ..end                                           # the increment of the index in the hot loop
+fv-spec ..end                                                      # all arrows
+fv-morph 2, width fv-src=1fr fv-follow-col=0 fv-sbbv-col=0, fv-goal +1               # Reopen the source code
 ```

@@ -1,4 +1,7 @@
-# Preface {#preface .small}
+# Preface {#preface-title layout=title}
+Some background
+
+# Background {.small}
 
 :::columns
 :::column {#avg-src width=2fr}

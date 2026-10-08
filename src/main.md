@@ -1,6 +1,8 @@
 ---
 title: Highly Optimizing Ahead-of-Time Compilers for Dynamic Languages
 author: Olivier Melançon
+tours:
+  titles: [preface-title, abstract-interpretation-title, sbbv-title, lv-title]
 ---
 
 # Highly Optimizing Ahead-of-Time Compilers for Dynamic Languages {layout=title}
