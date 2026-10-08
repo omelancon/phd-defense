@@ -256,7 +256,7 @@ versions:
 ```
 :::/column
 :::column {#fib-col width=0}
-```bbv-anim {#fib-lv program="programs/fib-call.bbv" algorithm=lv heuristic=arithmetic limit=3 entry=fib direction=LR}
+```bbv-anim {#fib-lv program="programs/fib-call.bbv" algorithm=lv heuristic=arithmetic limit=3 entry=fib direction=LR rank_wrap=auto}
 show: [label, context, code]
 paths:
   - input: {n: fx}
