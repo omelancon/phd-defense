@@ -130,6 +130,9 @@ show: [label]
 ```bbv-anim {#vp-sbbv program="programs/vector-print.bbv" algorithm=sbbv heuristic=arithmetic limit=2 intervals=true vector_bounds=false direction=LR height=480}
 show: [label, context, code]
 thresholds: [0, 1, maxfix-1, maxfix]
+paths:
+  - versions: [L1, B1, C1, I1, J1, N1, D1, G1, M1]
+  - versions: [L6, B4, C3, I3, J3, N3, D3, G3, M3]
 ```
 :::/column
 :::/columns
@@ -164,6 +167,15 @@ steps:
   - null
 ```
 
+```arrow {#vp-paths}
+steps:
+  - null
+  - {to: vp-sbbv.J1, to_anchor: top, angle: 70, length: 110, label: "unrolled first iteration"}
+  - {to: vp-sbbv.J3, to_anchor: bottom, angle: 290, length: 110, label: "hot loop"}
+  - {to: vp-sbbv.L6, to_anchor: bottom, angle: 290, length: 110, label: "eliminated vector? check"}
+  - null
+```
+
 ```timeline
 vp-morph 1                                          # expand vector-length, vector-ref and +
 reveal 1                                            # the CFG of the expanded program
@@ -190,4 +202,8 @@ vp-sbbv 69..71                                      # L6 specialized; before B4 
 vp-sbbv 72, vp-merges 7                             # C3 is reused
 vp-sbbv 73                                          # done
 vp-merges +1
+vp-sbbv 74, vp-paths 1                              # path: the unrolled first iteration
+vp-sbbv 75, vp-paths 2                              # path: the hot loop, after the merges
+vp-paths 3                                          # its loop head has no vector? check
+vp-sbbv 73, vp-paths end                            # back to the final graph, no highlight
 ```
