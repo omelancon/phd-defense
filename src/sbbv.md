@@ -45,6 +45,7 @@ show: [label]
 show: [label, context, code]
 paths:
   - input: {x: fl}
+  - input: {x: fx}
 ```
 :::/column
 :::/columns
@@ -68,10 +69,11 @@ steps:
   - null
 ```
 
-```arrow {#poly-flonum}
+```arrow {#poly-spec-paths}
 steps:
   - null
-  - {to: poly-sbbv.D1, to_anchor: bottom, angle: 290, length: 90, label: "(flonum? x) checked only once"}
+  - {to: poly-sbbv.D1, to_anchor: bottom, angle: 290, length: 90, label: "flonum-specialized path"}
+  - {to: poly-sbbv.B1, to_anchor: top, angle: 70, length: 90, label: "fixnum-specialized path"}
 ```
 
 ```timeline
@@ -89,8 +91,9 @@ poly-sbbv 12..17                                    # E and F queue J3 and J4
 poly-sbbv 18, poly-versions 5                       # over the limit: J4 will be merged
 poly-sbbv 19, poly-versions 6                       # the generic and overflow versions merge into J5
 poly-sbbv 20, poly-versions end
-poly-sbbv ..end-1                                   # the rest of the specialization
-poly-sbbv end, poly-flonum 1                        # the path of a flonum x: one flonum? test
+poly-sbbv ..end-2                                   # the rest of the specialization
+poly-sbbv +1, poly-spec-paths +1                    # the path of a flonum x: one flonum? test
+poly-sbbv +1, poly-spec-paths +1
 ```
 
 ::: notes
