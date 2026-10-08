@@ -241,3 +241,32 @@ ex-notes 22
 ex-lv end-1, ex-notes 23        # path: (read) returns a flonum
 ex-lv end, ex-notes 24          # path: (read) returns a fixnum, no overflow
 ```
+
+# Recursive example: fibonacci {#lv-fib .small}
+
+:::columns
+:::column {#fib-src width=1fr}
+```code-morph {#fib-morph lang=scheme room=fit}
+versions:
+  - file: programs/fib-call.scm
+    label: "fib.scm"
+  - file: programs/fib-call-expanded.scm
+    label: "expanded operators"
+    highlight: changed
+```
+:::/column
+:::column {#fib-col width=0}
+```bbv-anim {#fib-lv program="programs/fib-call.bbv" algorithm=lv heuristic=arithmetic limit=3 entry=fib direction=LR}
+show: [label, context, code]
+paths:
+  - input: {n: fx}
+    overflow: never
+```
+:::/column
+:::/columns
+
+```timeline
+fib-morph 1                     # expand the operators
+width fib-src=0 fib-col=1fr     # the code collapses; the ΛV run takes the whole width
+fib-lv 1..end                   # the run, one frame per step
+```

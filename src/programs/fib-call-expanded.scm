@@ -1,0 +1,16 @@
+(define (fib n)
+  (if (if (fixnum? n) (fx<= n 1) (##<= n 1))
+      n
+      (let ((a (fib (cond ((fixnum? n) (or (fx-? n 1) (##- n 1)))
+                          ((flonum? n) (fl- n 1.0))
+                          (else (##- n 1)))))
+            (b (fib (cond ((fixnum? n) (or (fx-? n 2) (##- n 2)))
+                          ((flonum? n) (fl- n 2.0))
+                          (else (##- n 2))))))
+        (cond ((and (fixnum? a) (fixnum? b))
+               (or (fx+? a b) (##+ a b)))
+              ((and (flonum? a) (flonum? b))
+               (fl+ a b))
+              (else (##+ a b))))))
+
+(fib (read))

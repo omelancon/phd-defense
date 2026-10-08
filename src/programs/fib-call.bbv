@@ -1,0 +1,39 @@
+; fib-call-expanded.scm as basic blocks, called from the top level: (fib (read)).
+; (<= n 1): a fixnum fast path, else the generic comparison.
+; (- n 1), (- n 2) and (+ a b): fixnum with overflow check, flonum, else generic, as in
+; polynomial-square.bbv. The generic fallback is shared by an overflow and the else branch.
+
+function fib(n)
+A:  if fixnum?(n) goto B else goto C
+B:  if fx<=(n, 1) goto R else goto D
+C:  if ##<=(n, 1) goto R else goto D
+R:  return n
+D:  if fixnum?(n) goto E else goto F
+E:  n1 = fx-?(n, 1)
+    if n1 goto H else goto I
+F:  if flonum?(n) goto G else goto I
+G:  n1 = fl-(n, 1.0)
+    goto H
+I:  n1 = ##-(n, 1)
+    goto H
+H:  call fib(n1) -> J
+J:  a = #res
+    if fixnum?(n) goto K else goto L
+K:  n2 = fx-?(n, 2)
+    if n2 goto P else goto Q
+L:  if flonum?(n) goto O else goto Q
+O:  n2 = fl-(n, 2.0)
+    goto P
+Q:  n2 = ##-(n, 2)
+    goto P
+P:  call fib(n2) -> S
+S:  b = #res
+    if fixnum?(a) goto T else goto V
+T:  if fixnum?(b) goto U else goto V
+U:  r = fx+?(a, b)
+    if r goto W else goto Z
+W:  return r
+V:  if flonum?(a) goto X else goto Z
+X:  if flonum?(b) goto Y else goto Z
+Y:  return fl+(a, b)
+Z:  return ##+(a, b)
