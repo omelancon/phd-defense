@@ -1,0 +1,15 @@
+(define (vprint v)
+  (let loop ((i 0))
+    (when (< i (if #|@len-check|#(vector? v)#|@end|#
+                   (##vector-length v)
+                   (fail)))
+      (display (if (and #|@ref-check|#(vector? v)#|@end|#
+                        (fixnum? i)
+                        (fx>= i 0)
+                        (fx< i (##vector-length v)))
+                   (##vector-ref v i)
+                   (fail)))
+      (loop (cond ((fixnum? i)
+                   (or (fx+? i 1) (##+ i 1)))
+                  ((flonum? i) (fl+ i 1.0))
+                  (else (##+ i 1)))))))

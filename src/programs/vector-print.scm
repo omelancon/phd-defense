@@ -1,0 +1,5 @@
+(define (vprint v)
+  (let loop ((i 0))
+    (when (< i (vector-length v))
+      (display (vector-ref v i))
+      (loop (+ i 1)))))

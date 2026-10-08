@@ -26,3 +26,14 @@ Requests for the Lattice developers, from the defense deck.
 2. The panel of abstract-interp-anim at `panel_at: right` is capped at 40% of the width, so a
    widening chain such as `∇ [0, maxfix-1]` wraps inside its chip. An option for the panel width (or
    letting the history list take the room it needs) would allow the panel beside a narrow CFG.
+
+3. Long SBBV runs in direction=LR become unreadable (slide "SBBV: Behavior with loops", src/sbbv.md)
+
+   Need: vector-print.bbv has 13 ranks along the loop (L, B, C, I, J, N, D, G, M, ...), so with
+   direction=LR the drawing is about 7 times wider than tall; at height=480 in a 5fr column it fills
+   about a quarter of its box, and the node text is tiny. show: [label, context] barely helps, since
+   the number of ranks, not the node width, sets the scale.
+   Today: nothing folds the chain; wrap= only wraps versions within a rank.
+   Wanted: an option that wraps the ranks of an LR drawing onto several bands (say `rank_wrap=7`:
+   ranks 1..7 on a first band, 8..13 on a second, edges between bands routed down), or a layout that
+   uses the height of the box when the drawing is much wider than tall.

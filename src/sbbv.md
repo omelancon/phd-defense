@@ -95,3 +95,99 @@ poly-sbbv ..end-2                                   # the rest of the specializa
 poly-sbbv +1, poly-spec-paths +1                    # the path of a flonum x: one flonum? test
 poly-sbbv +1, poly-spec-paths +1
 ```
+
+# SBBV: Behavior with loops {#sbbv-with-loops}
+:::columns
+:::column {#vp-src width=1fr}
+```code-morph {#vp-morph lang=scheme room=fit}
+versions:
+  - file: programs/vector-print.scm
+    label: "vector-print.scm"
+  - file: programs/vector-print-expanded.scm
+    label: "expanded vector-length, vector-ref and +"
+    highlight: changed
+  - file: programs/vector-print-expanded.scm
+    label: "expanded vector-length, vector-ref and +"
+    highlight: [ref-check]
+  - file: programs/vector-print-expanded.scm
+    label: "expanded vector-length, vector-ref and +"
+    highlight: [len-check]
+  - file: programs/vector-print-expanded.scm
+    label: "expanded vector-length, vector-ref and +"
+```
+:::/column
+:::column {#vp-cfg-col width=1fr}
+{.reveal}
+```bbv-cfg {#vp-cfg program="programs/vector-print.bbv" height=500}
+```
+:::/column
+:::column {#vp-follow-col width=0}
+```bbv-cfg {#vp-follow program="programs/vector-print.bbv" follow=vp-sbbv height=480}
+show: [label]
+```
+:::/column
+:::column {#vp-sbbv-col width=0}
+```bbv-anim {#vp-sbbv program="programs/vector-print.bbv" algorithm=sbbv heuristic=arithmetic limit=2 intervals=true vector_bounds=false direction=LR height=480}
+show: [label, context, code]
+thresholds: [0, 1, maxfix-1, maxfix]
+```
+:::/column
+:::/columns
+
+```arrow {#vp-absint}
+steps:
+  - null
+  - {to: vp-cfg.C, to_anchor: right, angle: 75, length: 240, label: "abstract interpretation can remove this test"}
+  - {to: vp-cfg.L, to_anchor: left, angle: 200, length: 160, label: "but not this one"}
+  - null
+```
+
+```arrow {#vp-heads}
+steps:
+  - null
+  - {to: vp-sbbv.L1, to_anchor: bottom, angle: 290, length: 110, label: "vector? check on the first iteration"}
+  - null
+  - {to: vp-sbbv.L2, to_anchor: bottom, angle: 290, length: 110, label: "unrolling the loop, no more check"}
+  - null
+```
+
+```arrow {#vp-merges}
+steps:
+  - null
+  - {to: vp-sbbv.L3, to_anchor: bottom, angle: 290, length: 110, label: "merge"}
+  - {to: vp-sbbv.B2, to_anchor: bottom, angle: 290, length: 110, label: "merge will make this path unreachable"}
+  - null
+  - {to: vp-sbbv.L5, to_anchor: bottom, angle: 290, length: 110, label: "merge"}
+  - {to: vp-sbbv.B3, to_anchor: bottom, angle: 290, length: 110, label: "will become unreachable"}
+  - null
+  - {to: vp-sbbv.C3, to_anchor: bottom, angle: 290, length: 110, label: "this path has already been explored"}
+  - null
+```
+
+```timeline
+vp-morph 1                                          # expand vector-length, vector-ref and +
+reveal 1                                            # the CFG of the expanded program
+vp-morph 2, vp-absint 1                             # the vector? test of vector-ref: abstract interpretation removes it
+vp-morph 3, vp-absint 2                             # the vector? test of vector-length, at the loop head: it stays
+width vp-src=0 vp-cfg-col=0 vp-follow-col=1fr vp-sbbv-col=5fr, vp-absint end, vp-morph 4   # SBBV, with the source CFG following, replaces the code and the CFG; highlight off
+vp-sbbv 1..2                                        # A specialized, L1 queued
+vp-heads 1                                          # the first version of the loop head
+vp-sbbv 3..4                                        # L1 specialized: its vector? test stays
+vp-sbbv 5, vp-heads 2
+vp-sbbv 6..26                                       # first iteration; M1 queues L2 (i: fx {1})
+vp-heads 3                                          # the second version of the loop head
+vp-sbbv 27..28                                      # L2 specialized: its vector? test is removed
+vp-sbbv 29, vp-heads end
+vp-sbbv 30..46                                      # second iteration; L3 queued, L is over the limit
+vp-merges 1                                         # L3 will be merged
+vp-merges 2                                         # the path from L2 will become unreachable
+vp-sbbv 47, vp-merges 3                             # L2 and L3 merge into L4 (widened)
+vp-sbbv 48..67                                      # L4 specialized, its path queues L5; over the limit again
+vp-merges 4                                         # L5 will be merged
+vp-merges 5                                         # the path from L4 will become unreachable
+vp-sbbv 68, vp-merges 6                             # L4 and L5 merge into L6
+vp-sbbv 69..71                                      # L6 specialized; before B4 jumps to C3
+vp-sbbv 72, vp-merges 7                             # C3 is reused
+vp-sbbv 73                                          # done
+vp-merges +1
+```

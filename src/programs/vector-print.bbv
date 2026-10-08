@@ -1,0 +1,31 @@
+; vector-print.scm (SBBV, behavior with loops) with vector-length, vector-ref and + expanded, as
+; basic blocks. L is the loop head: it checks vector? before reading the length. vector-ref checks
+; vector? (C), fixnum? (I) and both bounds (J, N) before the access; every failed check goes to F.
+; The comparison of the loop stays generic; + tests fixnum? (then fx+? with its overflow check),
+; flonum?, and falls back to the generic ##+.
+function vprint(v)
+A:  goto L(i=0)
+L:  if vector?(v) goto B else goto K
+K:  fail
+B:  len = ##vector-length(v)
+    if <(i, len) goto C else goto R
+R:  return #f
+C:  if vector?(v) goto I else goto F
+I:  if fixnum?(i) goto J else goto F
+J:  if fx>=(i, 0) goto N else goto F
+N:  len2 = ##vector-length(v)
+    if fx<(i, len2) goto D else goto F
+F:  fail
+D:  e = ##vector-ref(v, i)
+    t = display(e)
+    if fixnum?(i) goto G else goto H
+G:  i2 = fx+?(i, 1)
+    if i2 goto M else goto O
+M:  goto L(i=i2)
+O:  i3 = ##+(i, 1)
+    goto L(i=i3)
+H:  if flonum?(i) goto W else goto X
+W:  i4 = fl+(i, 1.0)
+    goto L(i=i4)
+X:  i5 = ##+(i, 1)
+    goto L(i=i5)
