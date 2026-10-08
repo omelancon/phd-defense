@@ -98,7 +98,7 @@ poly-sbbv +1, poly-spec-paths +1
 
 # SBBV: Behavior with loops {#sbbv-with-loops}
 :::columns
-:::column {#vp-src width=1fr}
+:::column {#vp-src width=5fr}
 ```code-morph {#vp-morph lang=scheme room=fit}
 versions:
   - file: programs/vector-print.scm
@@ -116,7 +116,7 @@ versions:
     label: "expanded vector-length, vector-ref and +"
 ```
 :::/column
-:::column {#vp-cfg-col width=1fr}
+:::column {#vp-cfg-col width=4fr}
 {.reveal}
 ```bbv-cfg {#vp-cfg program="programs/vector-print.bbv" height=500}
 ```
