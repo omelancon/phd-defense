@@ -1,4 +1,4 @@
-# Experimental Results {#lv-experiments-title layout=title}
+# ΛV Experimental Results {#lv-experiments-title layout=title}
 
 ::include{file="plots/lv-typechecks-micro.md"}
 ::include{file="plots/lv-typechecks-micro-arithmetic.md"}
