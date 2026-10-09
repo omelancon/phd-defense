@@ -5,7 +5,7 @@ What is it and why it falls short?
 # Intuition on Static Analysis {.small}
 
 {.reveal}
-When looking to a program, some tests beg to be removed, even to the human-eye.
+Even to the human-eye, some tests beg to be removed.
 
 ::: columns
 ::: column {width=5fr}
