@@ -136,39 +136,12 @@ reveal +1, findv-morph +1, why end     # redundant checks removed, nothing highl
 reveal ..end, findv-morph ..end        # each sub-bullet with its highlight
 ```
 
-# Table of Content {.small}
+# Table of Content {.large}
 
 {.reveal}
-:::group
-1. **Background on Abstract interpretation**
-  - An existing program analysis technique and why it fails?
-:::
-
-{.reveal}
-:::group
-2. **Static Basic Block Versioning (SBBV)**
-  - A framework that unifies abstract interpretation and code duplication.
-:::
-
-{.reveal}
-:::group
-3. **Lambda Versioning (ΛV)**
-  - An extension of SBBV for interprocedural/whole-program analysis.
-:::
-
-{.reveal}
-:::group
-4. **Technique Improvements**
-  - Extended contexts for vector support.
-  - Exploration of merge heuristics for Basic Block Versioning.
-:::
-
-{.reveal}
-:::group
-5. **Experimental Evaluation**
-:::
-
-{.reveal}
-:::group
-6. **Future Work**
-:::
+1. ## Background on Abstract interpretation
+2. ## Static Basic Block Versioning (SBBV)
+3. ## Lambda Versioning (ΛV)
+4. ## Technique Improvements
+5. ## Experimental Evaluation
+6. ## Future Work
