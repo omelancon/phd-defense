@@ -120,3 +120,30 @@ class HasseAnim(Component):
         drawn = [st[short].get(name) != "hidden" for st in data["states"]]
         key = name.replace("\\", "\\\\").replace('"', '\\"')
         return Part(f'.hs-{kind}[data-k="{key}"]:not([data-st=hidden])', None if all(drawn) else drawn)
+
+
+class StatementOptions(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+
+_KEY = re.compile(r"\*\*(.+?)\*\*", re.S)
+
+
+@register("statement")
+class Statement(Component):
+    """A key sentence set large on its own slide (the object of the thesis, say).
+
+    The body is the sentence as plain text; ``**words**`` are its key phrases, set in the accent
+    colour. Styled by plugins/statement.css with the theme's variables, so it follows the theme.
+    """
+
+    Options = StatementOptions
+    body = "text"
+    css = [str(HERE / "statement.css")]
+
+    def render(self, block, opts: StatementOptions, ctx) -> RenderResult:
+        text = " ".join(block.body.split())
+        if not text:
+            raise ComponentError("write the sentence in the body of the block")
+        text = _KEY.sub(r'<span class="lt-statement-key">\1</span>', html.escape(text, quote=False))
+        return RenderResult(f'<div class="lt-statement"><p>{text}</p></div>')

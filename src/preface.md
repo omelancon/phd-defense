@@ -140,6 +140,14 @@ reveal +1, perf-morph -2      # more flexible...
 reveal +1                     # ... but slower
 ```
 
+# Object of this Thesis {.center}
+
+```statement
+How can an ahead-of-time compiler **eliminate run-time checks**, so that dynamic languages
+**run as fast as static ones** without **losing their flexibility**?
+```
+
+
 # Static Analysis of Dynamic Languages
 
 {.reveal}

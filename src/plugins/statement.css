@@ -1,0 +1,9 @@
+/* `statement` (src/lattice_plugins.py): one sentence carried by the whole slide.
+   Put `.center` on the slide to set it in the middle of the slide. */
+.lt-statement{display:flex;justify-content:center}
+.lt-statement p{position:relative;margin:0 0 40px;max-width:23em;padding:6px 0 6px 44px;text-align:left;
+  font-family:var(--lt-font-head);font-size:44px;font-weight:500;line-height:1.34;
+  letter-spacing:-.005em;color:var(--lt-ink);text-wrap:balance}
+.lt-statement p::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:6px;
+  border-radius:3px;background:var(--lt-accent)}
+.lt-statement-key{color:var(--lt-accent);font-weight:650;white-space:nowrap}

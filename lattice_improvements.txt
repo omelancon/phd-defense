@@ -328,3 +328,23 @@ Requests for the Lattice developers, from the defense deck.
    Workaround meanwhile: none on the slide. A tour of arrows along the versions would show the order
    but would not dim the rest of the graph or light the call and return edges, so the deck waits for
    the feature.
+
+
+5. A stylesheet for the deck (slide "Object of this Thesis", src/preface.md)
+
+   Need: one sentence set large in the middle of the slide, with its key phrases in the accent
+   colour (the statement of the thesis object).
+   Today: CSS reaches a deck only through a component's `css` list, and the helper classes
+   (`.center`, `.small`) do not change the size or colour of text. A custom container
+   (`::: statement`) gives the class but no way to ship its CSS. The deck therefore ships a static
+   local plugin, `statement` (src/lattice_plugins.py, src/plugins/statement.css), whose only purpose
+   is to carry that CSS.
+   Wanted syntax: a front matter key listing stylesheets, paths relative to the root file,
+
+     ---
+     css: [styles/deck.css]
+     ---
+
+   embedded after the theme so that its rules may use and override the `--lt-*` variables. Then
+   `::: statement` with `**key phrases**` in Markdown would replace the plugin.
+
