@@ -15,11 +15,10 @@ Why previous techniques fall short?
 **Algorithm sketch:**
 
 {.reveal}
-- Start from an entry point with a generic context
 - Propagate abstract values through the control-flow graph
-  {.reveal}
-  - A block's context is *at least* the union of its predecessors'
-  - Branches narrow contexts flowing to their successors
+- Start from an entry point with a generic context
+- A block's context is *at least* the union of its predecessors'
+- Branches narrow contexts flowing to their successors
 - Repeat until a fixed point is reached
 
 {.reveal}
@@ -29,16 +28,35 @@ Why previous techniques fall short?
 - Wide range of run-time behaviors: approximation is coarse.
 :::/column
 :::column {width=1fr}
-```bbv-cfg {#overview-cfg program="programs/overview-diamond.bbv" height=430}
+```bbv-cfg {#overview-cfg program="programs/overview-diamond.bbv" height=430 follow=overview-run}
+```
+:::/column
+:::column {width=0}
+```bbv-anim {#overview-run program="programs/overview-diamond.bbv" algorithm=sbbv}
+events: [done]
+paths:
+  - versions: [A1, B1, C1, D1]
+  - versions: [A1]
+  - versions: [B1]
+  - versions: [C1]
+  - versions: [D1]
 ```
 :::/column
 :::/columns
+
+```arrow {#overview-cfg-parts}
+steps:
+  - null
+  - {to: overview-cfg.A, to_anchor: top, length: 60, label: "control-flow graph"}
+  - {to: overview-cfg.B, to_anchor: 200, length: 60, label: "basic block"}
+  - {to: overview-cfg.B->D, to_anchor: left, length: 60, label: "jump"}
+  - null
+```
 
 ```arrow {#overview-parts}
 steps:
   - null
   - {to: overview-cfg.A, to_anchor: top, angle: 120, length: 90, label: "entry point"}
-  - null
   - {to: overview-cfg.D, to_anchor: left, angle: 200, length: 90, label: "join point"}
   - {to: overview-cfg.A, to_anchor: right, angle: 290, length: 80, label: "branch point"}
   - null
@@ -48,11 +66,13 @@ steps:
 reveal +1
 reveal +1                          # sound approximation
 reveal +1                          # abstract values
-reveal +2, overview-parts 1        # "Algorithm sketch" with its first point: the entry point
-reveal +1, overview-parts 2        # propagate through the CFG
-reveal +1, overview-parts 3        # union at the join point
-reveal +1, overview-parts 4        # narrowing at the branch point
-reveal +1, overview-parts end      # fixed point
+reveal +2, overview-run 1, overview-cfg-parts 1   # "Algorithm sketch" with "Propagate": every block lit, the CFG named
+overview-cfg-parts 2, overview-run 3               # basic block
+overview-cfg-parts 3, overview-run 0               # jump
+reveal +1, overview-cfg-parts end, overview-run 2, overview-parts 1   # lights and arrows go away: entry point
+reveal +1, overview-parts 2, overview-run 5        # union at the join point
+reveal +1, overview-parts 3, overview-run 2        # narrowing at the branch point
+reveal +1, overview-parts end, overview-run 0      # fixed point
 reveal +2                         # "Dynamic languages" with its point
 ```
 
