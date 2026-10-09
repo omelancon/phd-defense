@@ -93,6 +93,53 @@ It just works! But what is the catch?
 ```plot {backend=vega source="plots/polynomial_bench.py:polynomial_bench" width=11 height=1.6}
 ```
 
+# Performance of Dynamic Languages
+
+{.reveal}
+What makes dynamic languages slower?
+
+::: columns
+::: column {width=5fr}
+{.reveal-with}
+```code-morph {#perf-morph lang=scheme room=fit}
+versions:
+  - file: programs/scheme-polynomial.scm
+    label: "polynomial.scm"
+  - file: programs/scheme-polynomial-expanded.scm
+    label: "expanded operators"
+    highlight: changed
+  - file: programs/scheme-polynomial-expanded.scm
+    label: "expanded operators"
+  - file: programs/scheme-polynomial-expanded.scm
+    label: "expanded operators"
+    highlight: [x-fix, x-flo, y-fix, y-flo]
+  - file: programs/scheme-polynomial-expanded.scm
+    label: "expanded operators"
+    highlight: [x-ovf, y-ovf]
+```
+::: /column
+::: column {width=6fr}
+{.reveal}
+- static languages (C, OCaml) test types at compile time
+- dynamic languages (Scheme, JavaScript, Python) check them at run time
+  {.reveal}
+  - type checks
+  - overflow checks
+- More flexible...
+- ... but degrades performance
+::: /column
+::: /columns
+
+```timeline
+reveal 1                      # the question and the program
+reveal +1, perf-morph +1      # operators expanded; static languages
+reveal +1, perf-morph +1      # dynamic languages, nothing highlighted
+reveal +1, perf-morph +1      # type checks highlighted
+reveal +1, perf-morph +1      # overflow checks highlighted
+reveal +1, perf-morph -2      # more flexible...
+reveal +1                     # ... but slower
+```
+
 # Static Analysis of Dynamic Languages
 
 {.reveal}
