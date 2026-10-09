@@ -5,7 +5,7 @@ Unifying abstract interpretation and code duplication
 # Overview of Static Basic Block Versioning
 
 {.reveal}
-**Abstract interpretation and dynamic languages**
+**Static analysis and dynamic languages**
 
 {.reveal}
 - Tug of war between union and narrowing operations
@@ -156,7 +156,7 @@ paths:
 ```arrow {#vp-absint}
 steps:
   - null
-  - {to: vp-cfg.C, to_anchor: right, angle: 75, length: 240, label: "abstract interpretation can remove this test"}
+  - {to: vp-cfg.C, to_anchor: right, angle: 75, length: 240, label: "static analysis can remove this test"}
   - {to: vp-cfg.L, to_anchor: left, angle: 200, length: 160, label: "but not this one"}
   - null
 ```
@@ -195,7 +195,7 @@ steps:
 ```timeline
 vp-morph 1                                          # expand vector-length, vector-ref and +
 reveal 1                                            # the CFG of the expanded program
-vp-morph 2, vp-absint 1                             # the vector? test of vector-ref: abstract interpretation removes it
+vp-morph 2, vp-absint 1                             # the vector? test of vector-ref: static analysis removes it
 vp-morph 3, vp-absint 2                             # the vector? test of vector-length, at the loop head: it stays
 width vp-src=0 vp-cfg-col=0 vp-follow-col=1fr vp-sbbv-col=10fr, vp-absint end, vp-morph 4   # SBBV, with the source CFG following, replaces the code and the CFG; highlight off
 vp-sbbv 1..2                                        # A specialized, L1 queued

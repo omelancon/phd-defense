@@ -70,7 +70,7 @@ reveal 7, cfg-parts end   # the arrow goes away with the next bullet
 reveal ..end
 ```
 
-# Program Analysis of Dynamic Languages
+# Static Analysis of Dynamic Languages
 
 {.reveal}
 This Scheme program looks for the first element that satisfies a predicate in a vector.
@@ -139,7 +139,7 @@ reveal ..end, findv-morph ..end        # each sub-bullet with its highlight
 # Table of Content {.large}
 
 {.reveal}
-1. ## Background on Abstract interpretation
+1. ## Background on Static Analysis
 2. ## Static Basic Block Versioning (SBBV)
 3. ## Lambda Versioning (ΛV)
 4. ## Technique Improvements

@@ -1,33 +1,32 @@
-# Abstract Interpretation {#abstract-interpretation-title layout=title}
+# Static Analysis {#abstract-interpretation-title layout=title}
 
 Why previous techniques fall short?
 
-# Abstract Interpretation Overview {.small}
+# Static Analysis Overview {.small}
 
 :::columns
 :::column {width=2fr}
 {.reveal}
-- Technique for sound approximation of program semantics.
-- Executes the program on abstract values.
-  {.reveal}
-  - Abstract values represent sets of concrete values.
+- Based on abstract interpretation [Cousot 1977]
+- Technique for sound approximation of program semantics
+- Executes on abstract values (sets of concrete values)
 
 {.reveal}
 **Algorithm sketch:**
 
 {.reveal}
-- Start from an entry point with a generic context.
-- Propagate abstract values through the control-flow graph.
+- Start from an entry point with a generic context
+- Propagate abstract values through the control-flow graph
   {.reveal}
-  - A block's context is *at least* the union of its predecessors'.
-  - Branches narrow contexts flowing to their successors.
-- Repeat until a fixed point is reached.
+  - A block's context is *at least* the union of its predecessors'
+  - Branches narrow contexts flowing to their successors
+- Repeat until a fixed point is reached
 
 {.reveal}
 **Dynamic languages**
 
 {.reveal}
-- Wide range of possible run-time behaviors: approximation is often coarse.
+- Wide range of run-time behaviors: approximation is coarse.
 :::/column
 :::column {width=1fr}
 ```bbv-cfg {#overview-cfg program="programs/overview-diamond.bbv" height=430}
@@ -46,15 +45,15 @@ steps:
 ```
 
 ```timeline
-reveal 1                          # sound approximation
-reveal 2                          # abstract values
-reveal 3                          # sets of concrete values
-reveal 5, overview-parts 1        # "Algorithm sketch" with its first point: the entry point
-reveal 6, overview-parts 2        # propagate through the CFG
-reveal 7, overview-parts 3        # union at the join point
-reveal 8, overview-parts 4        # narrowing at the branch point
-reveal 9, overview-parts end      # fixed point
-reveal 11                         # "Dynamic languages" with its point
+reveal +1
+reveal +1                          # sound approximation
+reveal +1                          # abstract values
+reveal +2, overview-parts 1        # "Algorithm sketch" with its first point: the entry point
+reveal +1, overview-parts 2        # propagate through the CFG
+reveal +1, overview-parts 3        # union at the join point
+reveal +1, overview-parts 4        # narrowing at the branch point
+reveal +1, overview-parts end      # fixed point
+reveal +2                         # "Dynamic languages" with its point
 ```
 
 
@@ -176,7 +175,7 @@ narrow-type ..end                         # B and C, then the fixed point
 A test tells each branch something new. On the true branch of x <= 10, x is in [0, 10] (so also a fixnum); on the false branch it is in [11, ∞). On the true branch of fixnum?(x), x is a fixnum; on the false branch, anything but a fixnum.
 :::
 
-# Abstract Interpretation of `findv` {#findv-absint}
+# Static Analysis of `findv` {#findv-absint}
 
 :::columns
 :::column {#findv-ai-src width=1fr}
