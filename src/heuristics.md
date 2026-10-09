@@ -40,7 +40,7 @@ steps:
 ```arrow {#pure-fl follow=pure}
 steps:
   - null
-  - {to: ari.C4, to_anchor: top, angle: 124, length: 160}
+  - {to: ari.C3, to_anchor: top, angle: 124, length: 160}
 ```
 
 ```timeline
@@ -52,11 +52,11 @@ pure 1                      # the pure fixnum and flonum contexts survive
 
 :::: columns
 ::: column {width=1fr}
-```plot {backend=vega source="plots/thesis_plots.py:lv_typechecks_micro_inlined" legend=true width=4.6 height=2.55}
+```plot {backend=vega source="plots/thesis_plots.py:lv_typechecks_micro_inlined" title="micro benchmarks" legend=true width=4.6 height=2.55}
 ```
 ::: /column
 ::: column {width=1fr}
-```plot {backend=vega source="plots/thesis_plots.py:lv_typechecks_macro_inlined" legend=false width=4.6 height=2.55}
+```plot {backend=vega source="plots/thesis_plots.py:lv_typechecks_macro_inlined" title="macro benchmarks" legend=false width=4.6 height=2.55}
 ```
 ::: /column
 ::::
