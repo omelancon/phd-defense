@@ -1,74 +1,74 @@
 # Preface {#preface-title layout=title}
-Some background
+First, some background
 
-# Background {.small}
+# Example: My Favorite Polynomial
 
-:::columns
-:::column {#avg-src width=2fr}
-
-```code-steps {#avg-code lang=scheme file="programs/average.scm"}
-steps:
-  - [sum-add, n-add, div, cdr] # every operator with extra work
-```
-:::/column
-:::column {#avg-cfg width=0}
-
-```bbv-cfg {#avg-graph program="programs/average.bbv" height=510}
-```
-:::/column
-:::column {#dyn-notes width=3fr}
 {.reveal}
-- Object of study: dynamic programming languages
-- *Dynamic*: behaviour decided at run time
-- Example: `+` on integers, floats, mixed arithmetic (even strings in some languages)
-- Run-time decisions: extra work in every operator
-- Goal: remove these dynamic checks, for efficiency without losing safety
-:::/column
-:::column {#cfg-notes width=0}
+Suppose you want to compute values of your favorite polynomial: $p(x) = x^2 + x$.
+
 {.reveal}
-- Program analysis: programs as *control-flow graph*
-- More flexible than 2D text
-- Reason about paths taken through the program:
-  {.reveal}
-  - What values can a variable take?
-  - What checks were already performed?
-  - How will this variable be used down the line?
-- Answering these allow more efficient code generation
-:::/column
-:::/columns
+:::group
+Naturally, you write a program. You choose C because you heard it's fast!
 
-```arrow {#types to_anchor=right}
-steps:
-  - null
-  - {to: n-add, to_anchor: 330, angle: 330, length: 260, label: "n counts elements: always a fixnum (small integer)"}
-  - {to: elem, angle: 330, length: 150, label: "an element of the list: depends on the caller"}
-  - {to: ints, angle: 345, length: 250, label: "here, integers (fixnums)"}
-  - {to: flos, angle: 345, length: 190, label: "here, floats (flonums)"}
-  - {to: sum-add, angle: 330, length: 150, label: "fixnum + fixnum, flonum + flonum, or even 0 + 36.6"}
-  - null
+```code-morph {#poly-morph lang=c room=max}
+versions:
+  - file: programs/c-polynomial.c
+  - file: programs/c-polynomial-tests.c
+  - file: programs/c-polynomial-tests.c
+    highlight: answer3
+  - file: programs/c-polynomial-tests.c
+    highlight: int
+  - file: programs/c-polynomial-fxfl-tests.c
+  - file: programs/c-polynomial-fxfl-tests.c
+    highlight: answer3
+  - file: programs/c-polynomial-fxfl-overflow.c
+    highlight: overflow
 ```
+:::
 
-```arrow {#cfg-parts}
-steps:
-  - null
-  - {to: avg-graph.B, to_anchor: 200, length: 60, label: "basic block"}
-  - {to: avg-graph.A->L, to_anchor: left, length: 60, label: "jump"}
-  - {to: avg-graph.L, to_anchor: left, length: 40, label: "branch"}
-  - null
-```
+{.reveal}
+- Statically typed for `int`
+- Workaround gymnastics for `float`
+- It does not cover overflows!
 
 ```timeline
-reveal 1                  # dynamic languages
-reveal 2                  # dynamic behaviour
-reveal 3                  # `+`: highlight the two additions
-types 1..5                # what each `+` receives, one arrow per step
-reveal 4, types end, avg-code 1   # all the operators that decide at run time
-reveal 5                  # removing the checks
-width avg-src=0 dyn-notes=0 avg-cfg=2fr cfg-notes=3fr, reveal 6   # the CFG replaces the code
-cfg-parts 1..3            # basic block, jump, branch: one arrow per step
-reveal 7, cfg-parts end   # the arrow goes away with the next bullet
-reveal ..end
+reveal ..2
+poly-morph ..2
+poly-morph +1, reveal +1
+poly-morph +1, reveal +1
+poly-morph +1
+poly-morph +1, reveal +1
 ```
+
+# Example: My Favorite Polynomial (Attempt 2)
+
+{.reveal}
+:::group
+You turn to OCaml!
+
+```code-morph {#poly-morph2 lang=ocaml room=max}
+versions:
+  - file: programs/ocaml-polynomial.ml
+  - file: programs/ocaml-polynomial-tests.ml
+  - file: programs/ocaml-polynomial-tests.ml
+    highlight: error
+  - file: programs/ocaml-polynomial-fxfl.ml
+```
+:::
+
+{.reveal}
+- Compile-time type error for `float` input
+- There is a fix, but...
+- Still a silent wrap-around for `int` overflow
+
+```timeline
+reveal +1
+poly-morph2 ..1
+poly-morph2 +1, reveal +1
+poly-morph2 +1, reveal +1
+reveal +1
+```
+# Example: My Favorite Polynomial (Attempt 3)
 
 # Static Analysis of Dynamic Languages
 
