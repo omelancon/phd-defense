@@ -3,12 +3,22 @@
 Each public function is a `source` of a `plot {backend=vega}` block in this folder. The data is a
 one-time copy in data/thesis-figures/ at the root of the defense project (see its README.md); the
 encodings follow the thesis: same colours, solid and dashed lines, same baselines and y ranges.
+
+Every function takes the block's `legend` (default true), which Lattice passes to a source with
+that parameter: the slide decides whether the panel has a legend, the function only where it goes.
+The ΛV functions also take a `heuristics` option, the merge heuristics to show (all of them by
+default): `heuristics="[arithmetic]"` on the block, and `legend_heuristics` (default true): false
+leaves the heuristics out of the legend, which then names only ΛV and SBBV. Lattice passes the
+options it does not know to the source and refuses one the function does not take, so these two
+options on an SBBV plot are errors.
 """
 from __future__ import annotations
 
 import csv
 import math
 from pathlib import Path
+
+from lattice import ComponentError
 
 DATA = Path(__file__).resolve().parents[2] / "data" / "thesis-figures"
 
@@ -42,8 +52,9 @@ def _legend(orient: str) -> dict:
             "symbolSize": 260, "rowPadding": 2}
 
 
-def _chart(values, x, y, color, dash, legend_orient, title=None) -> dict:
-    """Lines with points, one series per (color, dash) pair, and a tooltip on every point."""
+def _chart(values, x, y, color, dash, legend_orient, title=None, color_legend=True) -> dict:
+    """Lines with points, one series per (color, dash) pair, and a tooltip on every point. Without
+    `color_legend`, the legend shows the dashes only."""
     tooltip = [
         {"field": "limit", "type": "quantitative", "title": "version limit"},
         {"field": color["field"], "type": "nominal"},
@@ -51,7 +62,8 @@ def _chart(values, x, y, color, dash, legend_orient, title=None) -> dict:
         {"field": "value", "type": "quantitative", "format": ".3f"},
     ]
     legends = legend_orient is not None
-    color = {**color, "type": "nominal", "legend": _legend(legend_orient) if legends else None}
+    color = {**color, "type": "nominal",
+             "legend": _legend(legend_orient) if legends and color_legend else None}
     dash = {**dash, "type": "nominal", "legend": _legend(legend_orient) if legends else None}
     spec = {
         "data": {"values": values},
@@ -78,7 +90,10 @@ SBBV_COLORS = {"domain": ["Gambit", "Bigloo"], "range": ["#0072B2", "#D55E00"]}
 SUITE_DASH = {"domain": ["macro", "micro"], "range": [[1, 0], [7, 4]]}
 
 
-def _sbbv(name: str, ytitle: str, domain: list[float] | None, fmt: str, legend_orient: str) -> dict:
+def _sbbv(name: str, ytitle: str, domain: list[float] | None, fmt: str, legend_orient: str,
+          legend: bool) -> dict:
+    """One SBBV figure; its legend, if `legend`, sits at `legend_orient`."""
+    legend_orient = legend_orient if _flag("legend", legend) else None
     rows = _rows(DATA / "sbbv" / f"{name}.csv")
     values = [{"limit": int(r[0]), "compiler": c, "suite": s, "value": v}
               for r in rows for (c, s), v in zip(SBBV_SERIES, r[1:])]
@@ -90,24 +105,24 @@ def _sbbv(name: str, ytitle: str, domain: list[float] | None, fmt: str, legend_o
                   legend_orient)
 
 
-def sbbv_checks():
+def sbbv_checks(legend=True):
     """Thesis Figure 9: run-time checks relative to compilation without any optimization."""
-    return _sbbv("checks", "Relative dynamic checks", [0, 1], ".1f", "top-right")
+    return _sbbv("checks", "Relative dynamic checks", [0, 1], ".1f", "top-right", legend)
 
 
-def sbbv_size():
+def sbbv_size(legend=True):
     """Thesis Figure 10: program size relative to compilation without SBBV."""
-    return _sbbv("size", "Relative program size", None, "~g", "top-left")
+    return _sbbv("size", "Relative program size", None, "~g", "top-left", legend)
 
 
-def sbbv_time():
+def sbbv_time(legend=True):
     """Thesis Figure 11: execution time relative to compilation without SBBV (y axis from 0.6)."""
-    return _sbbv("time", "Relative execution time", [0.6, 1.0], ".2f", "bottom-right")
+    return _sbbv("time", "Relative execution time", [0.6, 1.0], ".2f", "bottom-right", legend)
 
 
-def sbbv_compile_time():
+def sbbv_compile_time(legend=True):
     """Thesis Figure 12: compile time relative to compilation without SBBV."""
-    return _sbbv("compile-time", "Relative compile time", None, "~g", "top-left")
+    return _sbbv("compile-time", "Relative compile time", None, "~g", "top-left", legend)
 
 
 # ---------------------------------------------------------------------------- Lambda Versioning (Ch. 4)
@@ -119,15 +134,37 @@ ALGO_DASH = {"domain": ["ΛV", "SBBV"], "range": [[1, 0], [7, 4]]}
 LV_COLUMNS = {"typechecks": 1, "compile-time": 2, "versions": 4}
 
 
-def _lv_series(metric: str, kind: str, variant: str, algo: str, first: int) -> list[dict]:
+def _heuristics(heuristics) -> list[str]:
+    """The heuristics a plot shows, in the order of HEURISTICS: all of them when not given."""
+    if heuristics is None:
+        return HEURISTICS
+    if isinstance(heuristics, str):
+        heuristics = [heuristics]
+    if not isinstance(heuristics, list) or not heuristics:
+        raise ComponentError(f"heuristics must be a non-empty list of {', '.join(HEURISTICS)}")
+    unknown = [h for h in heuristics if h not in HEURISTICS]
+    if unknown:
+        raise ComponentError(f"unknown heuristic {', '.join(map(repr, unknown))}: "
+                             f"expected {', '.join(HEURISTICS)}")
+    return [h for h in HEURISTICS if h in heuristics]
+
+
+def _lv_series(metric: str, kind: str, variant: str, algo: str, first: int,
+               heuristics: list[str]) -> list[dict]:
     col = LV_COLUMNS[metric]
     out = []
-    for h in HEURISTICS:
+    for h in heuristics:
         suffix = f"{h}.{variant}." if variant else f"{h}."
         for r in _rows(DATA / "lv" / f"geomeans.{suffix}{kind}.csv"):
             if r[0] >= first and r[col] > 0:  # -1: no value (aggregate-benchmark.sh)
                 out.append({"limit": int(r[0]), "heuristic": h, "algorithm": algo, "value": r[col]})
     return out
+
+
+def _flag(name: str, value) -> bool:
+    if not isinstance(value, bool):
+        raise ComponentError(f"{name} must be true or false, not {value!r}")
+    return value
 
 
 def _ceiling(m: float) -> float:
@@ -137,73 +174,98 @@ def _ceiling(m: float) -> float:
     return step * math.ceil(m / step)
 
 
-def _lv(metric: str, kind: str, panel: str, ytitle: str, sbbv_in_hyper: bool) -> dict:
-    """One panel of a thesis figure; both panels of a figure share their y range."""
+def _lv(metric: str, kind: str, panel: str, ytitle: str, sbbv_in_hyper: bool, heuristics=None,
+        legend_heuristics=True, legend=True) -> dict:
+    """One panel of a thesis figure; both panels of a figure share their y range. `heuristics` keeps
+    some of the merge heuristics, each with its colour of the full figure; `legend_heuristics=False`
+    leaves them out of the legend. The legend, if `legend`, sits where the curves leave room: top
+    right where they fall (type checks), top left where they rise."""
+    shown = _heuristics(heuristics)
+    legend_heuristics = _flag("legend_heuristics", legend_heuristics)
     first = 0 if metric == "typechecks" else 1
-    inlined = _lv_series(metric, kind, "inline-rts", "ΛV", first)
-    hyper = _lv_series(metric, kind, "", "ΛV", first)
-    sbbv = _lv_series(metric, kind, "sbbv", "SBBV", first)
+    inlined = _lv_series(metric, kind, "inline-rts", "ΛV", first, shown)
+    hyper = _lv_series(metric, kind, "", "ΛV", first, shown)
+    sbbv = _lv_series(metric, kind, "sbbv", "SBBV", first, shown)
     if metric == "typechecks":
         domain, fmt = [0, 1], ".1f"
     else:
         domain, fmt = [0, _ceiling(max(v["value"] for v in inlined + hyper + sbbv))], "~g"
+    legend = ("top-right" if first == 0 else "top-left") if _flag("legend", legend) else None
     if panel == "inlined":
-        values, title, legend = sbbv + inlined, "Inlined operators", "top-right" if first == 0 else "top-left"
+        values, title = sbbv + inlined, "Inlined operators"
     else:
-        values, title, legend = (sbbv if sbbv_in_hyper else []) + hyper, "Hyperfunction operators", None
+        values, title = (sbbv if sbbv_in_hyper else []) + hyper, "Hyperfunction operators"
     limits = list(range(first, 11))
     return _chart(values, _x_axis(limits, "No ΛV"), _y_axis(ytitle, domain, fmt),
-                  {"field": "heuristic", "scale": HEURISTIC_COLORS}, {"field": "algorithm", "scale": ALGO_DASH},
-                  legend, title)
+                  {"field": "heuristic", "scale": _heuristic_colors(shown)},
+                  {"field": "algorithm", "scale": ALGO_DASH},
+                  legend, title, legend_heuristics)
+
+
+def _heuristic_colors(shown: list[str]) -> dict:
+    colors = dict(zip(HEURISTIC_COLORS["domain"], HEURISTIC_COLORS["range"]))
+    return {"domain": shown, "range": [colors[h] for h in shown]}
 
 
 # Thesis Figures 18 and 19: type checks relative to compilation without ΛV/SBBV. As in the thesis,
 # the hyperfunction panel leaves SBBV out (SBBV always uses inlined operators).
-def lv_typechecks_micro_inlined():
-    return _lv("typechecks", "micro", "inlined", "Relative type checks", False)
+def lv_typechecks_micro_inlined(heuristics=None, legend_heuristics=True, legend=True):
+    return _lv("typechecks", "micro", "inlined", "Relative type checks", False,
+               heuristics, legend_heuristics, legend)
 
 
-def lv_typechecks_micro_hyperfunction():
-    return _lv("typechecks", "micro", "hyperfunction", "Relative type checks", False)
+def lv_typechecks_micro_hyperfunction(heuristics=None, legend_heuristics=True, legend=True):
+    return _lv("typechecks", "micro", "hyperfunction", "Relative type checks", False,
+               heuristics, legend_heuristics, legend)
 
 
-def lv_typechecks_macro_inlined():
-    return _lv("typechecks", "macro", "inlined", "Relative type checks", False)
+def lv_typechecks_macro_inlined(heuristics=None, legend_heuristics=True, legend=True):
+    return _lv("typechecks", "macro", "inlined", "Relative type checks", False,
+               heuristics, legend_heuristics, legend)
 
 
-def lv_typechecks_macro_hyperfunction():
-    return _lv("typechecks", "macro", "hyperfunction", "Relative type checks", False)
+def lv_typechecks_macro_hyperfunction(heuristics=None, legend_heuristics=True, legend=True):
+    return _lv("typechecks", "macro", "hyperfunction", "Relative type checks", False,
+               heuristics, legend_heuristics, legend)
 
 
 # Thesis Figures 20 and 21: compile time relative to SBBV with a limit of one version.
-def lv_compile_time_micro_inlined():
-    return _lv("compile-time", "micro", "inlined", "Relative compile time", True)
+def lv_compile_time_micro_inlined(heuristics=None, legend_heuristics=True, legend=True):
+    return _lv("compile-time", "micro", "inlined", "Relative compile time", True,
+               heuristics, legend_heuristics, legend)
 
 
-def lv_compile_time_micro_hyperfunction():
-    return _lv("compile-time", "micro", "hyperfunction", "Relative compile time", True)
+def lv_compile_time_micro_hyperfunction(heuristics=None, legend_heuristics=True, legend=True):
+    return _lv("compile-time", "micro", "hyperfunction", "Relative compile time", True,
+               heuristics, legend_heuristics, legend)
 
 
-def lv_compile_time_macro_inlined():
-    return _lv("compile-time", "macro", "inlined", "Relative compile time", True)
+def lv_compile_time_macro_inlined(heuristics=None, legend_heuristics=True, legend=True):
+    return _lv("compile-time", "macro", "inlined", "Relative compile time", True,
+               heuristics, legend_heuristics, legend)
 
 
-def lv_compile_time_macro_hyperfunction():
-    return _lv("compile-time", "macro", "hyperfunction", "Relative compile time", True)
+def lv_compile_time_macro_hyperfunction(heuristics=None, legend_heuristics=True, legend=True):
+    return _lv("compile-time", "macro", "hyperfunction", "Relative compile time", True,
+               heuristics, legend_heuristics, legend)
 
 
 # Thesis Figures 22 and 23: average number of versions per basic block of the source program.
-def lv_versions_micro_inlined():
-    return _lv("versions", "micro", "inlined", "Versions per basic block", True)
+def lv_versions_micro_inlined(heuristics=None, legend_heuristics=True, legend=True):
+    return _lv("versions", "micro", "inlined", "Versions per basic block", True,
+               heuristics, legend_heuristics, legend)
 
 
-def lv_versions_micro_hyperfunction():
-    return _lv("versions", "micro", "hyperfunction", "Versions per basic block", True)
+def lv_versions_micro_hyperfunction(heuristics=None, legend_heuristics=True, legend=True):
+    return _lv("versions", "micro", "hyperfunction", "Versions per basic block", True,
+               heuristics, legend_heuristics, legend)
 
 
-def lv_versions_macro_inlined():
-    return _lv("versions", "macro", "inlined", "Versions per basic block", True)
+def lv_versions_macro_inlined(heuristics=None, legend_heuristics=True, legend=True):
+    return _lv("versions", "macro", "inlined", "Versions per basic block", True,
+               heuristics, legend_heuristics, legend)
 
 
-def lv_versions_macro_hyperfunction():
-    return _lv("versions", "macro", "hyperfunction", "Versions per basic block", True)
+def lv_versions_macro_hyperfunction(heuristics=None, legend_heuristics=True, legend=True):
+    return _lv("versions", "macro", "hyperfunction", "Versions per basic block", True,
+               heuristics, legend_heuristics, legend)

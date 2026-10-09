@@ -5,6 +5,7 @@
 ::include{file="plots/sbbv-time.md"}
 ::include{file="plots/sbbv-compile-time.md"}
 ::include{file="plots/lv-typechecks-micro.md"}
+::include{file="plots/lv-typechecks-micro-arithmetic.md"}
 ::include{file="plots/lv-typechecks-macro.md"}
 ::include{file="plots/lv-compile-time-micro.md"}
 ::include{file="plots/lv-compile-time-macro.md"}

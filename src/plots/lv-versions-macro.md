@@ -2,11 +2,11 @@
 
 :::columns
 :::column {width=1fr}
-```plot {backend=vega source="thesis_plots.py:lv_versions_macro_inlined" width=4.6 height=2.55}
+```plot {backend=vega source="thesis_plots.py:lv_versions_macro_inlined" legend=true width=4.6 height=2.55}
 ```
 :::/column
 :::column {width=1fr}
-```plot {backend=vega source="thesis_plots.py:lv_versions_macro_hyperfunction" width=4.6 height=2.55}
+```plot {backend=vega source="thesis_plots.py:lv_versions_macro_hyperfunction" legend=false width=4.6 height=2.55}
 ```
 :::/column
 :::/columns

@@ -2,7 +2,7 @@
 
 :::columns
 :::column {width=3fr}
-```plot {backend=vega source="thesis_plots.py:sbbv_time" width=5.6 height=4.1}
+```plot {backend=vega source="thesis_plots.py:sbbv_time" legend=true width=5.6 height=4.1}
 ```
 :::/column
 :::column {width=2fr}
