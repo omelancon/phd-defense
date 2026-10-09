@@ -114,6 +114,7 @@ versions:
   - fixnum arithmetic
   - eliminated bound checks
   - can this test be removed?
+- **will come back to this example**
 ::: /column
 ::: /columns
 
@@ -133,7 +134,8 @@ reveal +1, findv-morph +1              # expanded operators, what they add highl
 reveal +1, findv-morph +1              # the redundant checks
 why ..+4                               # why four of them are redundant, one arrow each
 reveal +1, findv-morph +1, why end     # redundant checks removed, nothing highlighted
-reveal ..end, findv-morph ..end        # each sub-bullet with its highlight
+reveal ..end-1, findv-morph ..end        # each sub-bullet with its highlight
+reveal ..end
 ```
 
 # Table of Content {.large}
