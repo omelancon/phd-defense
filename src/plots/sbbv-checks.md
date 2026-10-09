@@ -1,16 +1,13 @@
-# SBBV Results: Dynamic Checks {#plot-sbbv-checks .small}
+# SBBV Results: Dynamic Checks {#plot-sbbv-checks}
 
-:::columns
-:::column {width=3fr}
-```plot {backend=vega source="thesis_plots.py:sbbv_checks" legend=true width=5.6 height=4.1}
+```plot {backend=vega source="thesis_plots.py:sbbv_checks" legend=true width=10 height=4.6}
 ```
-:::/column
-:::column {width=2fr}
-- Gambit and Bigloo, R7RS benchmarks: checks executed, relative to no optimization
-- No BBV: the compilers' own optimizations
-- Limit 1, equivalent to static analysis: fewer checks
-- Limit 2, duplication (macro): 54% of checks gone with Gambit, 62% with Bigloo
-- Slow decrease past limit 10: the `similarity` heuristic needs many versions
-:::/column
-:::/columns
 
+::: notes
+Thesis Figure 9. Lower is better. Macro benchmarks are solid lines, micro benchmarks dashed.
+Checks executed on the R7RS benchmarks, relative to compilation without any optimization. The
+"No BBV" point is the compilers' own optimizations. A limit of 1 is equivalent to a static
+analysis and already removes checks. A limit of 2 adds duplication: on macro benchmarks, 54% of
+checks are gone with Gambit and 62% with Bigloo. Past a limit of about 10 the decrease is slow:
+the similarity heuristic needs many versions. Hover a point for its exact value.
+:::
