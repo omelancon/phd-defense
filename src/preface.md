@@ -70,6 +70,29 @@ reveal +1
 ```
 # Example: My Favorite Polynomial (Attempt 3)
 
+{.reveal}
+:::group
+You decide to try dynamic languages.
+
+::: columns
+::: column
+```code {lang=scheme file="programs/scheme-polynomial-tests.scm" title="Scheme"}
+```
+::: /column
+::: column
+```code {lang=python file="programs/python-polynomial-tests.py" title="Python"}
+```
+::: /column
+::: /columns
+:::
+
+{.reveal}
+It just works! But what is the catch?
+
+{.reveal}
+```plot {backend=vega source="plots/polynomial_bench.py:polynomial_bench" width=11 height=1.6}
+```
+
 # Static Analysis of Dynamic Languages
 
 {.reveal}
