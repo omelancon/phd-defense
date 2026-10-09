@@ -1,6 +1,74 @@
 # Static Analysis {#abstract-interpretation-title layout=title}
 
-Why previous techniques fall short?
+What is it and why it falls short?
+
+# Intuition on Static Analysis {.small}
+
+{.reveal}
+When looking to a program, some tests beg to be removed, even to the human-eye.
+
+::: columns
+::: column {width=5fr}
+{.reveal-with}
+```code-morph {#findv-morph lang=scheme room=fit}
+versions:
+  - file: programs/background-findv.scm
+    label: "findv.scm"
+  - file: programs/background-findv-expanded.scm
+    label: "expanded operators"
+    highlight: changed
+  - file: programs/background-findv-expanded.scm
+    label: "expanded operators"
+    highlight: [vec-check, fix-check, ovf-check, flo-check, ref-vec, ref-lo, ref-hi]
+  - file: programs/background-findv-optimized.scm
+    label: "redundant checks removed"
+  - file: programs/background-findv-optimized.scm
+    label: "redundant checks removed"
+    highlight: lifted
+  - file: programs/background-findv-optimized.scm
+    label: "redundant checks removed"
+    highlight: [fx-add, fx-gte]
+  - file: programs/background-findv-optimized.scm
+    label: "redundant checks removed"
+    highlight: vref
+  - file: programs/background-findv-optimized.scm
+    label: "redundant checks removed"
+    highlight: ref-fix
+```
+::: /column
+::: column {width=4fr}
+{.reveal}
+- operators implicit run-time checks
+- many of which are redundant
+- eliminating them can make the program more efficient
+  {.reveal}
+  - lift `vector?` out of the loop
+  - fixnum arithmetic
+  - eliminated bound checks
+  - can this test be removed?
+- **will come back to this example**
+::: /column
+::: /columns
+
+```arrow {#why}
+steps:
+  - null
+  - {to: vec-check, angle: 315, length: 260, label: "checked at every iteration"}
+  - {to: fix-check, angle: 315, label: "index arithmetic will always be on small integers"}
+  - {to: ref-vec, angle: 45, length: 220, label: "already checked in findv"}
+  - {to: ref-hi, angle: 45, label: "findv known to return valid index"}
+  - null
+```
+
+```timeline
+reveal 1                               # the program
+reveal +1, findv-morph +1              # expanded operators, what they add highlighted
+reveal +1, findv-morph +1              # the redundant checks
+why ..+4                               # why four of them are redundant, one arrow each
+reveal +1, findv-morph +1, why end     # redundant checks removed, nothing highlighted
+reveal ..end-1, findv-morph ..end        # each sub-bullet with its highlight
+reveal ..end
+```
 
 # Static Analysis Overview {.small}
 
