@@ -1,6 +1,6 @@
 # Static Analysis {#abstract-interpretation-title layout=title}
 
-What is it and why it falls short?
+What is it and why does it fall short?
 
 # Intuition on Static Analysis {.small}
 

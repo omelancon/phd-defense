@@ -172,7 +172,7 @@ How can an ahead-of-time compiler **eliminate run-time checks**, so that dynamic
 **run as fast as static ones** without **losing their flexibility**?
 ```
 
-# Table of Content {.large}
+# Table of Contents {.large}
 
 {.reveal}
 1. ## Background on Static Analysis

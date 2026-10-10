@@ -110,7 +110,7 @@ To count checks, every primitive is redefined by a macro with explicit inline ch
 overflow, array bounds), so both compilers perform the same checks in the same order; counting
 runs are separate from timing runs. Timing: perf stat, each run at least 5 s, 50 runs with the 5
 highest and 5 lowest removed; relative standard deviation at most 0.24% (macro) and 2.20% (micro).
-Intel Core i7-7700K, 48 GB, Debian 10. Micro benchmarks only shed light on specific behaviours.
+Intel Core i7-7700K, 48 GB, Debian 10. Micro benchmarks only shed light on specific behaviors.
 The detour (key f) shows that the baseline compilers are already competitive with Node.js and
 Chez Scheme.
 :::

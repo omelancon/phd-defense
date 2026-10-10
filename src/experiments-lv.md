@@ -85,7 +85,7 @@ reveal 2, hf-arrow 2     # second bullet, arrow gone
 ```
 
 ::: notes
-Thesis Section 3.2.2, 3.5.1 and 3.7. ΛV turns every function into a hyperfunction: after CPS
+Thesis Sections 3.2.2, 3.5.1 and 3.7. ΛV turns every function into a hyperfunction: after CPS
 conversion and lambda lifting, each block is a lambda that receives its live variables and its
 return points as continuations (K[0], K[1], K[2]), so a call passes one continuation per return
 point. The example is square from the thesis (Section 3.2.2), specialized with three entry points

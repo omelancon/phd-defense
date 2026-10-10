@@ -66,7 +66,7 @@ as far as FORTRAN 77", but "these subroutines are not reentrant".
 :::
 
 
-# Heterogeneous Datastructures {#future-heterogeneous .small}
+# Heterogeneous Data Structures {#future-heterogeneous .small}
 
 ::::: columns
 :::: column {width=1fr}

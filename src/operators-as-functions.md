@@ -45,7 +45,7 @@ of-lv end, of-removed 1                   # the fixnum version of +: its type ch
 
 # Operators as functions: compile time {#operators-compile-time .small}
 
-Operator as functions re-use specialisations. Inlined operators had to re-specialize at every site.
+Operators as functions re-use specializations. Inlined operators had to re-specialize at every site.
 
 ```plot {backend=vega source="plots/thesis_plots.py:lv_operators_compile_time_all" legend=true width=10 height=4.2}
 ```

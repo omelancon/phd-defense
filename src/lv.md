@@ -23,7 +23,7 @@
 **Solution**
 
 {.reveal}
-1. Backward propagation from function's exit sites to call sites.
+1. Backward propagation from functions' exit sites to call sites.
 2. Duplicate functions' entry points and exit sites to preserve context precision.
 
 ```timeline
@@ -110,7 +110,7 @@ reveal ..end
 
 {.reveal}
 - Transform the source program into one with **multi-entry/multi-return functions**
-- Context at call sites propagate information to generate specialized entry points
+- Context at call sites propagates information to generate specialized entry points
 - Entry points track the exit sites they can reach
 - When a specialized exit site is discovered/removed, its call sites are notified and updated
 
@@ -126,7 +126,7 @@ flash: true
 **Algorithm sketch**
 
 {.reveal}
-- Extend SBBV with multi-source recahability algorithm that associates entry points and exit sites
+- Extend SBBV with a multi-source reachability algorithm that associates entry points and exit sites
 - When a new exit site is found, generate a specialized return point for each of its call sites
 - When a merge removes an exit site, remove the corresponding return points from its call sites
 - Entry points and exit sites duplication is governed by the same version limit as SBBV
@@ -276,7 +276,7 @@ ex-lv end-1, ex-notes 23        # path: (read) returns a flonum
 ex-lv end, ex-notes 24          # path: (read) returns a fixnum, no overflow
 ```
 
-# Recursive example: fibonacci {#lv-fib .small}
+# Recursive example: Fibonacci {#lv-fib .small}
 
 :::columns
 :::column {#fib-src width=1fr}
