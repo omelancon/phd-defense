@@ -12,11 +12,11 @@
 **New rules**
 
 {.reveal}
-- `(##vector-length v)` returns `⟦v⟧`
+- `(##vector-length v)` returns the singleton `⟦v⟧`
   {.reveal}
   - `⟦v⟧`: exactly the length of `v`, some fixnum in `[0, maxfix]`
-- `(fx< x len)` with `len` = `⟦v⟧` narrows the upper bound of `x` to `⟦v⟧-1` when true
-- `(fx< x len)` with `x` in `[0, ⟦v⟧-1]` and `len` = `⟦v⟧` is always true
+- `(fx< x len)` with `len = ⟦v⟧` narrows the upper bound of `x` to `⟦v⟧-1` when true
+- `(fx< x len)` with `x` in `[0, ⟦v⟧-1]` and `len == ⟦v⟧` is always true
 
 # Example: vector-ref {#vector-simple .small}
 
