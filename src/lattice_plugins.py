@@ -373,3 +373,121 @@ class TableSteps(Component):
         markup = (f'<div class="lt-table-steps"><table><thead>{thead}</thead>'
                   f"<tbody>{tbody}</tbody></table></div>")
         return RenderResult(markup, data={"positions": positions}, positions=len(positions))
+
+
+class JuryMember(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    name: str
+    role: str             # président, directeur de recherche...
+    affiliation: str = ""
+
+
+class TitlePageOptions(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    title: str | None = None      # defaults to the front matter's title
+    author: str | None = None     # defaults to the front matter's author
+    kicker: str = ""              # a short line above the title (the occasion)
+    date: str | None = None       # defaults to the front matter's date, if any
+    logo: str | None = None       # an SVG, relative to the deck file, inlined
+    logo_alt: str = ""
+    jury: list[JuryMember] = Field(default_factory=list)
+    motif: bool = True            # a large, faint lattice in the background
+
+
+_SVG_HEAD = re.compile(r"^.*?(?=<svg\b)", re.S)
+
+
+def _inline_svg(source: str, alt: str) -> str:
+    """An SVG file as inline markup: shapes without a fill take the text colour (``currentColor``),
+    so that the black parts of a logo follow the theme's ink while its coloured parts keep their colour."""
+    svg = _SVG_HEAD.sub("", source, count=1)
+    svg = re.sub(r"<!--.*?-->|<metadata\b.*?</metadata>", "", svg, flags=re.S)
+    svg = re.sub(r"<(path|polygon|rect|circle|ellipse)\b(?![^>]*\bfill=)", r'<\1 fill="currentColor"', svg)
+    end = svg.find(">") + 1                     # the root tag loses its size: CSS sets it
+    svg = re.sub(r'\s(?:width|height)="[^"]*"', "", svg[:end]) + svg[end:]
+    label = f'role="img" aria-label="{html.escape(alt, quote=True)}"' if alt else 'aria-hidden="true"'
+    return svg.replace("<svg ", f'<svg class="tp-logo" {label} preserveAspectRatio="xMinYMid meet" ', 1)
+
+
+def _lattice_motif(half: int = 4, dx: float = 60, dy: float = 52, r: float = 6) -> str:
+    """A Hasse diagram for the background: a diamond lattice from a bottom element to a top one, each
+    node joined to the nodes just above it. ``half`` is the number of rows from the bottom to the
+    widest row. Styled faint by plugins/title-page.css."""
+    rows = [i + 1 for i in range(half + 1)] + [half - i for i in range(half)]   # 1 2 3 4 5 4 3 2 1
+
+    def pos(i, j):
+        return (j - (rows[i] - 1) / 2) * dx, -i * dy
+
+    lines, dots = [], []
+    for i, n in enumerate(rows):
+        for j in range(n):
+            x, y = pos(i, j)
+            dots.append((x, y))
+            if i + 1 < len(rows):
+                above = (j, j + 1) if rows[i + 1] > n else (j - 1, j)
+                lines += [(x, y, *pos(i + 1, k)) for k in above if 0 <= k < rows[i + 1]]
+    w, h = half * dx + 2 * r + 4, (len(rows) - 1) * dy + 2 * r + 4
+    ox, oy = w / 2, h - r - 2
+    edges = "".join(f'<line x1="{x1 + ox:.1f}" y1="{y1 + oy:.1f}" x2="{x2 + ox:.1f}" y2="{y2 + oy:.1f}"/>'
+                    for x1, y1, x2, y2 in lines)
+    nodes = "".join(f'<circle cx="{x + ox:.1f}" cy="{y + oy:.1f}" r="{r}"/>' for x, y in dots)
+    return (f'<svg class="tp-motif" viewBox="0 0 {w:.0f} {h:.0f}" aria-hidden="true">'
+            f'<g class="tp-motif-edges">{edges}</g><g class="tp-motif-nodes">{nodes}</g></svg>')
+
+
+_HYPHENATED = re.compile(r"\S+-\S+")
+
+
+@register("title-page")
+class TitlePage(Component):
+    """The opening slide of a defense: the institution, the title, the author and the jury.
+
+    The YAML body gives ``kicker`` (a short line naming the occasion), ``logo`` (an SVG file, inlined so
+    that its uncoloured shapes take the theme's ink), ``logo_alt`` and ``jury``, a list of
+    ``{name, role, affiliation}`` in the order of the defense; ``motif: false`` removes the faint
+    lattice drawn in the background. ``title``, ``author`` and ``date`` default
+    to the front matter. The slide's own ``#`` heading is hidden (it still names the slide in the
+    overview and the go-to list), so the block owns the whole slide. Styled by plugins/title-page.css
+    with the theme's variables: the jury hangs from a rule with a node per member, the vertical
+    counterpart of the takeaways on the Conclusion slide.
+    """
+
+    Options = TitlePageOptions
+    version = "2"
+    body = "yaml"
+    css = [str(HERE / "title-page.css")]
+
+    def render(self, block, opts: TitlePageOptions, ctx) -> RenderResult:
+        title = opts.title or ctx.meta.title
+        author = opts.author or ctx.meta.author
+        if not title:
+            raise ComponentError("give a 'title', or a title in the front matter")
+        date = opts.date if opts.date is not None else (ctx.meta.date or "")
+        esc = lambda s: html.escape(str(s), quote=False)
+
+        top = ""
+        if opts.logo or opts.kicker:
+            logo = _inline_svg(ctx.path(opts.logo).read_text(encoding="utf-8"), opts.logo_alt) if opts.logo else ""
+            kicker = f'<p class="tp-kicker">{esc(opts.kicker)}</p>' if opts.kicker else ""
+            top = f'<div class="tp-top">{logo}{kicker}</div>'
+
+        byline = ""
+        if author or date:
+            byline = ('<div class="tp-byline">'
+                      + (f'<p class="tp-author">{esc(author)}</p>' if author else "")
+                      + (f'<p class="tp-date">{esc(date)}</p>' if date else "") + "</div>")
+        # a hyphenated word (Ahead-of-Time) never breaks at its hyphens
+        title_html = _HYPHENATED.sub(lambda m: f'<span class="tp-nowrap">{m.group(0)}</span>', esc(title))
+        main = f'<div class="tp-main"><p class="tp-title">{title_html}</p>{byline}</div>'
+
+        jury = ""
+        if opts.jury:
+            items = "".join(
+                f'<li><p class="tp-name">{esc(m.name)}</p><p class="tp-role">'
+                f'<span class="tp-role-name">{esc(m.role)}</span>'
+                + (f'<span class="tp-affil">{esc(m.affiliation)}</span>' if m.affiliation else "")
+                + "</p></li>" for m in opts.jury)
+            jury = f'<section class="tp-jury" aria-label="Jury"><p class="tp-label">Jury</p><ol>{items}</ol></section>'
+
+        motif = _lattice_motif() if opts.motif else ""
+        return RenderResult(f'<div class="lt-title-page">{motif}{top}{main}{jury}</div>')

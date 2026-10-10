@@ -1,0 +1,54 @@
+/* `title-page` (src/lattice_plugins.py): the opening slide. The institution across the top, the title
+   and the author on the left, the jury on the right, hanging from a rule with a node per member (the
+   vertical counterpart of the takeaways' rule on the Conclusion slide). Built from the theme's variables. */
+
+/* the block owns the slide: the slide's heading only names it in the overview and the go-to list;
+   its wrapper grows to the whole body */
+.lt-slide:has(.lt-title-page)>.lt-head{display:none}
+.lt-slide:has(.lt-title-page){padding-top:44px}
+.lt-c-title-page{flex:1;min-height:0;display:flex;flex-direction:column}
+
+.lt-title-page{position:relative;isolation:isolate;flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 372px;
+  grid-template-rows:auto 1fr;column-gap:72px}
+.lt-title-page p{margin:0}
+
+/* institution: the logo and the occasion, over a hairline */
+.tp-top{grid-column:1/-1;display:flex;align-items:flex-end;justify-content:space-between;gap:32px;
+  padding-bottom:18px;border-bottom:1px solid var(--lt-rule)}
+.tp-logo{display:block;height:64px;width:auto;color:var(--lt-ink)}
+.tp-kicker{font-size:15px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--lt-muted);
+  line-height:1;padding-bottom:3px}
+
+/* title and author */
+.tp-main{align-self:center;padding-bottom:12px}
+.tp-title{font-family:var(--lt-font-head);font-size:52px;font-weight:650;line-height:1.1;letter-spacing:-.015em;
+  color:var(--lt-ink);text-wrap:balance}
+.tp-nowrap{white-space:nowrap}
+.tp-byline{display:flex;align-items:center;gap:18px;margin-top:40px}
+.tp-byline::before{content:"";flex:none;width:56px;height:5px;border-radius:3px;background:var(--lt-accent)}
+.tp-author{font-family:var(--lt-font-head);font-size:30px;font-weight:600;color:var(--lt-accent);letter-spacing:-.005em}
+.tp-date{font-size:20px;color:var(--lt-muted)}
+.tp-date::before{content:"\00B7";margin-right:18px;color:var(--lt-edge)}
+
+/* jury: one node per member on a rule */
+.tp-jury{align-self:center;padding-top:24px}
+.tp-label{font-size:15px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--lt-muted);
+  margin-bottom:18px!important;padding-left:38px}
+.tp-jury ol{--tp-gap:16px;list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--tp-gap)}
+.tp-jury li{position:relative;margin:0;padding-left:38px}
+.tp-jury li::before{content:"";position:absolute;left:0;top:8px;width:18px;height:18px;border-radius:50%;
+  box-sizing:border-box;background:var(--lt-bg);border:3px solid var(--lt-accent);z-index:1}
+/* the rule: from each node to the next one */
+.tp-jury li:not(:last-child)::after{content:"";position:absolute;left:8px;top:17px;width:2px;
+  height:calc(100% + var(--tp-gap));background:var(--lt-rule)}
+.tp-name{font-family:var(--lt-font-head);font-size:23px;font-weight:600;line-height:1.45;color:var(--lt-ink)}
+.tp-role{font-size:16px;line-height:1.4;color:var(--lt-muted)}
+.tp-role-name{color:var(--lt-accent);font-weight:600}
+.tp-affil::before{content:"\00B7";margin:0 .5em;color:var(--lt-edge)}
+
+
+/* the motif: a large lattice, barely there, behind the title; it bleeds off the bottom left corner */
+.tp-motif{position:absolute;z-index:-1;left:-150px;top:104px;height:640px;width:auto;pointer-events:none;
+  --tp-motif-ink:color-mix(in srgb, var(--lt-edge) 14%, var(--lt-bg))}
+.tp-motif-edges line{stroke:var(--tp-motif-ink);stroke-width:2}
+.tp-motif-nodes circle{fill:var(--lt-bg);stroke:var(--tp-motif-ink);stroke-width:2}
