@@ -28,8 +28,15 @@ caption: code duplication to anticipate multiple run-time behaviors.
 tk-checks 1       # SBBV: over half of the dynamic checks gone, about 10% faster
 tk-static 1       # ΛV: optimal specialization, one type check per input
 tk-flex 1         # and nothing given up for it
+reveal 1          # the "Thank you!" badge appears
 ```
 
+{.reveal}
+::: thanks-corner
+::detour-badge{ref=detour-thanks .thanks-badge}
+::: /thanks-corner
+
+::: detour {#detour-thanks label="Thank you!" key=m}
 # Remerciements {#thanks}
 
 ```thanks
@@ -44,3 +51,4 @@ image: figures/dream-of-islands.png
 alt: Un voilier sous la pluie, une chaloupe dans les vagues
 caption: "*A Dream of Islands*, Philip Teece, p.&nbsp;33"
 ```
+::: /detour

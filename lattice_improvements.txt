@@ -114,3 +114,27 @@ Requests for the Lattice developers, from the defense deck.
 
    or, closer to plain Markdown, column attributes on a GFM table (a reveal step per column) and a
    `best=min` attribute on the table.
+
+8. A detour badge that appears at the last step without making the detour a step (slide "Conclusion",
+   src/conclusion.md)
+
+   Need: the "Thank you!" badge, bottom right of the Conclusion slide, appears after the last takeaway
+   and enters the acknowledgements detour only by its key (m), Down or a click, never by Right.
+   Today: `badge=step` and `badge=next` need the detour to be a detour step (LT055), and a detour step
+   is entered by Right. A reveal on the badge itself is refused (LT056, LT065). The deck therefore
+   wraps the badge in a container that is a reveal fragment, and adds a `reveal 1` line at the end of
+   the timeline:
+
+     {.reveal}
+     ::: thanks-corner
+     ::detour-badge{ref=detour-thanks}
+     ::: /thanks-corner
+
+   plus a rule in src/plugins/thanks.css to put the wrapper at the bottom right (there is no helper
+   class for that either, see request 4). The wrapper and the extra timeline line are noise.
+   Wanted syntax, roughly: a badge mode tied to a step but not to a detour step,
+
+     ::detour-badge{ref=detour-thanks badge=at at=end}
+
+   or `badge=end` for the last step of the slide, and, still in the same spirit as request 4, a
+   helper class for alignment (`.bottom-right`) usable on a placed badge.

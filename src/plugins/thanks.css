@@ -9,3 +9,8 @@
 .th-drawing{height:462px;background:var(--lt-ink);
   -webkit-mask:var(--th-src) center/contain no-repeat;mask:var(--th-src) center/contain no-repeat}
 .th-figure figcaption{align-self:center;font-size:10px;letter-spacing:.02em;color:var(--lt-muted)}
+
+/* The badge of the acknowledgements detour, at the bottom right of the Conclusion slide. Its wrapper is
+   a reveal fragment, so the badge appears at the last step without being a detour step (request 8 of
+   lattice_improvements.txt). */
+.thanks-corner{align-self:flex-end;margin-top:auto}
