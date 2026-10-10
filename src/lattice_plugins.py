@@ -6,7 +6,8 @@ import re
 import subprocess
 from pathlib import Path
 
-from pydantic import BaseModel, ConfigDict
+from markdown_it import MarkdownIt
+from pydantic import BaseModel, ConfigDict, Field
 
 from lattice import Component, ComponentError, Part, RenderResult, register
 
@@ -147,3 +148,32 @@ class Statement(Component):
             raise ComponentError("write the sentence in the body of the block")
         text = _KEY.sub(r'<span class="lt-statement-key">\1</span>', html.escape(text, quote=False))
         return RenderResult(f'<div class="lt-statement"><p>{text}</p></div>')
+
+
+class RelatedWorkNoteOptions(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    title: str = "Related work"
+    items: list[str] = Field(min_length=1)
+
+
+_INLINE = MarkdownIt("commonmark", {"html": False})
+
+
+@register("related-work-note")
+class RelatedWorkNote(Component):
+    """A box pointing out related work, the same on every slide that has one.
+
+    The YAML body gives a ``title`` (a sentence introducing the list) and the ``items``, one work per
+    entry (``Name (Author year)``); both take inline Markdown (`code`, *emphasis*). Styled by
+    plugins/related-work-note.css, a light blue box built from the theme's variables. Put a
+    ``{.reveal}`` line before the block to reveal it.
+    """
+
+    Options = RelatedWorkNoteOptions
+    body = "yaml"
+    css = [str(HERE / "related-work-note.css")]
+
+    def render(self, block, opts: RelatedWorkNoteOptions, ctx) -> RenderResult:
+        items = "".join(f"<li>{_INLINE.renderInline(item)}</li>" for item in opts.items)
+        return RenderResult(f'<aside class="lt-related-work"><p>{_INLINE.renderInline(opts.title)}</p>'
+                            f"<ul>{items}</ul></aside>")

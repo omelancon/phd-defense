@@ -13,13 +13,13 @@
 ::: /columns
 
 {.reveal}
-::: callout
-Related work explored some designs:
-
-- Multi-barrelled CPS (Shivers 2004)
-- Extended flat closure (Saleil 2017)
-- Alternate returns (FORTRAN 77)
-:::
+```related-work-note
+title: "Related work explored some designs:"
+items:
+  - Multi-barrelled CPS (Shivers 2004)
+  - Extended flat closure (Saleil 2017)
+  - Alternate returns (FORTRAN 77)
+```
 :::: /column
 :::: column {#native-code-col width=0}
 ```code {#native-code lang=tasm file="programs/hvm-hyperfunction.hvm" title="HVM: a VM for hyperfunctions"}

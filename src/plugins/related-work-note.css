@@ -1,0 +1,8 @@
+/* `related-work-note` (src/lattice_plugins.py): a box pointing out related work. The same box as a
+   callout, in a light blue drawn from the theme's blue (--lt-range), so that it follows the theme. */
+.lt-related-work{
+  --rw-edge:var(--lt-range);
+  --rw-bg:color-mix(in srgb, var(--lt-range) 16%, var(--lt-bg));
+  padding:16px 22px;border-radius:10px;background:var(--rw-bg);border-left:6px solid var(--rw-edge);
+  color:var(--lt-ink)}
+.lt-related-work li::marker{color:var(--rw-edge)}
