@@ -177,3 +177,37 @@ class RelatedWorkNote(Component):
         items = "".join(f"<li>{_INLINE.renderInline(item)}</li>" for item in opts.items)
         return RenderResult(f'<aside class="lt-related-work"><p>{_INLINE.renderInline(opts.title)}</p>'
                             f"<ul>{items}</ul></aside>")
+
+
+class TakeawayOptions(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    key: str              # the phrase of the thesis question it answers, quoted
+    figure: str           # one big number or word
+    caption: str          # what the figure means, one short sentence
+
+
+@register("takeaway")
+class Takeaway(Component):
+    """One answer on the closing slide: a quoted key phrase, then a big figure and a caption.
+
+    The YAML body gives ``key`` (the phrase of the thesis question it answers), ``figure`` (a number
+    or a short word, set large in the accent colour) and ``caption``; ``key`` and ``caption`` take
+    inline Markdown. Two positions: at 0 only the key shows, on a grey rule with a hollow node; at 1
+    the node fills, the rule turns to the accent colour and the figure and caption appear. The rule
+    runs into the gap after its column, so that takeaways side by side in columns read as one path.
+    Give it an ``#id`` and move it in a timeline. Styled by plugins/takeaway.css, which uses the
+    theme's variables.
+    """
+
+    Options = TakeawayOptions
+    version = "1"
+    body = "yaml"
+    runtime = str(HERE / "takeaway.js")
+    css = [str(HERE / "takeaway.css")]
+
+    def render(self, block, opts: TakeawayOptions, ctx) -> RenderResult:
+        markup = ('<div class="lt-takeaway"><span class="tk-rule"></span>'
+                  f'<p class="tk-key">{_INLINE.renderInline(opts.key)}</p>'
+                  f'<p class="tk-figure">{html.escape(opts.figure, quote=False)}</p>'
+                  f'<p class="tk-caption">{_INLINE.renderInline(opts.caption)}</p></div>')
+        return RenderResult(markup, data={"positions": 2}, positions=2)

@@ -1,0 +1,32 @@
+/* `takeaway` (src/lattice_plugins.py): one answer on the closing slide. A rule with a node at its
+   start runs above it and into the gap after its column, so that takeaways in columns read as one
+   path; at position 1 the node fills, the rule turns to the accent colour from the node onward,
+   and the figure and caption appear. */
+/* the row of takeaways keeps its content height and sits in the middle of the room under the title;
+   its columns still stretch to the tallest one, so that their rules stay on one line */
+.lt-columns:has(.lt-takeaway){flex:none;margin-block:auto}
+.lt-takeaway{position:relative;padding-top:34px}
+.lt-takeaway p{margin:0}
+.tk-rule{position:absolute;left:0;right:calc(-1 * var(--lt-gap, 40px));top:0;height:2px;background:var(--lt-rule)}
+.lt-column:last-child .tk-rule{right:0}
+.tk-rule::after{content:"";position:absolute;inset:0;background:var(--lt-accent);transform-origin:left;transform:scaleX(0)}
+.tk-rule::before{content:"";position:absolute;z-index:1;left:0;top:-8px;width:18px;height:18px;border-radius:50%;
+  box-sizing:border-box;background:var(--lt-bg);border:3px solid var(--lt-edge)}
+.tk-key{font-size:22px;font-style:italic;line-height:1.3;color:var(--lt-muted)}
+.tk-key::before{content:"\201C"}
+.tk-key::after{content:"\201D"}
+.tk-figure{margin:10px 0 6px!important;font-family:var(--lt-font-head);font-size:78px;font-weight:650;line-height:1;
+  letter-spacing:-.025em;color:var(--lt-accent)}
+.tk-caption{font-size:22px;line-height:1.4;color:var(--lt-ink);max-width:15.5em}
+.tk-figure,.tk-caption{opacity:0;transform:translateY(10px)}
+/* answered */
+.tk-done .tk-rule::before{background:var(--lt-accent);border-color:var(--lt-accent)}
+.tk-done .tk-rule::after{transform:scaleX(1)}
+.tk-done .tk-key{color:var(--lt-ink)}
+.tk-done .tk-figure,.tk-done .tk-caption{opacity:1;transform:none}
+/* single steps animate: the node fills, the rule draws itself, then the figure and the caption rise */
+.tk-animate .tk-rule::before{transition:background .25s,border-color .25s}
+.tk-animate .tk-rule::after{transition:transform .8s cubic-bezier(.3,.7,.2,1) .1s}
+.tk-animate .tk-key{transition:color .3s}
+.tk-animate .tk-figure{transition:opacity .45s .15s,transform .45s cubic-bezier(.2,.7,.2,1) .15s}
+.tk-animate .tk-caption{transition:opacity .45s .3s,transform .45s cubic-bezier(.2,.7,.2,1) .3s}
