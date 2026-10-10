@@ -1,0 +1,19 @@
+; vector-simple.scm (vector support) with vector-length and vector-ref expanded, as basic blocks.
+; The test (fx< i (vector-length v)) of the program is C; vector-ref then checks vector? (D), fixnum? (E),
+; the lower bound (G) and the upper bound (H) before the access; every failed check goes to F.
+; v is a vector of 3 elements: make-vector stands for the literal #(1 2 3), whose length is not tracked.
+function main()
+A:  i = read()
+    v = make-vector(3, 0)
+    if fixnum?(i) goto B else goto Z
+B:  if vector?(v) goto C else goto F
+C:  len = ##vector-length(v)
+    if fx<(i, len) goto D else goto Z
+D:  if vector?(v) goto E else goto F
+E:  if fixnum?(i) goto G else goto F
+G:  if fx>=(i, 0) goto H else goto F
+H:  len2 = ##vector-length(v)
+    if fx<(i, len2) goto I else goto F
+I:  return ##vector-ref(v, i)
+Z:  return #f
+F:  fail

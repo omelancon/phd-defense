@@ -1,0 +1,5 @@
+(let ((i (read))
+      (v #(1 2 3)))
+  (if (and (fixnum? i) (fx< i (vector-length v)))
+      (vector-ref v i)
+      #f))
