@@ -45,3 +45,20 @@ Requests for the Lattice developers, from the defense deck.
    embedded after the theme so that its rules may use and override the `--lt-*` variables. Then
    `::: statement` with `**key phrases**` in Markdown would replace the plugin.
 
+4. A fragment revealed out of document order (slide "Native Multi-Return Functions", src/future-work.md)
+
+   Need: the code in the right column appears with the second bullet of the left column, and a
+   callout below the bullets, in the left column, appears after it.
+   Today: fragments are numbered in document order, so `{.reveal-with}` on the code would join the
+   callout, written before it. The slide instead opens the code column with a `width` cue in place
+   of an empty column of the same width (`native-code-col=1fr native-room=0`), so that the bullets
+   do not move. The callout is pushed to the bottom of its column by wrapping the bullets in a
+   nested `columns` (which grows with flex: 1), since there is no way to align a block to the bottom.
+   Wanted syntax: an explicit fragment number, and a helper class for bottom alignment, roughly
+
+     {.reveal at=2}
+     ```code {file="programs/hvm-hyperfunction.hvm"}
+     ```
+
+     {.reveal .bottom}
+     ::: callout

@@ -1,0 +1,14 @@
+.hyper + nregs=3 nk=2 nfree=0
+  .entry 1 params=2 label=A   ; any x any
+  .entry 2 params=2 label=B   ; fx x fx
+A:  brntag r0, fixnum, GEN
+    brntag r1, fixnum, GEN
+B:  fxadd? r2, r0, r1, GEN
+    ret   0, r2               ; fixnum result
+GEN: add  r2, r0, r1
+    ret   1, r2               ; generic result
+
+.hyper fib nregs=4 nk=2 nfree=0
+  ...
+C2: ldclo r3                  ; fib(n-1)
+    calld r3, @fib, 2, K(D2, D1), (rv)
