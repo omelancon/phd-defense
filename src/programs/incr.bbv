@@ -1,0 +1,15 @@
+; incr.scm (future work) with + expanded, as basic blocks, called from the top level: (incr 0).
+; + tests fixnum? (then fx+? with its overflow check), flonum?, and falls back to the generic ##+,
+; as in polynomial-square.bbv. With intervals, x is exactly 0 in the entry of incr called by main.
+function main()
+M:  call incr(0) -> N
+N:  return #res
+
+function incr(x)
+A:  if fixnum?(x) goto B else goto C
+B:  r = fx+?(x, 1)
+    if r goto R else goto D
+R:  return r
+C:  if flonum?(x) goto F else goto D
+F:  return fl+(x, 1.0)
+D:  return ##+(x, 1)

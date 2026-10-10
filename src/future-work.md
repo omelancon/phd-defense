@@ -75,3 +75,36 @@ het-sbbv 1..end                             # the SBBV run, one frame per step
 het-lost 1                                  # the value read back has type any
 reveal 2, het-lost 2                        # second bullet; the arrow goes away
 ```
+
+# Built-in Constant Folding {#future-constant-folding .small}
+
+:::columns
+:::column {#cf-src width=1fr}
+```code {#cf-code lang=scheme file="programs/incr.scm"}
+```
+:::/column
+:::column {#cf-col width=0}
+```bbv-anim {#cf-lv program="programs/incr.bbv" algorithm=lv heuristic=arithmetic limit=3 entry=main direction=TB intervals=true call_edges=true}
+show: [label, context, code]
+paths:
+  - versions: [A1, B1, R1]
+  - versions: [M1, N1]
+```
+:::/column
+:::/columns
+
+```arrow {#cf-note}
+steps:
+  - null
+  - {to: cf-lv.N1, to_anchor: bottom, angle: 270, length: 90, label: "receives exactly 1"}
+  - {to: cf-lv.R1, to_anchor: left, angle: 180, length: 110, label: "no side-effects"}
+  - {to: cf-lv.N1, to_anchor: bottom, angle: 270, length: 190, label: "ΛV can replace the call with the constant 1"}
+```
+
+```timeline
+width cf-src=0 cf-col=1fr       # the code collapses; the ΛV run takes the whole width
+cf-lv 1..end-2                  # the run, one frame per step, up to the done frame
+cf-note 1                       # the return point receives exactly the singleton 1
+cf-lv end-1, cf-note 2          # path: incr called with x: 0, no side-effects
+cf-lv end, cf-note 3            # path: the call site and its return point
+```
