@@ -210,9 +210,13 @@ def _lv(metric: str, kind: str, panel: str, ytitle: str, sbbv_in_hyper: bool, he
     else:
         values, default_title = (sbbv if sbbv_in_hyper else []) + hyper, "Hyperfunction operators"
     limits = list(range(first, 11))
+    # the dash legend names only the algorithms drawn (the type check panel of hyperfunction
+    # operators has no SBBV)
+    drawn = [a for a in ALGO_DASH["domain"] if any(v["algorithm"] == a for v in values)]
+    dash = {"domain": drawn, "range": [r for a, r in zip(ALGO_DASH["domain"], ALGO_DASH["range"]) if a in drawn]}
     return _chart(values, _x_axis(limits, "No ΛV"), _y_axis(ytitle, domain, fmt),
                   {"field": "heuristic", "scale": _heuristic_colors(shown)},
-                  {"field": "algorithm", "scale": ALGO_DASH},
+                  {"field": "algorithm", "scale": dash},
                   legend, _title(title, default_title), legend_heuristics)
 
 
@@ -222,7 +226,8 @@ def _heuristic_colors(shown: list[str]) -> dict:
 
 
 # Thesis Figures 18 and 19: type checks relative to compilation without ΛV/SBBV. As in the thesis,
-# the hyperfunction panel leaves SBBV out (SBBV always uses inlined operators).
+# the hyperfunction panel leaves SBBV out (SBBV always uses inlined operators), unless the block
+# passes `sbbv=true` to draw it for reference, as the compile time and versions panels do.
 def lv_typechecks_micro_inlined(heuristics=None, legend_heuristics=True, legend=True,
                                 title=None):
     return _lv("typechecks", "micro", "inlined", "Relative type checks", False,
@@ -230,8 +235,8 @@ def lv_typechecks_micro_inlined(heuristics=None, legend_heuristics=True, legend=
 
 
 def lv_typechecks_micro_hyperfunction(heuristics=None, legend_heuristics=True, legend=True,
-                                      title=None):
-    return _lv("typechecks", "micro", "hyperfunction", "Relative type checks", False,
+                                      title=None, sbbv=False):
+    return _lv("typechecks", "micro", "hyperfunction", "Relative type checks", _flag("sbbv", sbbv),
                heuristics, legend_heuristics, legend, title)
 
 
@@ -242,8 +247,8 @@ def lv_typechecks_macro_inlined(heuristics=None, legend_heuristics=True, legend=
 
 
 def lv_typechecks_macro_hyperfunction(heuristics=None, legend_heuristics=True, legend=True,
-                                      title=None):
-    return _lv("typechecks", "macro", "hyperfunction", "Relative type checks", False,
+                                      title=None, sbbv=False):
+    return _lv("typechecks", "macro", "hyperfunction", "Relative type checks", _flag("sbbv", sbbv),
                heuristics, legend_heuristics, legend, title)
 
 
