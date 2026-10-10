@@ -45,7 +45,7 @@ lines:
   - Merci au **jury de thèse**. Un merci particulier à **Matthew Flatt**.
   - Merci à toute la **communauté du DIRO**.
   - Merci à tous mes **collègues et amis** du **LTP**. 🤽
-  - Merci à mes **amis** pour ces années de support.
+  - Merci à mes **amis**.
   - Merci à ma **famille**, pour votre soutien, votre amour et votre fierté.
 image: figures/dream-of-islands.png
 alt: Un voilier sous la pluie, une chaloupe dans les vagues

@@ -38,7 +38,7 @@ versions:
 ::: /column
 ::: column {width=4fr}
 {.reveal}
-- operators implicit run-time checks
+- operators have implicit run-time checks
 - many of which are redundant
 - eliminating them can make the program more efficient
   {.reveal}

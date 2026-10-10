@@ -64,4 +64,4 @@ pure 1                      # the pure fixnum and flonum contexts survive
 {.reveal}
 - `arithmetic` fares better on all benchmarks
 - generates optimal program for recursive functions such as `fib`
-- heuristic has a larger impact on ΛV than SBBV.
+- heuristic has a larger impact on ΛV than SBBV

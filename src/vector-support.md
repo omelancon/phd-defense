@@ -1,4 +1,4 @@
-# Vector Bound Checks Elimination {#vector-bound-checks-elimination-title layout=title}
+# Vector Bound Check Elimination {#vector-bound-checks-elimination-title layout=title}
 
 # Vector Support: New Rules {#vector-rules}
 

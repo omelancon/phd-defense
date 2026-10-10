@@ -129,7 +129,7 @@ flash: true
 - Extend SBBV with a multi-source reachability algorithm that associates entry points and exit sites
 - When a new exit site is found, generate a specialized return point for each of its call sites
 - When a merge removes an exit site, remove the corresponding return points from its call sites
-- Entry points and exit sites duplication is governed by the same version limit as SBBV
+- Entry point and exit site duplication is governed by the same version limit as SBBV
 
 ```timeline
 reveal +2
