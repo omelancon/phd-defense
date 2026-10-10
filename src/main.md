@@ -15,6 +15,7 @@ tours:
 ::include{file="experiments-sbbv.md"}
 ::include{file="lv.md"}
 ::include{file="vector-support.md"}
+::include{file="operators-as-functions.md"}
 ::include{file="heuristics.md"}
 ::include{file="experiments-lv.md"}
 ::include{file="future-work.md"}

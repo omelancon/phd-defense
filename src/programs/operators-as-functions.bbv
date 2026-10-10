@@ -1,0 +1,38 @@
+; operators-as-functions-defs.scm as basic blocks: + and * are ordinary functions, called by p.
+; (p (read)): the argument is unknown. main is hidden: only p and the operators are drawn.
+; In each operator, (and (fixnum? a) (fixnum? b)) is two nested tests, and (cond ...) falls
+; through to the flonum clause, then to the generic operator.
+function main() hidden
+M:  x = read()
+    call p(x) -> N
+N:  return #res
+
+function p(x)
+A:  call *(x, x) -> B
+B:  y = #res
+    call +(y, x) -> C
+C:  return #res
+
+function *(a, b)
+T:  if fixnum?(a) goto U else goto Y
+U:  if fixnum?(b) goto V else goto Y
+V:  r = fx*?(a, b)
+    if r goto R else goto W
+R:  return r
+W:  return ##*(a, b)
+Y:  if flonum?(a) goto Z else goto G
+Z:  if flonum?(b) goto F else goto G
+F:  return fl*(a, b)
+G:  return ##*(a, b)
+
+function +(a, b)
+D:  if fixnum?(a) goto E else goto K
+E:  if fixnum?(b) goto H else goto K
+H:  r = fx+?(a, b)
+    if r goto I else goto J
+I:  return r
+J:  return ##+(a, b)
+K:  if flonum?(a) goto L else goto P
+L:  if flonum?(b) goto O else goto P
+O:  return fl+(a, b)
+P:  return ##+(a, b)

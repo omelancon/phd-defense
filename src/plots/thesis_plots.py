@@ -1,4 +1,5 @@
-"""Vega-Lite specs for the evaluation figures of the thesis (Figures 9 to 12 and 18 to 23).
+"""Vega-Lite specs for the evaluation figures of the thesis (Figures 9 to 12 and 18 to 23, and
+one derived plot: the ΛV compile time of operators as functions against inlined operators).
 
 Each public function is a `source` of a `plot {backend=vega}` block in this folder. The data is a
 one-time copy in data/thesis-figures/ at the root of the defense project (see its README.md); the
@@ -300,3 +301,64 @@ def lv_versions_macro_hyperfunction(heuristics=None, legend_heuristics=True, leg
                                     title=None):
     return _lv("versions", "macro", "hyperfunction", "Versions per basic block", True,
                heuristics, legend_heuristics, legend, title)
+
+
+# Not a thesis figure: the compile time panels of Figures 20 and 21 redrawn to compare the two
+# representations of the operators, both with ΛV and the arithmetic heuristic. The colour is the
+# heuristic's, as in the figures; the dashes tell the representation: solid for operators as
+# functions (the hyperfunction data), dashed for inlined operators. SBBV is left out. The `_all`
+# function combines the micro and macro geometric means (15 and 12 benchmarks).
+OPERATORS_DASH = {"domain": ["As function", "Inlined"], "range": [[1, 0], [7, 4]]}
+
+
+# Number of benchmarks of each suite in the geometric means (thesis, Chapter 4 evaluation).
+SUITE_SIZES = {"micro": 15, "macro": 12}
+
+
+def _combined(metric: str, variant: str, algo: str, first: int) -> list[dict]:
+    """The geometric mean over both suites at each limit, from the geometric means of the suites:
+    exp(sum(n_k ln g_k) / sum(n_k)), n_k the number of benchmarks of suite k. It is exact when each
+    value is the geometric mean of per-benchmark ratios, as in the thesis files."""
+    suites = {k: {int(v["limit"]): v["value"]
+                  for v in _lv_series(metric, k, variant, algo, first, ["arithmetic"])}
+              for k in SUITE_SIZES}
+    total = sum(SUITE_SIZES.values())
+    limits = sorted(set.intersection(*(set(v) for v in suites.values())))
+    return [{"limit": n, "heuristic": "arithmetic", "algorithm": algo,
+             "value": math.exp(sum(SUITE_SIZES[k] * math.log(suites[k][n]) for k in SUITE_SIZES)
+                               / total)}
+            for n in limits]
+
+
+def _lv_operators(metric: str, kind: str | None, ytitle: str, legend=True, title=None) -> dict:
+    """ΛV with operators as functions (solid) against ΛV with inlined operators (dashed), arithmetic
+    heuristic, for one kind of benchmarks, or for both together when `kind` is None (the geometric
+    mean over the benchmarks of both suites, see `_combined`). The legend, if `legend`, names the
+    two representations and sits top left where the curves rise."""
+    first = 1
+    if kind is None:
+        function = _combined(metric, "", "As function", first)
+        inlined = _combined(metric, "inline-rts", "Inlined", first)
+    else:
+        function = _lv_series(metric, kind, "", "As function", first, ["arithmetic"])
+        inlined = _lv_series(metric, kind, "inline-rts", "Inlined", first, ["arithmetic"])
+    domain = [0, _ceiling(max(v["value"] for v in function + inlined))]
+    legend = "top-left" if _flag("legend", legend) else None
+    return _chart(function + inlined, _x_axis(list(range(first, 11)), "No ΛV"),
+                  _y_axis(ytitle, domain, "~g"),
+                  {"field": "heuristic", "scale": _heuristic_colors(["arithmetic"])},
+                  {"field": "algorithm", "scale": OPERATORS_DASH},
+                  legend, _title(title, None), False)
+
+
+def lv_operators_compile_time_micro(legend=True, title=None):
+    return _lv_operators("compile-time", "micro", "Relative compile time", legend, title)
+
+
+def lv_operators_compile_time_macro(legend=True, title=None):
+    return _lv_operators("compile-time", "macro", "Relative compile time", legend, title)
+
+
+def lv_operators_compile_time_all(legend=True, title=None):
+    """Both suites together: the geometric mean over the 15 micro and 12 macro benchmarks."""
+    return _lv_operators("compile-time", None, "Relative compile time", legend, title)

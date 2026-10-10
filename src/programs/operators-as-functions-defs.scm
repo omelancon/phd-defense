@@ -1,0 +1,20 @@
+(define (* a b)
+  (cond ((and (fixnum? a) (fixnum? b))
+         (or (fx*? a b)
+             (##* a b)))
+        ((and (flonum? a) (flonum? b))
+         (fl* a b))
+        (else (##* a b))))
+
+(define (+ a b)
+  (cond ((and (fixnum? a) (fixnum? b))
+         (or (fx+? a b)
+             (##+ a b)))
+        ((and (flonum? a) (flonum? b))
+         (fl+ a b))
+        (else (##+ a b))))
+
+(define (p x)
+  (+ (* x x) x))
+
+(p (read))
