@@ -1,0 +1,11 @@
+/* `table-steps` (src/lattice_plugins.py): a table whose columns appear step by step. The table keeps
+   the theme's table style (.lt-body table); hidden columns take no room, and the computed best
+   value of each row is highlighted in light yellow, a marker that hugs the number. */
+.lt-table-steps{max-width:100%;overflow-x:auto}
+.lt-table-steps .ts-off{display:none}
+.lt-table-steps .ts-v{display:inline-block;margin:-3px -8px;padding:3px 8px;border-radius:5px;
+  background:rgba(255,205,40,0)}
+.lt-table-steps td.ts-best .ts-v{background:rgba(255,205,40,.42)}
+.ts-animate td .ts-v{transition:background-color .4s .25s}
+.lt-table-steps .ts-in{animation:ts-fade-in .45s ease-out .3s both}
+@keyframes ts-fade-in{from{opacity:0}to{opacity:1}}

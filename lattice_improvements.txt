@@ -89,3 +89,28 @@ Requests for the Lattice developers, from the defense deck.
 
      {.reveal until=+1 overlay=true}
      ::: callout
+
+7. Table columns shown step by step, with the best value per row computed (slide "Bigloo and
+   Gambit Are Already Fast", src/experiments-sbbv.md)
+
+   Need: a results table that opens without some of its columns (the SBBV ones), then adds them
+   in one step, the highlight (fastest time of each row) moving to the new winners.
+   Today: a GFM table is static, `{.reveal}` works on whole blocks, and bold is written by hand,
+   and there is no way to highlight a cell, so the mark cannot differ between steps. The deck therefore ships a local plugin, `table-steps`
+   (src/lattice_plugins.py, src/plugins/table-steps.js and .css), that takes the table in its YAML
+   body, hides and shows columns per position, highlights the best value among the columns shown (light yellow), and
+   glides the columns that stay to their new places.
+   Wanted syntax, roughly what the plugin does:
+
+     ```table-steps {#times}
+     best: min
+     table: |
+       | Program | Node.js | Bigloo | Bigloo + SBBV | ...
+       |---------|--------:|-------:|--------------:| ...
+     steps:
+       - hide: [Bigloo + SBBV, Gambit + SBBV]
+       - show: [Bigloo + SBBV, Gambit + SBBV]
+     ```
+
+   or, closer to plain Markdown, column attributes on a GFM table (a reveal step per column) and a
+   `best=min` attribute on the table.

@@ -72,19 +72,23 @@ Execution and compile time
 ::: detour {#sbbv-context label="Already fast?" key=f}
 # Bigloo and Gambit Are Already Fast {#sbbv-context-table .small}
 
-Execution time in seconds, SBBV with a limit of 2 versions (bold: fastest)
+Execution time in seconds, SBBV with a limit of 2 versions (highlighted: fastest)
 
-| Program     | Node.js | Bigloo | Bigloo + SBBV | Gambit | Gambit + SBBV | Chez  | Racket |
-|-------------|--------:|-------:|--------------:|-------:|--------------:|------:|-------:|
-| `almabench` | **6.31**| 15.68  | 14.46         | 14.64  | 13.86         | 17.69 | 19.30  |
-| `boyer`     | 40.31   | 7.40   | 7.22          | 8.21   | **6.49**      | 8.09  | 12.38  |
-| `earley`    | 56.75   | 14.90  | 13.83         | 10.87  | 10.34         | **9.53** | 24.73 |
-| `leval`     | 18.42   | 7.53   | **6.47**      | 12.03  | 9.74          | 7.16  | 16.96  |
-| `maze`      | 10.07   | 7.47   | 6.70          | 6.75   | **5.73**      | 12.01 | 12.12  |
-| `bague`     | 305.04  | 12.90  | **11.19**     | 15.54  | 12.93         | 21.01 | 19.33  |
-
-{.reveal}
-With SBBV, both compilers get faster on every program
+```table-steps
+best: min
+table: |
+  | Program     | Node.js | Bigloo | Bigloo + SBBV | Gambit | Gambit + SBBV | Chez  | Racket |
+  |-------------|--------:|-------:|--------------:|-------:|--------------:|------:|-------:|
+  | `almabench` | 6.31    | 15.68  | 14.46         | 14.64  | 13.86         | 17.69 | 19.30  |
+  | `boyer`     | 40.31   | 7.40   | 7.22          | 8.21   | 6.49          | 8.09  | 12.38  |
+  | `earley`    | 56.75   | 14.90  | 13.83         | 10.87  | 10.34         | 9.53  | 24.73  |
+  | `leval`     | 18.42   | 7.53   | 6.47          | 12.03  | 9.74          | 7.16  | 16.96  |
+  | `maze`      | 10.07   | 7.47   | 6.70          | 6.75   | 5.73          | 12.01 | 12.12  |
+  | `bague`     | 305.04  | 12.90  | 11.19         | 15.54  | 12.93         | 21.01 | 19.33  |
+steps:
+  - hide: [Bigloo + SBBV, Gambit + SBBV]
+  - show: [Bigloo + SBBV, Gambit + SBBV]
+```
 
 ::: notes
 Thesis Appendix D, Figure 14 (Section 4.5, "Putting the Results in Context"). Node.js 21.7.1,
@@ -92,7 +96,8 @@ Bigloo 4.6a, Gambit 4.9.4-377, Chez Scheme 9.5.1, Racket 7.2. The programs have 
 JavaScript versions from previous work, a subset of the benchmark suite. Without SBBV, Gambit and
 Bigloo beat Node.js on every program except almabench (V8 has special optimizations for floats
 and arrays), up to 24× faster on bague, and are in the same ballpark as Chez Scheme. So the gains
-of SBBV are measured against compilers that are already competitive.
+of SBBV are measured against compilers that are already competitive. The slide opens without the
+SBBV columns; the step adds them, and the highlight moves to the fastest times with SBBV.
 :::
 ::: /detour
 

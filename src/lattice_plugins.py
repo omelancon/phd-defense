@@ -270,3 +270,106 @@ class Thanks(Component):
                   f'aria-label="{html.escape(opts.alt, quote=True)}" '
                   f"style=\"aspect-ratio:{w}/{h};--th-src:url('{url}')\"></div>{caption}</figure>")
         return RenderResult(f'<div class="lt-thanks"><div class="th-lines">{lines}</div>{figure}</div>')
+
+
+class TableStepsOptions(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    table: str                                  # a GFM table, as it would be written in the slide
+    best: str = "none"                          # min, max or none: which number of each row is highlighted
+    steps: list[dict | None] = [None]
+
+
+_NUM = re.compile(r"[-+]?\d+(?:[.,]\d+)*(?:[eE][-+]?\d+)?")
+
+
+def _table_cells(line: str) -> list[str]:
+    """The cells of one row of a GFM table (a `\\|` stays in its cell)."""
+    line = line.strip()
+    if line.startswith("|"):
+        line = line[1:]
+    if line.endswith("|") and not line.endswith("\\|"):
+        line = line[:-1]
+    return [c.strip().replace("\\|", "|") for c in re.split(r"(?<!\\)\|", line)]
+
+
+@register("table-steps")
+class TableSteps(Component):
+    """A table whose columns appear or disappear step by step, the best number of each row highlighted.
+
+    The YAML body gives ``table`` (a GFM table, cells in inline Markdown, alignment from its
+    separator row), ``best`` (``min`` or ``max``: in each row, the smallest or largest number among
+    the columns shown at that position is highlighted in light yellow, all of them on a tie; ``none``, the default,
+    leaves the cells as written) and ``steps``, one entry per position: ``null`` (no change) or a
+    mapping with ``hide`` and ``show``, lists of column headers as written in the table. Entries
+    are deltas over the previous position, so the first one hides what the slide opens without.
+    With ``best``, write the numbers without ``**``: the highlight is computed.
+
+    A single step animates: the columns that stay glide to their new places, the columns shown
+    fade in, the highlight moves. Give it an ``#id`` when the slide has another track. Styled by
+    plugins/table-steps.css; the table itself keeps the theme's table style.
+    """
+
+    Options = TableStepsOptions
+    version = "2"
+    body = "yaml"
+    runtime = str(HERE / "table-steps.js")
+    css = [str(HERE / "table-steps.css")]
+
+    def render(self, block, opts: TableStepsOptions, ctx) -> RenderResult:
+        lines = [ln for ln in opts.table.strip().splitlines() if ln.strip()]
+        if len(lines) < 2 or not re.fullmatch(r"\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?\s*", lines[1]):
+            raise ComponentError("'table' must be a GFM table: a header row, then a separator row (| --- | ---: |)")
+        head = _table_cells(lines[0])
+        aligns = []
+        for sep in _table_cells(lines[1]):
+            left, right = sep.startswith(":"), sep.endswith(":")
+            aligns.append("center" if left and right else "right" if right else "left" if left else None)
+        rows = [_table_cells(ln) for ln in lines[2:]]
+        ncols = len(head)
+        if len(aligns) != ncols or any(len(r) != ncols for r in rows):
+            raise ComponentError(f"every row of the table must have {ncols} cells, as its header")
+        if opts.best not in ("min", "max", "none"):
+            raise ComponentError(f"best: {opts.best!r}; use min, max or none")
+
+        def value(cell: str) -> float | None:
+            plain = cell.replace("*", "").replace("`", "").strip()
+            m = _NUM.fullmatch(plain)
+            return float(m.group(0).replace(",", "")) if m else None
+
+        values = [[value(c) for c in r] for r in rows]
+        if opts.best != "none" and any("**" in c for r in rows for c in r):
+            raise ComponentError("with 'best', write the numbers without ** : the highlight is computed")
+
+        hidden: set[int] = set()
+        positions = []
+        for i, step in enumerate(opts.steps):
+            step = step or {}
+            unknown = set(step) - {"hide", "show"}
+            if unknown:
+                raise ComponentError(f"steps[{i}]: unknown key(s) {sorted(unknown)}; use hide, show")
+            for key in ("hide", "show"):
+                for name in step.get(key) or []:
+                    name = str(name).strip()
+                    if name not in head:
+                        raise ComponentError(f"steps[{i}].{key}: no column {name!r}; the table has "
+                                             f"{', '.join(repr(h) for h in head)}")
+                    (hidden.add if key == "hide" else hidden.discard)(head.index(name))
+            best = []
+            if opts.best != "none":
+                for r, row in enumerate(values):
+                    shown = [v for c, v in enumerate(row) if c not in hidden and v is not None]
+                    if shown:
+                        target = min(shown) if opts.best == "min" else max(shown)
+                        best += [[r, c] for c, v in enumerate(row) if c not in hidden and v == target]
+            positions.append({"hidden": sorted(hidden), "best": best})
+
+        def cell(tag: str, text: str, c: int) -> str:
+            style = f' style="text-align:{aligns[c]}"' if aligns[c] else ""
+            return f'<{tag} data-c="{c}"{style}><span class="ts-v">{_INLINE.renderInline(text)}</span></{tag}>'
+
+        thead = "<tr>" + "".join(cell("th", h, c) for c, h in enumerate(head)) + "</tr>"
+        tbody = "".join(f'<tr data-r="{r}">' + "".join(cell("td", t, c) for c, t in enumerate(row)) + "</tr>"
+                        for r, row in enumerate(rows))
+        markup = (f'<div class="lt-table-steps"><table><thead>{thead}</thead>'
+                  f"<tbody>{tbody}</tbody></table></div>")
+        return RenderResult(markup, data={"positions": positions}, positions=len(positions))

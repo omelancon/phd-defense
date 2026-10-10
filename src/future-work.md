@@ -126,9 +126,8 @@ steps:
 
 ```timeline
 width cf-src=0 cf-col=1fr       # the code collapses; the ΛV run takes the whole width
-cf-lv 1..10                     # the run, up to the return point N1 for the exit R1
+cf-lv 1..11                     # the run, up to the return point N1 for the exit R1
 cf-note 1                       # N1 receives exactly the singleton 1
-cf-lv 11                        # R1 specialized: every version incr/A1 reaches is known
 cf-lv 12, cf-note 2             # incr called with x: 0 has no side effects
 cf-lv 13, cf-note 3             # the call site and its return point
 cf-lv 14, cf-note 4             # the fold: the call becomes #res = 1, A1, B1 and R1 can be freed
