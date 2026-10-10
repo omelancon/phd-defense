@@ -47,8 +47,8 @@ reveal 3, native-arrow 0                                           # related wor
 ::::: columns
 :::: column {width=1fr}
 {#het-points .reveal}
-- Most remaining checks in benchmarks are on values stored in heterogeneous structures (vector, pair, box, etc.)
-- Include mutability/escapability information in contexts to track the type of values within structures
+- **Most remaining checks** in benchmarks are on values read from **heterogeneous structures** (vector, pair, box, etc.)
+- Include **mutability/escapability** information in contexts to track the type of values within structures
 :::: /column
 :::: column {#het-col width=0}
 ```code {#het-code lang=scheme file="programs/heterogeneous.scm"}
