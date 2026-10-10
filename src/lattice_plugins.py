@@ -154,6 +154,8 @@ class RelatedWorkNoteOptions(BaseModel):
     model_config = ConfigDict(extra="forbid")
     title: str = "Related work"
     items: list[str] = Field(min_length=1)
+    flash: bool = False   # shown for one position only, laid over what follows it
+    inline: bool = False  # the title and the items run on as one sentence (no bullets), to save height
 
 
 _INLINE = MarkdownIt("commonmark", {"html": False})
@@ -165,18 +167,36 @@ class RelatedWorkNote(Component):
 
     The YAML body gives a ``title`` (a sentence introducing the list) and the ``items``, one work per
     entry (``Name (Author year)``); both take inline Markdown (`code`, *emphasis*). Styled by
-    plugins/related-work-note.css, a light blue box built from the theme's variables. Put a
-    ``{.reveal}`` line before the block to reveal it.
+    plugins/related-work-note.css, a light blue box built from the theme's variables.
+
+    Two ways to show it:
+
+    - a note that stays: put a ``{.reveal}`` line before the block. Like any fragment, its room is
+      kept from the first step of the slide, so the slide must have space for it.
+    - a note that flashes, for a slide without that space: ``flash: true`` and an ``#id``. The block
+      is then a track of three positions, hidden (0), shown (1) and hidden again (2), moved in the
+      timeline (``rw 1``, then ``rw end``). It takes no room: shown, it is laid over the blocks that
+      follow it in its column, at its own place, so it belongs where the next blocks are not yet
+      revealed (they appear in that space once it is gone).
+
+    ``inline: true`` runs the title and the items on as one sentence, without bullets (items are
+    separated by semicolons): one line instead of two for a note citing one work, where height is short.
     """
 
     Options = RelatedWorkNoteOptions
+    version = "3"
     body = "yaml"
+    runtime = str(HERE / "related-work-note.js")
     css = [str(HERE / "related-work-note.css")]
 
     def render(self, block, opts: RelatedWorkNoteOptions, ctx) -> RenderResult:
         items = "".join(f"<li>{_INLINE.renderInline(item)}</li>" for item in opts.items)
-        return RenderResult(f'<aside class="lt-related-work"><p>{_INLINE.renderInline(opts.title)}</p>'
-                            f"<ul>{items}</ul></aside>")
+        cls = "lt-related-work rw-inline" if opts.inline else "lt-related-work"
+        note = (f'<aside class="{cls}"><p>{_INLINE.renderInline(opts.title)}</p> '
+                f"<ul>{items}</ul></aside>")
+        if not opts.flash:
+            return RenderResult(note)
+        return RenderResult(f'<div class="lt-related-work-slot">{note}</div>', data={"flash": True}, positions=3)
 
 
 class TakeawayOptions(BaseModel):

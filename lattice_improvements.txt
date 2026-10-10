@@ -73,3 +73,19 @@ Requests for the Lattice developers, from the defense deck.
    Wanted syntax, roughly:
 
      ![Un voilier sous la pluie](figures/dream-of-islands.png){height=460 ink=true caption="*A Dream of Islands*, Philip Teece, p. 33"}
+
+6. A fragment shown for a few steps only, taking no room (slides "Static Analysis Overview",
+   src/background.md, and "Core idea of Lambda Versioning", src/lv.md)
+
+   Need: a related-work note that appears for one step (while the speaker comments on it) and then
+   goes away, so that the blocks revealed next can use its space.
+   Today: a fragment, once revealed, stays until the end of the slide, and its room is kept from the
+   first step (`visibility: hidden`), so a note on a full slide does not fit. The deck therefore
+   gives its local plugin `related-work-note` (src/lattice_plugins.py, src/plugins/) a `flash: true`
+   mode: the block becomes a three-position track (hidden, shown, hidden) moved in the timeline
+   (`rw 1`, then `rw end`), and while shown it is laid over the blocks that follow it, from a
+   zero-height slot (whose flex gap is given back with a `:has()` rule in the plugin's CSS).
+   Wanted syntax, roughly: a fragment with an end, and an overlay placement,
+
+     {.reveal until=+1 overlay=true}
+     ::: callout

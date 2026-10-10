@@ -12,6 +12,8 @@ Unifying abstract interpretation and code duplication
 - Inputs exist that produce wide ranges of behaviors
 - Union *wins* over narrowing
 
+::: columns
+::: column {width=7fr}
 {.reveal}
 **Core idea**
 
@@ -19,14 +21,39 @@ Unifying abstract interpretation and code duplication
 - Delay the union operation
 - Duplicate basic blocks for different contexts
 - When a version limit is reached, perform a *merge*
+::: /column
+::: column {width=4fr}
+{.reveal}
+```related-work-note
+title: "Ahead-of-time counterpart of:"
+items:
+  - Lazy BBV, in a JIT (Chevalier-Boisvert & Feeley 2015)
+```
+::: /column
+::: /columns
 
 ```timeline
 reveal 2
 reveal 3
 reveal 4
 reveal 6
-reveal ..end
+reveal ..8
+reveal 9            # related work: lazy BBV
 ```
+
+::: notes
+Related work, revealed last: Chevalier-Boisvert & Feeley, "Simple and Effective Type Check Removal
+through Lazy Basic Block Versioning", ECOOP 2015.
+- A JIT technique: it "lazily generates type-specialized versions of basic blocks on-the-fly";
+  "Versions for a particular context are only generated when that context is encountered during
+  execution." Laziness is what bounds the versions; ahead of time, SBBV has no execution to guide it.
+- At the version limit there is no merge: failing an existing compatible version, "a fully generic
+  version of the block that assigns the unknown type to all live variables will be generated."
+  SBBV merges contexts instead, so what they have in common is kept.
+- Results: "A limit of 5 versions per block eliminates 71% of total type tests, compared to 16% for
+  the analysis".
+- Intraprocedural, as SBBV: it "only tracks type information intraprocedurally" (what ΛV adds later).
+:::
 
 # SBBV: A first example {#sbbv-first-example}
 

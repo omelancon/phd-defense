@@ -4,5 +4,19 @@
   --rw-edge:var(--lt-range);
   --rw-bg:color-mix(in srgb, var(--lt-range) 16%, var(--lt-bg));
   padding:16px 22px;border-radius:10px;background:var(--rw-bg);border-left:6px solid var(--rw-edge);
-  color:var(--lt-ink)}
+  color:var(--lt-ink);text-align:left}
 .lt-related-work li::marker{color:var(--rw-edge)}
+/* `inline: true`: the title and the items as one sentence, without bullets */
+.lt-related-work.rw-inline>p,.lt-related-work.rw-inline>ul,.lt-related-work.rw-inline li{display:inline;margin:0;padding:0}
+.lt-related-work.rw-inline li+li::before{content:"; "}
+
+/* `flash: true`: the slot takes no room; the note hangs from it over the blocks that follow, and is
+   drawn only while the slot is on (position 1). The background is opaque (mixed with --lt-bg). */
+.lt-related-work-slot{position:relative;height:0;z-index:2}
+/* and its block gives back the gap the flex layout puts after it (18px in the body, 16px in a column) */
+.lt-body>.lt-c:has(>.lt-related-work-slot){margin-bottom:-18px}
+:is(.lt-column,.lt-column-in)>.lt-c:has(>.lt-related-work-slot){margin-bottom:-16px}
+.lt-related-work-slot>.lt-related-work{position:absolute;top:0;left:0;right:0;margin:0;display:none}
+.lt-related-work-slot.rw-on>.lt-related-work{display:block}
+.lt-related-work-slot.rw-on.rw-animate>.lt-related-work{animation:rw-in .25s ease-out}
+@keyframes rw-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}

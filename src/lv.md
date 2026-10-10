@@ -114,6 +114,14 @@ reveal ..end
 - Entry points track the exit sites they can reach
 - When a specialized exit site is discovered/removed, its call sites are notified and updated
 
+```related-work-note {#rw-lv}
+title: "Related work also duplicates entries and exits:"
+items:
+  - Interprocedural branch elimination, in C (Bodík, Gupta & Soffa 1997)
+  - Interprocedural lazy BBV, in a JIT (Saleil & Feeley 2017)
+flash: true
+```
+
 {.reveal}
 **Algorithm sketch**
 
@@ -126,9 +134,35 @@ reveal ..end
 ```timeline
 reveal +2
 reveal ..5
-reveal +2
+rw-lv 1                 # related work: Bodík et al. 1997, Saleil & Feeley 2017, over the room of the sketch
+reveal +2, rw-lv end    # note gone; "Algorithm sketch" in its place
 reveal ..end
 ```
+
+::: notes
+Related work, flashed after the core idea (one step, then gone).
+
+Bodík, Gupta & Soffa, "Interprocedural Conditional Branch Elimination", PLDI 1997.
+- The closest idea: "The entry splitting transformation creates multiple entries to a procedure,
+  and the exit splitting transformation allows a procedure to return control to one of several
+  return points in the caller." Exit splitting "requires passing additional return addresses to
+  the procedure."
+- Same motivation as square: "the value returned is often selected by an if-statement. This value
+  may again be checked by the caller."
+- Differences: C programs; a demand-driven question per branch, of the form "(v relop c)" (a
+  variable compared with a constant), with a code growth budget per branch. ΛV propagates whole
+  type and interval contexts, under the version limit and merges of SBBV.
+
+Saleil & Feeley, "Interprocedural Specialization of Higher-Order Dynamic Languages Without Static
+Analysis", ECOOP 2017.
+- Lazy BBV in a Scheme JIT, made interprocedural: "When a call site is executed, a new version of
+  the callee is generated".
+- Returns are specialized too, on the type of the result only: "Our implementation limits Pcall to
+  the type of the returned value". With both, the compiler can "remove 46% more checks than
+  intraprocedural BBV".
+- Difference: ΛV specializes return points ahead of time, on whole contexts discovered at the exit
+  sites, with no run-time dispatch on the returned value.
+:::
 
 # Example: polynomial and square {#lv-example .small}
 

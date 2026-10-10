@@ -63,7 +63,7 @@ Compile time, code duplication
 ::: columns
 ::: column {width=1fr}
 {#hf-points .reveal}
-- Code is converted to **multi-barreled CPS**: one continuation per return point
+- **Multi-return functions** through CPS: one continuation per return point
 - **No native implementation** of hyperfunctions: a Scheme macro emulates them, slower than the source program
 ::: /column
 ::: column {width=1fr}
