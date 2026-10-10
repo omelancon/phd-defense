@@ -294,6 +294,7 @@ prims: {pred: {args: [any, any], result: bool}}
 thresholds: [sign, maxfix-1, maxfix]
 paths:
   - versions: [D1, D4]
+  - versions: [F3]
 ```
 :::/column
 :::/columns
@@ -304,12 +305,13 @@ steps:
   - {to: ref-fix, to_anchor: bottom, angle: 290, length: 80, label: "now we can remove it"}
   - null
   - {to: fv-lv.D1, to_anchor: top, angle: 70, length: 80, label: "fixnum? removed"}
+  - {to: fv-lv.F3, to_anchor: top, angle: 70, length: 80, label: "only vector bound check remains"}
 ```
 
 ```timeline
 fv-morph 1                      # expand the operators
 fv-morph 2, fv-fix 1            # the fixnum? test on the result of findv
 width fv-src=0 fv-col=1fr, fv-fix 2   # the code collapses; the ΛV run takes the whole width
-fv-lv 1..end-1                    # the run, one frame per step
-fv-lv end, fv-fix 3                  # the fixnum? test on the result of findv
-```
+fv-lv 1..end-2                    # the run, one frame per step
+fv-lv end-1, fv-fix 3                  # the fixnum? test on the result of findv
+fv-lv end, fv-fix 4                  # the bounds check on the vector
