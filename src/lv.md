@@ -270,3 +270,46 @@ fib-morph 1                     # expand the operators
 width fib-src=0 fib-col=1fr     # the code collapses; the ΛV run takes the whole width
 fib-lv 1..end                   # the run, one frame per step
 ```
+
+# Example: findv {#lv-findv .small}
+
+:::columns
+:::column {#fv-src width=1fr}
+```code-morph {#fv-morph lang=scheme room=fit}
+versions:
+  - file: programs/background-findv.scm
+    label: "findv.scm"
+  - file: programs/background-findv-expanded.scm
+    label: "expanded operators"
+    highlight: changed
+  - file: programs/background-findv-expanded.scm
+    label: "expanded operators"
+    highlight: ref-fix
+```
+:::/column
+:::column {#fv-col width=0}
+```bbv-anim {#fv-lv program="programs/findv-call.bbv" algorithm=lv heuristic=arithmetic limit=2 entry=main direction=LR rank_wrap=auto call_edges=true height=500 intervals=true vector_bounds=false}
+show: [label, context, code]
+prims: {pred: {args: [any, any], result: bool}}
+thresholds: [sign, maxfix-1, maxfix]
+paths:
+  - versions: [D1, D4]
+```
+:::/column
+:::/columns
+
+```arrow {#fv-fix}
+steps:
+  - null
+  - {to: ref-fix, to_anchor: bottom, angle: 290, length: 80, label: "now we can remove it"}
+  - null
+  - {to: fv-lv.D1, to_anchor: top, angle: 70, length: 80, label: "fixnum? removed"}
+```
+
+```timeline
+fv-morph 1                      # expand the operators
+fv-morph 2, fv-fix 1            # the fixnum? test on the result of findv
+width fv-src=0 fv-col=1fr, fv-fix 2   # the code collapses; the ΛV run takes the whole width
+fv-lv 1..end-1                    # the run, one frame per step
+fv-lv end, fv-fix 3                  # the fixnum? test on the result of findv
+```
