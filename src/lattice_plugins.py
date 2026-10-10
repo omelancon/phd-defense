@@ -211,3 +211,42 @@ class Takeaway(Component):
                   f'<p class="tk-figure">{html.escape(opts.figure, quote=False)}</p>'
                   f'<p class="tk-caption">{_INLINE.renderInline(opts.caption)}</p></div>')
         return RenderResult(markup, data={"positions": 2}, positions=2)
+
+
+class ThanksOptions(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    lines: list[str] = Field(min_length=1)
+    image: str            # a PNG whose alpha channel is the drawing, relative to the deck file
+    alt: str = ""
+    caption: str = ""
+
+
+@register("thanks")
+class Thanks(Component):
+    """The acknowledgements slide: lines of thanks beside a black and white drawing and its credit.
+
+    The YAML body gives ``lines`` (one sentence each; ``**words**`` mark who is thanked, set in ink
+    while the rest of the sentence is muted), ``image`` (a PNG drawn as an alpha mask, so that the
+    drawing takes the theme's ink colour; it is embedded in the deck), ``alt`` and ``caption`` (the
+    credit, in inline Markdown). Styled by plugins/thanks.css with the theme's variables.
+    """
+
+    Options = ThanksOptions
+    body = "yaml"
+    css = [str(HERE / "thanks.css")]
+
+    def render(self, block, opts: ThanksOptions, ctx) -> RenderResult:
+        import base64
+        import struct
+
+        data = ctx.path(opts.image).read_bytes()
+        if data[:8] != b"\x89PNG\r\n\x1a\n":
+            raise ComponentError(f"{opts.image}: give a PNG with an alpha channel")
+        w, h = struct.unpack(">II", data[16:24])
+        url = "data:image/png;base64," + base64.b64encode(data).decode("ascii")
+        lines = "".join(f"<p>{_INLINE.renderInline(line)}</p>" for line in opts.lines)
+        caption = f"<figcaption>{_INLINE.renderInline(opts.caption)}</figcaption>" if opts.caption else ""
+        figure = (f'<figure class="th-figure"><div class="th-drawing" role="img" '
+                  f'aria-label="{html.escape(opts.alt, quote=True)}" '
+                  f"style=\"aspect-ratio:{w}/{h};--th-src:url('{url}')\"></div>{caption}</figure>")
+        return RenderResult(f'<div class="lt-thanks"><div class="th-lines">{lines}</div>{figure}</div>')

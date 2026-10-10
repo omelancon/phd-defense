@@ -62,3 +62,14 @@ Requests for the Lattice developers, from the defense deck.
 
      {.reveal .bottom}
      ::: callout
+
+5. A figure with a credit line, drawn in the theme's ink (slide "Remerciements", src/conclusion.md)
+
+   Need: a black and white drawing (a scanned book illustration) beside the acknowledgements, with
+   a small attribution under it, the drawing taking the theme's ink colour.
+   Today: `![alt](file.png)` has no caption and keeps the image's own colours, and the text styling
+   needs CSS (request 3). The deck therefore ships a local plugin, `thanks` (src/lattice_plugins.py,
+   src/plugins/thanks.css), that embeds the PNG as a CSS mask filled with `--lt-ink`.
+   Wanted syntax, roughly:
+
+     ![Un voilier sous la pluie](figures/dream-of-islands.png){height=460 ink=true caption="*A Dream of Islands*, Philip Teece, p. 33"}

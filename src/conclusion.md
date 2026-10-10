@@ -29,3 +29,18 @@ tk-checks 1       # SBBV: over half of the dynamic checks gone, about 10% faster
 tk-static 1       # ΛV: optimal specialization, one type check per input
 tk-flex 1         # and nothing given up for it
 ```
+
+# Remerciements {#thanks}
+
+```thanks
+lines:
+  - Merci à **Marc Feeley** et **Manuel Serrano** pour vos conseils et soutiens indéfectibles.
+  - Merci au **jury de thèse**. Un merci particulier à **Matthew Flatt**.
+  - Merci à toute la **communauté du DIRO**.
+  - Merci à tous mes **collègues et amis** du **LTP**. 🤽
+  - Merci à mes **amis** pour ces années de support.
+  - Merci à ma **famille**, pour votre soutien, votre amour et votre fierté.
+image: figures/dream-of-islands.png
+alt: Un voilier sous la pluie, une chaloupe dans les vagues
+caption: "*A Dream of Islands*, Philip Teece, p.&nbsp;33"
+```
