@@ -1,0 +1,10 @@
+; heterogeneous.scm (future work) as basic blocks: 42 is stored in a vector and read back. The
+; primitives ##vector-set! and ##vector-ref skip the checks of vector-set! and vector-ref (vector?,
+; fixnum? and both bounds), which would hide the point: the value read back has type any.
+function main()
+A:  v = make-vector(1, 0)
+    s = ##vector-set!(v, 0, 42)
+    goto B
+B:  x = ##vector-ref(v, 0)
+    goto C
+C:  return x
