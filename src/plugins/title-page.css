@@ -49,6 +49,6 @@
 
 /* the motif: a large lattice, barely there, behind the title; it bleeds off the bottom left corner */
 .tp-motif{position:absolute;z-index:-1;left:-150px;top:104px;height:640px;width:auto;pointer-events:none;
-  --tp-motif-ink:color-mix(in srgb, var(--lt-edge) 14%, var(--lt-bg))}
+  --tp-motif-ink:color-mix(in srgb, var(--lt-edge) 12%, var(--lt-bg))}
 .tp-motif-edges line{stroke:var(--tp-motif-ink);stroke-width:2}
 .tp-motif-nodes circle{fill:var(--lt-bg);stroke:var(--tp-motif-ink);stroke-width:2}
