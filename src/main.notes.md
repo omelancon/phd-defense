@@ -176,5 +176,5 @@ introducing no additional cost."
 the return values."
 
 FORTRAN 77 (ANSI X3.9-1978):
-- a CALL can pass "An alternate return specifier
+- a CALL can pass "An alternate return specifier"
 - does not permit tail calls
