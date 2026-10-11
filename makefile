@@ -3,6 +3,8 @@
 # separately for dot diagrams, .dot graph files and the overview map.
 #
 #   make                 clone or update lattice-slides, then (re)build the venv if the sources changed
+#   make serve          live preview with lattice serve; notes edited in the presenter view (p)
+#                        are saved to src/main.notes.md
 #   make lattice-slides  clone the repository, or pull the latest main if it is already there
 #   make venv            rebuild the venv when what it installs changed since the last build
 #   make cleanall        remove the venv, the clone and the build markers
@@ -21,12 +23,17 @@ INSTALL := ./$(LATTICE_DIR)[plot,pdf]
 REV     := .lattice-slides.rev
 STAMP   := $(VENV)/.built
 
-.PHONY: all open lattice-slides venv clean cleanall
+.PHONY: all open serve lattice-slides venv clean cleanall
 
 all: src/main.html
 
 open: all
 	open src/main.html &
+
+# Live preview that reloads on save. Only under serve can the presenter view edit notes; they
+# go to src/main.notes.md, which `make` then folds into src/main.html.
+serve: venv
+	. $(VENV)/bin/activate && lattice serve src/main.md
 
 src/main.html: venv $(wildcard src/*.md)
 	. $(VENV)/bin/activate && lattice build src/main.md
