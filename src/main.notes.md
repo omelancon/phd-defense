@@ -173,7 +173,7 @@ Saleil & Feeley, ECOOP 2017.
 - for returns, "the continuation entry point table address is pushed to the stack instead of a single return address
 introducing no additional cost."
 - First appeared, for entry points only, in Saleil & Feeley, Scheme Workshop 2015: "Our implementation does not currently propagate the type of
-the return values.")
+the return values."
 
 FORTRAN 77 (ANSI X3.9-1978):
 - a CALL can pass "An alternate return specifier
