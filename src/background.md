@@ -79,29 +79,6 @@ reveal 9                                 # will come back to this example
 reveal 10                                # related work: soft typing
 ```
 
-::: notes
-Related work, revealed after "will come back to this example". Here the checks are written out and
-the redundant ones removed; the other way is to start from a typed view and insert checks only
-where they are needed.
-
-Cartwright & Fagan, "Soft Typing", PLDI 1991: "a type checker need not reject programs containing
-"ill-typed" phrases. Instead, the type checker can insert explicit run-time checks". No
-annotation: "The system should not require the programmer to declare the types of any program
-phrases or operations."
-
-For Scheme (Wright & Cartwright, "A Practical Soft Type System for Scheme", TOPLAS 1997): "the type
-checker typically eliminates 90% of the run-time checks that are necessary for safe execution
-without soft typing", and "most soft typed programs run 10 to 15% faster than their dynamically
-typed counterparts".
-
-Two limits that this thesis addresses:
-- the fixnum? test on the result of findv needs a specialized copy of code; they ruled duplication
-  out: "uninhibited cloning is impractical, as it can exponentially increase program size" (SBBV
-  and ΛV bound it with a version limit);
-- arithmetic: "too weak to effectively eliminate dispatches in generic arithmetic operators"
-  (because + on small integers may overflow into a bignum).
-:::
-
 # Static Analysis Overview {.small}
 
 :::columns
@@ -184,21 +161,6 @@ reveal +1, overview-parts end, overview-run 0      # fixed point
 reveal +2                         # "Dynamic languages" with its point
 ```
 
-::: notes
-Related work, flashed after "Executes on abstract values" (one step, then gone).
-
-Cousot & Cousot, "Abstract interpretation: a unified lattice model for static analysis of programs
-by construction or approximation of fixpoints", POPL 1977, pp. 238-252.
-- Same goal as this thesis, check elimination (Section 9.2, p. 247): "the compiler should ensure that
-  arrays are subscripted only by indices within bounds"; when the analysis is imprecise, "runtime
-  subscript tests may be inserted in the absence of certainty" (p. 248).
-- Branches: "tests behave like filters" (p. 248), what the next slides call narrowing at branches.
-- Careful with words: the paper's *narrowing* (Δ, Section 9) is a different operator, used on
-  decreasing sequences. The widening (∇) of the next slide is defined in Section 9, which they
-  credit to their earlier work (Section 2): "Section 9 introduces finite fixpoint approximation
-  methods to be used when Kleene's sequences are infinite, Cousot[76]."
-:::
-
 
 # Union of Incoming Contexts {#union-of-incoming-contexts}
 
@@ -275,10 +237,6 @@ union-lattice 8..10       # on the lattice: [0, maxfix] ∪ [1, maxfix+1], then 
 union-ai ..end            # one more round changes nothing: the fixed point, [0, ∞)
 ```
 
-::: notes
-The context at the entry of C is the union of what A and B send it. Thresholds 0, 1, maxfix-1, maxfix: a bound that is not a threshold moves up to the next one, so the chain of C.i is finite: {0}, [0, 1], [0, maxfix-1], [0, maxfix], [0, ∞).
-:::
-
 # Narrowing of Outgoing Contexts {#narrowing-of-outgoing-contexts}
 
 :::columns
@@ -313,10 +271,6 @@ narrow-type 2                            # fixnum?(x) holds: x is a fixnum in B
 narrow-type 3                             # fixnum?(x) fails: x is anything but a fixnum in C
 narrow-type ..end                         # B and C, then the fixed point
 ```
-
-::: notes
-A test tells each branch something new. On the true branch of x <= 10, x is in [0, 10] (so also a fixnum); on the false branch it is in [11, ∞). On the true branch of fixnum?(x), x is a fixnum; on the false branch, anything but a fixnum.
-:::
 
 # Static Analysis of `findv` {#findv-absint}
 

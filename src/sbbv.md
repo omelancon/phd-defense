@@ -41,20 +41,6 @@ reveal ..8
 reveal 9            # related work: lazy BBV
 ```
 
-::: notes
-Related work, revealed last: Chevalier-Boisvert & Feeley, "Simple and Effective Type Check Removal
-through Lazy Basic Block Versioning", ECOOP 2015.
-- A JIT technique: it "lazily generates type-specialized versions of basic blocks on-the-fly";
-  "Versions for a particular context are only generated when that context is encountered during
-  execution." Laziness is what bounds the versions; ahead of time, SBBV has no execution to guide it.
-- At the version limit there is no merge: failing an existing compatible version, "a fully generic
-  version of the block that assigns the unknown type to all live variables will be generated."
-  SBBV merges contexts instead, so what they have in common is kept.
-- Results: "A limit of 5 versions per block eliminates 71% of total type tests, compared to 16% for
-  the analysis".
-- Intraprocedural, as SBBV: it "only tracks type information intraprocedurally" (what ΛV adds later).
-:::
-
 # SBBV: A first example {#sbbv-first-example}
 
 :::columns

@@ -49,15 +49,3 @@ Operators as functions re-use specializations. Inlined operators had to re-speci
 
 ```plot {backend=vega source="plots/thesis_plots.py:lv_operators_compile_time_all" legend=true width=10 height=4.2}
 ```
-
-::: notes
-Thesis Figures 20 (micro) and 21 (macro), ΛV only, arithmetic merge heuristic, the two suites
-combined: geometric mean over the 15 micro and 12 macro benchmarks, computed from the geometric
-means of the suites weighted by their sizes. Lower is better.
-Compile time is the execution of the ΛV algorithm, relative to SBBV with a limit of one version.
-Solid: operators as functions (hyperfunctions). Dashed: inlined operators. A specialization of an
-operator is computed once and reused by every call site with the same calling context, while
-inlined operators are respecialized at each call site. At limit 10: about 12.3 against 16.1 over
-all benchmarks (micro 11.3 against 15.8, macro 13.7 against 16.6). Hover a point for its exact
-value.
-:::

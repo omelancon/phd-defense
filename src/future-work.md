@@ -41,30 +41,6 @@ reveal 2, native-arrow 1, width native-code-col=1fr native-room=0  # second bull
 reveal 3, native-arrow 0                                           # related work, at the bottom left
 ```
 
-::: notes
-Related work on implementing multi-return functions natively.
-
-Shivers & Fisher, "Multi-return function call", ICFP 2004 (journal version: JFP 2006).
-- "the ability to specify multiple return points when calling a function".
-- Implementation: "we pass each return point as a frame-pointer/return-pc pair of values, either in
-  registers or stack slots, just as with parameters". "Multi-return function call is a
-  pay-as-you-go feature."
-- They never call it "multi-barrelled": that term comes from Thielecke's double-barrelled CPS
-  (two continuations).
-
-Saleil & Feeley, ECOOP 2017: the closure is "extended to store a pointer to a set of entry points
-(entry point table) instead of a single entry point address in the closure"; for returns, "the
-continuation entry point table address is pushed to the stack instead of a single return address
-introducing no additional cost." (Extended flat closures first appeared, for entry points only, in
-Saleil & Feeley, Scheme Workshop 2015: "Our implementation does not currently propagate the type of
-the return values.")
-
-FORTRAN 77 (ANSI X3.9-1978): a CALL can pass "An alternate return specifier, of the form *s"
-(Section 15.6.2.3), and RETURN e returns to the e-th of them (Section 15.8.3). Shivers & Fisher
-credit it themselves: "the idea of passing multiple return points to a function goes back at least
-as far as FORTRAN 77", but "these subroutines are not reentrant".
-:::
-
 
 # Heterogeneous Data Structures {#future-heterogeneous .small}
 

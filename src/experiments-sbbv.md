@@ -90,30 +90,7 @@ steps:
   - show: [Bigloo + SBBV, Gambit + SBBV]
 ```
 
-::: notes
-Thesis Appendix D, Figure 14 (Section 4.5, "Putting the Results in Context"). Node.js 21.7.1,
-Bigloo 4.6a, Gambit 4.9.4-377, Chez Scheme 9.5.1, Racket 7.2. The programs have Scheme and
-JavaScript versions from previous work, a subset of the benchmark suite. Without SBBV, Gambit and
-Bigloo beat Node.js on every program except almabench (V8 has special optimizations for floats
-and arrays), up to 24× faster on bague, and are in the same ballpark as Chez Scheme. So the gains
-of SBBV are measured against compilers that are already competitive. The slide opens without the
-SBBV columns; the step adds them, and the highlight moves to the fastest times with SBBV.
-:::
 ::: /detour
-
-::: notes
-SBBV was added as a pass in the CFG pipeline of two independently developed, mature optimizing
-ahead-of-time Scheme to C compilers, which are also back ends of compilers for JavaScript and
-Python. They already implement constant folding, inlining, flat closures, lambda lifting: any
-gain is on top of years of tuning. Merge heuristic: similarity (merge the most similar versions).
-To count checks, every primitive is redefined by a macro with explicit inline checks (type,
-overflow, array bounds), so both compilers perform the same checks in the same order; counting
-runs are separate from timing runs. Timing: perf stat, each run at least 5 s, 50 runs with the 5
-highest and 5 lowest removed; relative standard deviation at most 0.24% (macro) and 2.20% (micro).
-Intel Core i7-7700K, 48 GB, Debian 10. Micro benchmarks only shed light on specific behaviors.
-The detour (key f) shows that the baseline compilers are already competitive with Node.js and
-Chez Scheme.
-:::
 
 ::include{file="plots/sbbv-checks.md"}
 ::include{file="plots/sbbv-size.md"}
