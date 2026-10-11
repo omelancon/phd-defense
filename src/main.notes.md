@@ -145,6 +145,8 @@ Micro: about 4 versions per block at limit 10. 6 with inlined operators.
 Macro: 1.2 (hyperfunctions) against 2.0 (inlined) at limit 1 and
 about 4 against 7.4 at limit 10.
 
+**Related work**: find duplicated code and factor it out as procedures.
+
 # operators-compile-time
 
 Thesis Figures 20 (micro) and 21 (macro), ΛV only, arithmetic merge heuristic, the two suites
