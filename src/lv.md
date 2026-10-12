@@ -126,10 +126,10 @@ flash: true
 **Algorithm sketch**
 
 {.reveal}
-- Extend SBBV with a multi-source reachability algorithm that associates entry points and exit sites
-- When a new exit site is found, generate a specialized return point for each of its call sites
-- When a merge removes an exit site, remove the corresponding return points from its call sites
-- Entry point and exit site duplication is governed by the same version limit as SBBV
+- Associate entry points and exit sites (multi-source reachability algorithm)
+- New exit site $\implies$ generate a specialized return point for its call sites
+- Merge removes an exit site $\implies$ remove the corresponding return points
+- Return points duplication is governed version limit
 
 ```timeline
 reveal +2
@@ -147,7 +147,7 @@ reveal ..end
 ```
 :::/column
 :::column {#ex-col width=0}
-```bbv-anim {#ex-lv program="programs/polynomial-square.bbv" algorithm=lv heuristic=arithmetic limit=3 entry=main direction=TB height=500}
+```bbv-anim {#ex-lv program="programs/polynomial-square.bbv" algorithm=lv heuristic=arithmetic limit=3 entry=main direction=TB height=500 call_edges=true}
 show: [label, context, code]
 paths:
   - reads: [fl]
