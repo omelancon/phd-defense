@@ -17,8 +17,8 @@ Contrast: this thesis asks for no annotation, keeps the flexibility, and only re
 
 **Related work**:  Here the checks are written and removed; the other way is to start from no type checks. When the type assignment algorithm fails, the soft type system inserts explicit run-time checks
 
-Cartwright & Fagan, "Soft Typing", PLDI 1991: "a type checker need not reject programs containing
-"ill-typed" phrases. Instead, the type checker can insert explicit run-time checks". No
+Cartwright & Fagan, "Soft Typing", PLDI 1991: "a type checker need **not reject programs** containing
+"ill-typed" phrases. Instead, the **type checker can insert explicit run-time checks**". No
 annotation: "The system should not require the programmer to declare the types of any program
 phrases or operations."
 

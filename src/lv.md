@@ -24,7 +24,7 @@
 
 {.reveal}
 1. Backward propagation from functions' exit sites to call sites.
-2. Duplicate functions' entry points and exit sites to preserve context precision.
+2. Duplicate entry points and return points to preserve context precision.
 
 ```timeline
 reveal +2

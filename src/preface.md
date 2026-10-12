@@ -125,8 +125,7 @@ versions:
   {.reveal}
   - type checks
   - overflow checks
-- More flexible...
-- ... but degrades performance
+- More flexible, but degrades performance
 ::: /column
 ::: /columns
 
@@ -145,7 +144,6 @@ reveal +1, perf-morph +1      # dynamic languages, nothing highlighted
 reveal +1, perf-morph +2      # type checks highlighted
 reveal +1, perf-morph +1      # overflow checks highlighted
 reveal +1, perf-morph -2      # more flexible...
-reveal +1                     # ... but slower
 reveal +1                     # related work: gradual typing
 ```
 
