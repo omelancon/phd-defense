@@ -28,32 +28,33 @@ versions:
     label: "vector-simple.scm"
   - file: programs/vector-simple-expanded.scm
     label: "expanded vector-length and vector-ref"
-    highlight: changed
-  - file: programs/vector-simple-expanded.scm
-    label: "expanded vector-length and vector-ref"
-  - file: programs/vector-simple-expanded.scm
-    label: "expanded vector-length and vector-ref"
-    highlight: [ref-hi]
+    highlight: [src-lo, src-hi, ref-lo, ref-hi]
 ```
 :::/column
 :::column {#vs-col width=0}
-```bbv-anim {#vs-sbbv program="programs/vector-simple.bbv" algorithm=sbbv heuristic=arithmetic limit=2 intervals=true vector_bounds=true direction=TB rank_wrap=2 height=500}
+```bbv-anim {#vs-lv program="programs/vector-simple.bbv" algorithm=lv heuristic=arithmetic limit=2 entry=main direction=LR rank_wrap=auto call_edges=true height=500 intervals=true vector_bounds=true generic_entry=false}
 show: [label, context, code]
 ```
 :::/column
 :::/columns
 
-```arrow {#vs-removed}
+```arrow {#vs-removed-lo}
 steps:
   - null
-  - {to: vs-sbbv.H1, to_anchor: 350, angle: 20, length: 55, label: "check removed"}
+  - {to: vs-lv.H1, to_anchor: top, angle: 110, length: 60, label: "lower bound removed"}
+```
+
+```arrow {#vs-removed-hi}
+steps:
+  - null
+  - {to: vs-lv.J1, to_anchor: top, angle: 80, length: 60, label: "upper bound removed"}
 ```
 
 ```timeline
-vs-morph 1                                          # expand vector-length and vector-ref
-width vs-src=4fr vs-col=5fr, vs-morph +1            # the SBBV run slides in; highlight off
-vs-sbbv 1..end                                      # the run, one frame per step
-vs-removed 1, vs-morph +1                           # the bound check of vector-ref is gone
+vs-morph ..end
+width vs-src=0 vs-col=1fr       # the code collapses; the ΛV run takes the whole width
+vs-lv 1..end                    # the run, one frame per step
+vs-removed-lo 1, vs-removed-hi +1  # both bound checks of vector-ref are gone
 ```
 
 # Example: findv with vector bounds {#vector-findv .small}

@@ -1,19 +1,27 @@
-; vector-simple.scm (vector support) with vector-length and vector-ref expanded, as basic blocks.
-; The test (fx< i (vector-length v)) of the program is C; vector-ref then checks vector? (D), fixnum? (E),
-; the lower bound (G) and the upper bound (H) before the access; every failed check goes to F.
-; v is a vector of 3 elements: make-vector stands for the literal #(1 2 3), whose length is not tracked.
+; vector-simple.scm (vector support): the function vector-safe-ref with vector-length and vector-ref
+; expanded, as basic blocks, called from the top level with the literal #(1 2 3) and (read).
+; The tests of the source are (fixnum? i) (A), (>= i 0) (B) and (< i (vector-length v)) (C, D);
+; vector-ref then checks vector? (E), fixnum? (G), the lower bound (H) and the upper bound (J)
+; before the access; every failed check goes to F.
+; v is a vector of 3 elements: make-vector stands for the literal #(1 2 3). Inside vector-safe-ref,
+; v is a parameter, so its length is the symbol of v and the checks are decided on that symbol.
 function main()
-A:  i = read()
+M:  i = read()
     v = make-vector(3, 0)
-    if fixnum?(i) goto B else goto Z
-B:  if vector?(v) goto C else goto F
-C:  len = ##vector-length(v)
-    if fx<(i, len) goto D else goto Z
-D:  if vector?(v) goto E else goto F
-E:  if fixnum?(i) goto G else goto F
-G:  if fx>=(i, 0) goto H else goto F
-H:  len2 = ##vector-length(v)
-    if fx<(i, len2) goto I else goto F
-I:  return ##vector-ref(v, i)
+    call vector-safe-ref(v, i) -> R
+R:  return #res
+
+function vector-safe-ref(v, i)
+A:  if fixnum?(i) goto B else goto Z
+B:  if >=(i, 0) goto C else goto Z
+C:  if vector?(v) goto D else goto F
+D:  len = ##vector-length(v)
+    if <(i, len) goto E else goto Z
+E:  if vector?(v) goto G else goto F
+G:  if fixnum?(i) goto H else goto F
+H:  if fx>=(i, 0) goto J else goto F
+J:  len2 = ##vector-length(v)
+    if fx<(i, len2) goto K else goto F
+K:  return ##vector-ref(v, i)
 Z:  return #f
 F:  fail
