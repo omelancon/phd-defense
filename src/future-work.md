@@ -94,7 +94,7 @@ show: [label, context, code]
 steps:
   - null
   - {to: cf-lv.N1, to_anchor: bottom, angle: 270, length: 90, label: "receives exactly 1"}
-  - {to: cf-lv.R1, to_anchor: left, angle: 180, length: 110, label: "no side-effects"}
+  - {to: cf-lv.A1, to_anchor: right, angle: 0, length: 60, label: "no side-effects"}
   - {to: cf-lv.N1, to_anchor: bottom, angle: 270, length: 140, label: "replace the call with the constant 1"}
   - {to: cf-lv.A1, to_anchor: right, angle: 0, length: 90, label: "these versions can be freed"}
   - null

@@ -20,7 +20,7 @@ Unifying abstract interpretation and code duplication
 {.reveal}
 - Delay the union operation
 - Duplicate basic blocks for different contexts
-- When a version limit is reached, perform a *merge*
+- When a version limit is exceeded, perform a *merge*
 ::: /column
 ::: column {width=4fr}
 {.reveal}
