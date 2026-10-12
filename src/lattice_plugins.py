@@ -152,10 +152,10 @@ class Statement(Component):
 
 class RelatedWorkNoteOptions(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    title: str = "Related work"
+    comment: str = ""     # a sentence on how the works relate, between the heading and the items
     items: list[str] = Field(min_length=1)
     flash: bool = False   # shown for one position only, laid over what follows it
-    inline: bool = False  # the title and the items run on as one sentence (no bullets), to save height
+    inline: bool = False  # the comment and the items run on as one sentence (no bullets), to save height
 
 
 _INLINE = MarkdownIt("commonmark", {"html": False})
@@ -165,8 +165,9 @@ _INLINE = MarkdownIt("commonmark", {"html": False})
 class RelatedWorkNote(Component):
     """A box pointing out related work, the same on every slide that has one.
 
-    The YAML body gives a ``title`` (a sentence introducing the list) and the ``items``, one work per
-    entry (``Name (Author year)``); both take inline Markdown (`code`, *emphasis*). Styled by
+    Every note has the same layout: a bold "Related work" heading at the top, then the optional
+    ``comment`` (a sentence on how the works relate), then the ``items``, one work per entry
+    (``Name (Author year)``); both take inline Markdown (`code`, *emphasis*). Styled by
     plugins/related-work-note.css, a light blue box built from the theme's variables.
 
     Two ways to show it:
@@ -179,12 +180,12 @@ class RelatedWorkNote(Component):
       follow it in its column, at its own place, so it belongs where the next blocks are not yet
       revealed (they appear in that space once it is gone).
 
-    ``inline: true`` runs the title and the items on as one sentence, without bullets (items are
-    separated by semicolons): one line instead of two for a note citing one work, where height is short.
+    ``inline: true`` runs the comment and the items on as one sentence under the heading, without
+    bullets (items are separated by semicolons), to save height for a note citing one work.
     """
 
     Options = RelatedWorkNoteOptions
-    version = "3"
+    version = "4"
     body = "yaml"
     runtime = str(HERE / "related-work-note.js")
     css = [str(HERE / "related-work-note.css")]
@@ -192,8 +193,9 @@ class RelatedWorkNote(Component):
     def render(self, block, opts: RelatedWorkNoteOptions, ctx) -> RenderResult:
         items = "".join(f"<li>{_INLINE.renderInline(item)}</li>" for item in opts.items)
         cls = "lt-related-work rw-inline" if opts.inline else "lt-related-work"
-        note = (f'<aside class="{cls}"><p>{_INLINE.renderInline(opts.title)}</p> '
-                f"<ul>{items}</ul></aside>")
+        comment = f'<p class="rw-comment">{_INLINE.renderInline(opts.comment)}</p> ' if opts.comment else ""
+        note = (f'<aside class="{cls}"><p class="rw-head"><strong>Related work</strong></p>'
+                f"{comment}<ul>{items}</ul></aside>")
         if not opts.flash:
             return RenderResult(note)
         return RenderResult(f'<div class="lt-related-work-slot">{note}</div>', data={"flash": True}, positions=3)

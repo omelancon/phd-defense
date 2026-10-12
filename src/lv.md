@@ -115,7 +115,7 @@ reveal ..end
 - When a specialized exit site is discovered/removed, its call sites are notified and updated
 
 ```related-work-note {#rw-lv}
-title: "Related work also duplicates entries and exits:"
+comment: "Also duplicates entries and exits:"
 items:
   - Interprocedural branch elimination, in C (Bodík, Gupta & Soffa 1997)
   - Interprocedural lazy BBV, in a JIT (Saleil & Feeley 2017)

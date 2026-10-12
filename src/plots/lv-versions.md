@@ -11,7 +11,6 @@
 :::/column
 :::column {#dup-note width=0}
 ```related-work-note
-title: "Related work"
 items:
   - Using Slicing to Identify Duplication in Source Code (Komondoor & Horwitz 2001)
 ```

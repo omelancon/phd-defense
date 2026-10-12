@@ -14,7 +14,7 @@
 
 {.reveal}
 ```related-work-note
-title: "Related work explored some designs:"
+comment: "Explored some designs:"
 items:
   - Multi-return function call (Shivers & Fisher 2004)
   - Entry and return point tables (Saleil & Feeley 2017)

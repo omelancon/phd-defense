@@ -6,8 +6,10 @@
   padding:16px 22px;border-radius:10px;background:var(--rw-bg);border-left:6px solid var(--rw-edge);
   color:var(--lt-ink);text-align:left}
 .lt-related-work li::marker{color:var(--rw-edge)}
-/* `inline: true`: the title and the items as one sentence, without bullets */
-.lt-related-work.rw-inline>p,.lt-related-work.rw-inline>ul,.lt-related-work.rw-inline li{display:inline;margin:0;padding:0}
+/* the bold "Related work" heading at the top of every note */
+.lt-related-work>.rw-head{margin:0 0 .3em}
+/* `inline: true`: the comment and the items as one sentence under the heading, without bullets */
+.lt-related-work.rw-inline>.rw-comment,.lt-related-work.rw-inline>ul,.lt-related-work.rw-inline li{display:inline;margin:0;padding:0}
 .lt-related-work.rw-inline li+li::before{content:"; "}
 
 /* `flash: true`: the slot takes no room; the note hangs from it over the blocks that follow, and is

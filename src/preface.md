@@ -132,7 +132,7 @@ versions:
 
 {.reveal}
 ```related-work-note
-title: "Trading flexibility for performance:"
+comment: "Trading flexibility for performance:"
 items:
   - gradual typing (Siek & Taha 2006)
 inline: true

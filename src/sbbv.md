@@ -25,7 +25,7 @@ Unifying abstract interpretation and code duplication
 ::: column {width=4fr}
 {.reveal}
 ```related-work-note
-title: "Ahead-of-time counterpart of:"
+comment: "AOT counterpart of:"
 items:
   - Lazy BBV, in a JIT (Chevalier-Boisvert & Feeley 2015)
 ```
