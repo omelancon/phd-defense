@@ -3,9 +3,7 @@
 **Related work**: gradual typing is a trade-off between the two.
 
 Siek & Taha, "Gradual Typing for Functional Languages", Scheme Workshop 2006. The programmer
-chooses, with type annotations: "the cost of dynamism is "pay-as-you-go", so partially annotated
-programs enjoy the benefits of static typing to the degree that they are annotated."
-They list "the Bigloo [6, 36] dialect of Scheme" among the languages with such a mix.
+chooses, with type annotations: "the cost of dynamism is "pay-as-you-go", so **partially annotated** programs enjoy the **benefits of static typing to the degree that they are annotated**." They list "the Bigloo [6, 36] dialect of Scheme" among the languages with such a mix.
 
 Its run-time cost at the boundaries (Takikawa et al., "Is Sound Gradual Typing Dead?", POPL 2016,
 Section 7): "In the context of current implementation technology, sound gradual typing is dead."
