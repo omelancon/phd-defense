@@ -114,14 +114,6 @@ reveal ..end
 - Entry points track the exit sites they can reach
 - When a specialized exit site is discovered/removed, its call sites are notified and updated
 
-```related-work-note {#rw-lv}
-comment: "Also duplicates entries and exits:"
-items:
-  - Interprocedural branch elimination, in C (Bodík, Gupta & Soffa 1997)
-  - Interprocedural lazy BBV, in a JIT (Saleil & Feeley 2017)
-flash: true
-```
-
 {.reveal}
 **Algorithm sketch**
 
@@ -134,8 +126,7 @@ flash: true
 ```timeline
 reveal +2
 reveal ..5
-rw-lv 1                 # related work: Bodík et al. 1997, Saleil & Feeley 2017, over the room of the sketch
-reveal +2, rw-lv end    # note gone; "Algorithm sketch" in its place
+reveal +2               # "Algorithm sketch" with its first point
 reveal ..end
 ```
 

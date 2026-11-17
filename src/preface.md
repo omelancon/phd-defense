@@ -129,14 +129,6 @@ versions:
 ::: /column
 ::: /columns
 
-{.reveal}
-```related-work-note
-comment: "Trading flexibility for performance:"
-items:
-  - gradual typing (Siek & Taha 2006)
-inline: true
-```
-
 ```timeline
 reveal 1                      # the question and the program
 reveal +1                     # operators expanded; static languages
@@ -144,22 +136,19 @@ reveal +1, perf-morph +1      # dynamic languages, nothing highlighted
 reveal +1, perf-morph +2      # type checks highlighted
 reveal +1, perf-morph +1      # overflow checks highlighted
 reveal +1, perf-morph -2      # more flexible...
-reveal +1                     # related work: gradual typing
 ```
 
-# Object of this Thesis {.center}
+# Object of this Talk {.center}
 
 ```statement
-How can an ahead-of-time compiler **eliminate run-time checks**, so that dynamic languages
-**run as fast as static ones** without **losing their flexibility**?
+How to deduce **type information ahead of time** in dynamic languages to **remove run-time type checks**?
 ```
 
-# Table of Contents {.large}
+# Table of Contents {.toc}
 
 {.reveal}
 1. ## Background on Static Analysis
 2. ## Static Basic Block Versioning (SBBV)
 3. ## Lambda Versioning (ΛV)
-4. ## Technique Improvements
-5. ## Experimental Evaluation
-6. ## Future Work
+4. ## Experimental Evaluation
+5. ## Future Work

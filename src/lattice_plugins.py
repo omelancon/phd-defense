@@ -5,6 +5,7 @@ import html
 import re
 import subprocess
 from pathlib import Path
+from typing import Literal
 
 from markdown_it import MarkdownIt
 from pydantic import BaseModel, ConfigDict, Field
@@ -279,6 +280,7 @@ class TableStepsOptions(BaseModel):
     table: str                                  # a GFM table, as it would be written in the slide
     best: str = "none"                          # min, max or none: which number of each row is highlighted
     steps: list[dict | None] = [None]
+    compact: bool = False                       # tighter rows, for a table of many rows
 
 
 _NUM = re.compile(r"[-+]?\d+(?:[.,]\d+)*(?:[eE][-+]?\d+)?")
@@ -304,7 +306,9 @@ class TableSteps(Component):
     leaves the cells as written) and ``steps``, one entry per position: ``null`` (no change) or a
     mapping with ``hide`` and ``show``, lists of column headers as written in the table. Entries
     are deltas over the previous position, so the first one hides what the slide opens without.
-    With ``best``, write the numbers without ``**``: the highlight is computed.
+    With ``best``, write the numbers without ``**``: the highlight is computed. Without ``steps``
+    the table is static; ``compact: true`` tightens its rows and lines up its digits, for a table
+    of many rows.
 
     A single step animates: the columns that stay glide to their new places, the columns shown
     fade in, the highlight moves. Give it an ``#id`` when the slide has another track. Styled by
@@ -312,7 +316,7 @@ class TableSteps(Component):
     """
 
     Options = TableStepsOptions
-    version = "2"
+    version = "3"
     body = "yaml"
     runtime = str(HERE / "table-steps.js")
     css = [str(HERE / "table-steps.css")]
@@ -372,7 +376,7 @@ class TableSteps(Component):
         thead = "<tr>" + "".join(cell("th", h, c) for c, h in enumerate(head)) + "</tr>"
         tbody = "".join(f'<tr data-r="{r}">' + "".join(cell("td", t, c) for c, t in enumerate(row)) + "</tr>"
                         for r, row in enumerate(rows))
-        markup = (f'<div class="lt-table-steps"><table><thead>{thead}</thead>'
+        markup = (f'<div class="lt-table-steps{" ts-compact" if opts.compact else ""}"><table><thead>{thead}</thead>'
                   f"<tbody>{tbody}</tbody></table></div>")
         return RenderResult(markup, data={"positions": positions}, positions=len(positions))
 
@@ -384,6 +388,13 @@ class JuryMember(BaseModel):
     affiliation: str = ""
 
 
+class TitleLogo(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    file: str             # an SVG, relative to the deck file, inlined
+    alt: str = ""
+    height: int | None = None   # in px, when it should not have the height of the other logos
+
+
 class TitlePageOptions(BaseModel):
     model_config = ConfigDict(extra="forbid")
     title: str | None = None      # defaults to the front matter's title
@@ -392,6 +403,8 @@ class TitlePageOptions(BaseModel):
     date: str | None = None       # defaults to the front matter's date, if any
     logo: str | None = None       # an SVG, relative to the deck file, inlined
     logo_alt: str = ""
+    logos: list[TitleLogo] = Field(default_factory=list)   # further logos, drawn after `logo`
+    align: Literal["left", "right"] = "left"               # side of the title and the byline
     jury: list[JuryMember] = Field(default_factory=list)
     motif: bool = True            # a large, faint lattice in the background
 
@@ -399,7 +412,7 @@ class TitlePageOptions(BaseModel):
 _SVG_HEAD = re.compile(r"^.*?(?=<svg\b)", re.S)
 
 
-def _inline_svg(source: str, alt: str) -> str:
+def _inline_svg(source: str, alt: str, height: int | None = None) -> str:
     """An SVG file as inline markup: shapes without a fill take the text colour (``currentColor``),
     so that the black parts of a logo follow the theme's ink while its coloured parts keep their colour."""
     svg = _SVG_HEAD.sub("", source, count=1)
@@ -408,7 +421,8 @@ def _inline_svg(source: str, alt: str) -> str:
     end = svg.find(">") + 1                     # the root tag loses its size: CSS sets it
     svg = re.sub(r'\s(?:width|height)="[^"]*"', "", svg[:end]) + svg[end:]
     label = f'role="img" aria-label="{html.escape(alt, quote=True)}"' if alt else 'aria-hidden="true"'
-    return svg.replace("<svg ", f'<svg class="tp-logo" {label} preserveAspectRatio="xMinYMid meet" ', 1)
+    size = f' style="height:{height}px"' if height else ""
+    return svg.replace("<svg ", f'<svg class="tp-logo"{size} {label} preserveAspectRatio="xMinYMid meet" ', 1)
 
 
 def _lattice_motif(half: int = 4, dx: float = 60, dy: float = 52, r: float = 6) -> str:
@@ -442,22 +456,27 @@ _HYPHENATED = re.compile(r"\S+-\S+")
 
 @register("title-page")
 class TitlePage(Component):
-    """The opening slide of a defense: the institution, the title, the author and the jury.
+    """The opening slide of a talk: the institutions, the title, the authors and, for a defense, the jury.
 
     The YAML body gives ``kicker`` (a short line naming the occasion), ``logo`` (an SVG file, inlined so
-    that its uncoloured shapes take the theme's ink), ``logo_alt`` and ``jury``, a list of
-    ``{name, role, affiliation}`` in the order of the defense; ``motif: false`` removes the faint
-    lattice drawn in the background. ``title``, ``author`` and ``date`` default
+    that its uncoloured shapes take the theme's ink) with ``logo_alt``, ``logos`` (further logos beside
+    it, a list of ``{file, alt, height}``, the height in px when a logo should be smaller than the others), ``align`` (``right`` sets the title and the byline against the right
+    edge) and ``jury``, a list of ``{name, role, affiliation}`` in the order of the defense (without
+    it the title takes the whole width); ``motif: false`` removes the faint lattice drawn in the
+    background. ``title``, ``author`` and ``date`` default
     to the front matter. The slide's own ``#`` heading is hidden (it still names the slide in the
     overview and the go-to list), so the block owns the whole slide. Styled by plugins/title-page.css
     with the theme's variables: the jury hangs from a rule with a node per member, the vertical
     counterpart of the takeaways on the Conclusion slide.
+
+    Every deck opens with this block, so it also carries plugins/deck.css: the few classes that lay
+    out whole slides (the table of contents, a detour badge in a corner, the closing "Thank you").
     """
 
     Options = TitlePageOptions
-    version = "2"
+    version = "4"
     body = "yaml"
-    css = [str(HERE / "title-page.css")]
+    css = [str(HERE / "title-page.css"), str(HERE / "deck.css")]
 
     def render(self, block, opts: TitlePageOptions, ctx) -> RenderResult:
         title = opts.title or ctx.meta.title
@@ -468,8 +487,10 @@ class TitlePage(Component):
         esc = lambda s: html.escape(str(s), quote=False)
 
         top = ""
-        if opts.logo or opts.kicker:
-            logo = _inline_svg(ctx.path(opts.logo).read_text(encoding="utf-8"), opts.logo_alt) if opts.logo else ""
+        logos = ([TitleLogo(file=opts.logo, alt=opts.logo_alt)] if opts.logo else []) + opts.logos
+        if logos or opts.kicker:
+            logo = "".join(_inline_svg(ctx.path(l.file).read_text(encoding="utf-8"), l.alt, l.height) for l in logos)
+            logo = f'<div class="tp-logos">{logo}</div>' if logo else ""
             kicker = f'<p class="tp-kicker">{esc(opts.kicker)}</p>' if opts.kicker else ""
             top = f'<div class="tp-top">{logo}{kicker}</div>'
 
@@ -480,7 +501,7 @@ class TitlePage(Component):
                       + (f'<p class="tp-date">{esc(date)}</p>' if date else "") + "</div>")
         # a hyphenated word (Ahead-of-Time) never breaks at its hyphens
         title_html = _HYPHENATED.sub(lambda m: f'<span class="tp-nowrap">{m.group(0)}</span>', esc(title))
-        main = f'<div class="tp-main"><p class="tp-title">{title_html}</p>{byline}</div>'
+        main = f'<div class="tp-main tp-align-{opts.align}"><p class="tp-title">{title_html}</p>{byline}</div>'
 
         jury = ""
         if opts.jury:

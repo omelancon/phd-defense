@@ -12,8 +12,6 @@ Unifying abstract interpretation and code duplication
 - Inputs exist that produce wide ranges of behaviors
 - Union *wins* over narrowing
 
-::: columns
-::: column {width=7fr}
 {.reveal}
 **Core idea**
 
@@ -21,16 +19,6 @@ Unifying abstract interpretation and code duplication
 - Delay the union operation
 - Duplicate basic blocks for different contexts
 - When a version limit is exceeded, perform a *merge*
-::: /column
-::: column {width=4fr}
-{.reveal}
-```related-work-note
-comment: "AOT counterpart of:"
-items:
-  - Lazy BBV, in a JIT (Chevalier-Boisvert & Feeley 2015)
-```
-::: /column
-::: /columns
 
 ```timeline
 reveal 2
@@ -38,7 +26,6 @@ reveal 3
 reveal 4
 reveal 6
 reveal ..8
-reveal 9            # related work: lazy BBV
 ```
 
 # SBBV: A first example {#sbbv-first-example}

@@ -1,5 +1,7 @@
 """Vega-Lite specs for the evaluation figures of the thesis (Figures 9 to 12 and 18 to 23, and
-one derived plot: the ΛV compile time of operators as functions against inlined operators).
+one derived plot: the ΛV compile time of operators as functions against inlined operators), and
+for the type check figures of the ΛV paper (lv_paper, Figures 9 and 10: `lv_paper_typechecks_*`,
+at the end of this file, with the data in data/paper-figures/).
 
 Each public function is a `source` of a `plot {backend=vega}` block in this folder. The data is a
 one-time copy in data/thesis-figures/ at the root of the defense project (see its README.md); the
@@ -362,3 +364,81 @@ def lv_operators_compile_time_macro(legend=True, title=None):
 def lv_operators_compile_time_all(legend=True, title=None):
     """Both suites together: the geometric mean over the 15 micro and 12 macro benchmarks."""
     return _lv_operators("compile-time", None, "Relative compile time", legend, title)
+
+
+# ------------------------------------------------------------------ Lambda Versioning (paper results)
+
+# Figures 9 and 10 of the ΛV paper (lv_paper/paper.pdf): run-time type checks relative to the source
+# program without any optimization, for the benchmarks that do not read from heterogeneous data
+# structures (Figure 9) and for those that do (Figure 10). As in the paper: ΛV with the arithmetic
+# heuristic and operators as hyperfunctions in the heuristic's blue (the line is the geometric mean
+# over the benchmarks of the group, the shaded area spans their minimum and maximum), and Bigloo as a
+# red line at the geometric mean of its type checks over the same benchmarks. No SBBV series.
+# The data is a copy in data/paper-figures/lv/ (see its README.md).
+PAPER_DATA = DATA.parent / "paper-figures" / "lv"
+# The benchmarks of Figure 9 (NO_HETERO_DS_BENCHMARKS of lambda-versioning/benchmarks/makefile);
+# every other benchmark of all-bigloo.csv is in the group of Figure 10.
+NO_HETERO_DS = ["ack", "array1", "fact20", "fact100", "fib", "fibfp", "quicksortfl", "sum", "sumfp", "tak"]
+PAPER_COLORS = {"domain": ["ΛV", "Bigloo"], "range": ["#648FFF", "#E0000F"]}
+
+
+def _dict_rows(path: Path) -> list[dict]:
+    with open(path, newline="", encoding="utf-8") as f:
+        return list(csv.DictReader(f))
+
+
+def _bigloo_geomean(hetero: bool) -> float:
+    """Geometric mean of Bigloo's relative type checks over the benchmarks of a group, as
+    `aggregate-bigloo.sh --geomean` computes it for the paper's figures."""
+    values = [float(r["relative-typechecks"]) for r in _dict_rows(PAPER_DATA / "all-bigloo.csv")
+              if (r["benchmark"] not in NO_HETERO_DS) == hetero and float(r["relative-typechecks"]) > 0]
+    return math.exp(sum(math.log(v) for v in values) / len(values))
+
+
+def _lv_paper_typechecks(group: str, legend=True, title=None) -> dict:
+    rows = _dict_rows(PAPER_DATA / f"ALL.typechecks.arithmetic.{group}.csv")
+    limits = [int(r["version"]) for r in rows]
+    bigloo = _bigloo_geomean(group == "hetero-ds")
+    values = [{"limit": int(r["version"]), "series": "ΛV", "value": float(r["geomean"]),
+               "min": float(r["min"]), "max": float(r["max"])} for r in rows]
+    values += [{"limit": n, "series": "Bigloo", "value": bigloo} for n in (limits[0], limits[-1])]
+    color = {"field": "series", "type": "nominal", "scale": PAPER_COLORS,
+             "legend": _legend("top-right") if _flag("legend", legend) else None}
+    only_lv = [{"filter": "datum.series == 'ΛV'"}]
+    blue = PAPER_COLORS["range"][0]
+    spec = {
+        "data": {"values": values},
+        "encoding": {"x": _x_axis(limits, "No ΛV"), "y": _y_axis("Relative type checks", [0, 1], ".1f")},
+        "layer": [
+            # minimum to maximum over the benchmarks of the group
+            {"transform": only_lv, "mark": {"type": "area", "color": blue, "opacity": 0.16},
+             "encoding": {"y": {"field": "min", "type": "quantitative"}, "y2": {"field": "max"}}},
+            {"transform": only_lv,
+             "mark": {"type": "line", "color": blue, "strokeWidth": 1, "strokeDash": [5, 4], "opacity": 0.7},
+             "encoding": {"y": {"field": "min", "type": "quantitative"}}},
+            {"transform": only_lv,
+             "mark": {"type": "line", "color": blue, "strokeWidth": 1, "strokeDash": [5, 4], "opacity": 0.7},
+             "encoding": {"y": {"field": "max", "type": "quantitative"}}},
+            {"mark": {"type": "line", "strokeWidth": 2.5}, "encoding": {"color": color}},
+            {"transform": only_lv, "mark": {"type": "point", "filled": True, "size": 55, "color": blue},
+             "encoding": {"tooltip": [
+                 {"field": "limit", "type": "quantitative", "title": "version limit"},
+                 {"field": "value", "type": "quantitative", "format": ".3f", "title": "geometric mean"},
+                 {"field": "min", "type": "quantitative", "format": ".3f", "title": "minimum"},
+                 {"field": "max", "type": "quantitative", "format": ".3f", "title": "maximum"}]}},
+        ],
+    }
+    title = _title(title, None)
+    if title:
+        spec["title"] = {"text": title, "fontSize": 18, "fontWeight": 500, "anchor": "middle"}
+    return spec
+
+
+def lv_paper_typechecks_no_hetero(legend=True, title=None):
+    """Paper Figure 9: benchmarks that do not use heterogeneous data structures."""
+    return _lv_paper_typechecks("no-hetero-ds", legend, title)
+
+
+def lv_paper_typechecks_hetero(legend=True, title=None):
+    """Paper Figure 10: benchmarks that use heterogeneous data structures."""
+    return _lv_paper_typechecks("hetero-ds", legend, title)

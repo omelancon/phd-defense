@@ -1,6 +1,8 @@
-/* `title-page` (src/lattice_plugins.py): the opening slide. The institution across the top, the title
-   and the author on the left, the jury on the right, hanging from a rule with a node per member (the
-   vertical counterpart of the takeaways' rule on the Conclusion slide). Built from the theme's variables. */
+/* `title-page` (src/lattice_plugins.py): the opening slide. The institutions across the top, the title
+   and the authors on the left (or against the right edge, `align: right`), the jury, if any, on the
+   right, hanging from a rule with a node per member (the vertical counterpart of the takeaways' rule
+   on the Conclusion slide); without a jury the title takes the whole width. Built from the theme's
+   variables. */
 
 /* the block owns the slide: the slide's heading only names it in the overview and the go-to list;
    its wrapper grows to the whole body */
@@ -15,12 +17,16 @@
 /* institution: the logo and the occasion, over a hairline */
 .tp-top{grid-column:1/-1;display:flex;align-items:flex-end;justify-content:space-between;gap:32px;
   padding-bottom:18px;border-bottom:1px solid var(--lt-rule)}
+.tp-logos{display:flex;align-items:flex-end;gap:44px}
 .tp-logo{display:block;height:64px;width:auto;color:var(--lt-ink)}
 .tp-kicker{font-size:15px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--lt-muted);
   line-height:1;padding-bottom:3px}
 
 /* title and author */
 .tp-main{align-self:center;padding-bottom:12px}
+.tp-main:last-child{grid-column:1/-1}              /* no jury: the whole width */
+.tp-align-right{text-align:right}
+.tp-align-right .tp-byline{justify-content:flex-end}
 .tp-title{font-family:var(--lt-font-head);font-size:52px;font-weight:650;line-height:1.1;letter-spacing:-.015em;
   color:var(--lt-ink);text-wrap:balance}
 .tp-nowrap{white-space:nowrap}

@@ -1,33 +1,22 @@
 ---
-title: Highly Optimizing Ahead-of-Time Compilers for Dynamic Languages
-author: Olivier Melançon
+title: Ahead-of-Time Optimization of Dynamic Languages using Duplication and Multi-Return Functions
+author: Olivier Melançon, Manuel Serrano, Marc Feeley
 tours:
   titles: [preface-title, abstract-interpretation-title, sbbv-title, sbbv-experiments-title, lv-title, lv-experiments-title]
 help_button: true
 ---
 
-# Highly Optimizing Ahead-of-Time Compilers for Dynamic Languages
+# Ahead-of-Time Optimization of Dynamic Languages using Duplication and Multi-Return Functions
 
 ```title-page
-kicker: Soutenance de thèse de doctorat
+kicker: Synchron 2026
 logo: figures/udem-logo.svg
 logo_alt: Université de Montréal
-jury:
-  - name: Eugène Syriani
-    role: Président
-    affiliation: DIRO
-  - name: Sébastien Roy
-    role: Membre
-    affiliation: DIRO
-  - name: Marc Feeley
-    role: Directeur de recherche
-    affiliation: DIRO
-  - name: Manuel Serrano
-    role: Co-directeur de recherche
-    affiliation: INRIA UCA
-  - name: Matthew Flatt
-    role: Examinateur externe
-    affiliation: University of Utah
+logos:
+  - file: figures/inria-logo.svg
+    alt: Inria
+    height: 46
+align: right
 ```
 
 ::include{file="preface.md"}

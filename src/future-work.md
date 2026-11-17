@@ -1,5 +1,50 @@
-# Future Work {#future-work-title layout=title}
+# Future Work {#future-work .small}
 
+Three directions.
+
+::::: columns
+::: column {width=1fr}
+:::: group
+### Native hyperfunctions
+
+*no more emulation*
+
+- Emulated today by a Scheme macro
+- Needed to measure execution time
+- Work in progress: the HVM virtual machine
+::::
+
+::detour-badge{ref=detour-native}
+::: /column
+::: column {width=1fr}
+:::: group
+### Heterogeneous data
+
+*types of stored values*
+
+- Most remaining checks: values read from vectors, pairs, boxes
+- The type of a stored value is lost
+- Track mutability and escapability
+::::
+
+::detour-badge{ref=detour-heterogeneous}
+::: /column
+::: column {width=1fr}
+:::: group
+### Constant folding
+
+*calls that return a constant*
+
+- ΛV finds calls that always return the same constant
+- Without side effects, the call becomes the constant
+- The callee's versions can be freed
+::::
+
+::detour-badge{ref=detour-folding}
+::: /column
+:::::
+
+::: detour {#detour-native label="Native hyperfunctions" key=n}
 # Native Multi-Return Functions {#future-native .small}
 
 ::::: columns
@@ -11,15 +56,6 @@
 - Here is a work-in-progress
 ::: /column
 ::: /columns
-
-{.reveal}
-```related-work-note
-comment: "Explored some designs:"
-items:
-  - Multi-return function call (Shivers & Fisher 2004)
-  - Entry and return point tables (Saleil & Feeley 2017)
-  - Alternate returns (FORTRAN 77)
-```
 :::: /column
 :::: column {#native-code-col width=0}
 ```code {#native-code lang=tasm file="programs/hvm-hyperfunction.hvm" title="HVM: a VM for hyperfunctions"}
@@ -38,10 +74,10 @@ steps:
 ```timeline
 reveal 1                                                           # first bullet
 reveal 2, native-arrow 1, width native-code-col=1fr native-room=0  # second bullet; the code opens in place of the empty column
-reveal 3, native-arrow 0                                           # related work, at the bottom left
 ```
+::: /detour
 
-
+::: detour {#detour-heterogeneous label="Heterogeneous data" key=h}
 # Heterogeneous Data Structures {#future-heterogeneous .small}
 
 ::::: columns
@@ -75,7 +111,9 @@ het-sbbv 1..end                             # the SBBV run, one frame per step
 het-lost 1                                  # the value read back has type any
 reveal 2, het-lost 2                        # second bullet; the arrow goes away
 ```
+::: /detour
 
+::: detour {#detour-folding label="Constant folding" key=c}
 # Built-in Constant Folding {#future-constant-folding .small}
 
 :::columns
@@ -110,3 +148,4 @@ cf-lv 14, cf-note 4             # the fold: the call becomes #res = 1, A1, B1 an
 cf-lv 15, cf-note 5             # they are gone
 cf-lv ..end                     # the rest of the run
 ```
+::: /detour

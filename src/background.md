@@ -46,14 +46,6 @@ versions:
   - fixnum arithmetic
   - eliminated bound checks
   - can this test be removed?
-
-{.reveal}
-```related-work-note
-comment: "Inserting checks only where needed:"
-items:
-  - soft typing (Cartwright & Fagan 1991)
-inline: true
-```
 ::: /column
 ::: /columns
 
@@ -74,7 +66,6 @@ reveal +1, findv-morph +1              # the redundant checks
 why ..+4                               # why four of them are redundant, one arrow each
 reveal +1, findv-morph +1, why end     # redundant checks removed, nothing highlighted
 reveal ..8, findv-morph ..end          # each sub-bullet with its highlight
-reveal 9                               # related work: soft typing
 ```
 
 # Static Analysis Overview {.small}
@@ -85,12 +76,6 @@ reveal 9                               # related work: soft typing
 - Based on abstract interpretation
 - Technique for sound approximation of program semantics
 - Executes on abstract values (sets of concrete values)
-
-```related-work-note {#rw-cousot}
-items:
-  - Abstract interpretation (Cousot & Cousot 1977)
-flash: true
-```
 
 {.reveal}
 **Algorithm sketch:**
@@ -129,8 +114,6 @@ paths:
 steps:
   - null
   - {to: overview-cfg.A, to_anchor: top, length: 60, label: "control-flow graph"}
-  - {to: overview-cfg.B, to_anchor: 200, length: 60, label: "basic block"}
-  - {to: overview-cfg.B->D, to_anchor: left, length: 60, label: "jump"}
   - null
 ```
 
@@ -147,10 +130,7 @@ steps:
 reveal +1
 reveal +1                          # sound approximation
 reveal +1                          # abstract values
-rw-cousot 1                        # related work: Cousot & Cousot 1977, over the room of the next blocks
-reveal +2, rw-cousot end, overview-run 1, overview-cfg-parts 1   # note gone; "Algorithm sketch" with "Propagate": every block lit, the CFG named
-overview-cfg-parts 2, overview-run 3               # basic block
-overview-cfg-parts 3, overview-run 0               # jump
+reveal +2, overview-run 1, overview-cfg-parts 1   # "Algorithm sketch" with "Propagate": every block lit, the CFG named
 reveal +1, overview-cfg-parts end, overview-run 2, overview-parts 1   # lights and arrows go away: entry point
 reveal +1, overview-parts 2, overview-run 5        # union at the join point
 reveal +1, overview-parts 3, overview-run 2        # narrowing at the branch point
@@ -171,7 +151,11 @@ history: [C.i]
 thresholds: [0, 1, maxfix-1, maxfix]
 ```
 :::/column
-:::column {width=2fr}
+:::column {#union-src width=2fr}
+```code {#union-code lang=scheme file="programs/union.scm" title="Source program"}
+```
+:::/column
+:::column {#union-lat width=0}
 ```hasse-anim {#union-lattice file="figures/interval-lattice.dot" height=495}
 steps:
   - null
@@ -220,6 +204,7 @@ steps:
 ```
 
 ```timeline
+width union-src=0 union-lat=2fr   # the source program collapses; the lattice takes its place
 union-ai 1..6             # C receives {1} from B: union
 union-lattice 1..2        # on the lattice: {0} ∪ {1}
 union-ai 7..10            # C receives [1, 2] from B: union with widening
@@ -247,7 +232,11 @@ show: [label, context, code]
 show: [label, context, code]
 ```
 :::/column
-:::column {width=3fr}
+:::column {#narrow-src width=3fr}
+```code {#narrow-code lang=scheme file="programs/narrow-cmp.scm" title="Source program"}
+```
+:::/column
+:::column {#narrow-text width=0}
 {.reveal}
 - gain information at conditional branches
   {.reveal}
@@ -257,6 +246,7 @@ show: [label, context, code]
 :::/columns
 
 ```timeline
+width narrow-src=0 narrow-text=3fr           # the source program collapses; the text takes its place
 reveal 1..2                                  # the idea
 narrow-cmp 1                              # A: x is a nonnegative integer
 narrow-cmp 2                              # x <= 10 holds: x in [0, 10] in B

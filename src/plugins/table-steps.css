@@ -2,6 +2,7 @@
    the theme's table style (.lt-body table); hidden columns take no room, and the computed best
    value of each row is highlighted in light yellow, a marker that hugs the number. */
 .lt-table-steps{max-width:100%;overflow-x:auto}
+.lt-table-steps.ts-compact th,.lt-table-steps.ts-compact td{padding:5px 15px;font-variant-numeric:tabular-nums}
 .lt-table-steps .ts-off{display:none}
 .lt-table-steps .ts-v{display:inline-block;margin:-3px -8px;padding:3px 8px;border-radius:5px;
   background:rgba(255,205,40,0)}

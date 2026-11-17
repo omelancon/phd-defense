@@ -138,3 +138,16 @@ Requests for the Lattice developers, from the defense deck.
 
    or `badge=end` for the last step of the slide, and, still in the same spirit as request 4, a
    helper class for alignment (`.bottom-right`) usable on a placed badge.
+
+9. The render cache ignores the front matter that a component reads (title slide, src/main.md)
+
+   Need: the local `title-page` component takes its title and authors from the front matter
+   (`ctx.meta.title`, `ctx.meta.author`), so that they are written once.
+   Today: the cache key of a component (render.py, `render_slide_components`) holds its options, body,
+   palette and aspect, but nothing of `deck.meta`. After a change of `title:` or `author:` in the
+   front matter, `lattice build` reuses the cached title slide: the footer shows the new title, the
+   title slide the old one, until `--no-cache` or `make clean`. The only workaround in the deck is to
+   repeat the title and the authors in the block, which defeats the default.
+   Wanted: the fields of `meta` that a render read become part of its cache entry (record the reads on
+   `RenderContext.meta`, as `ctx.path` records file dependencies), or simply `meta.title`,
+   `meta.author` and `meta.date` in every key.

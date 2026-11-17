@@ -26,17 +26,15 @@ digraph setup {
 
 ::::: columns
 ::: column {width=1fr}
-{.reveal}
 :::: group
 ### 27 benchmarks
 
-12 macro, over 400 lines
+17 with heterogeneous data
 
-15 micro: `fib`, `tak`, `sum`...
+10 without
 ::::
 ::: /column
 ::: column {width=1fr}
-{.reveal}
 :::: group
 ### 60 configurations
 
@@ -46,7 +44,6 @@ Version limit 1 to 10
 ::::
 ::: /column
 ::: column {width=1fr}
-{.reveal}
 :::: group
 ### 3 measures
 
@@ -88,4 +85,3 @@ reveal 2, hf-arrow 2     # second bullet, arrow gone
 
 ::include{file="plots/lv-typechecks.md"}
 ::include{file="plots/lv-compile-time.md"}
-::include{file="plots/lv-versions.md"}

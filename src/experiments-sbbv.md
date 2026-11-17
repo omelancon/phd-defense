@@ -38,7 +38,6 @@ digraph setup {
 
 ::::: columns
 ::: column {width=1fr}
-{.reveal}
 :::: group
 ### 19 benchmarks
 
@@ -48,7 +47,6 @@ digraph setup {
 ::::
 ::: /column
 ::: column {width=1fr}
-{.reveal}
 :::: group
 ### 8 configurations
 
@@ -58,7 +56,6 @@ Version limit 1 to 5, 10, 20
 ::::
 ::: /column
 ::: column {width=1fr}
-{.reveal}
 :::: group
 ### 4 measures
 

@@ -1,0 +1,21 @@
+/* Classes that lay out whole slides of the deck, for plain Markdown and containers (no component).
+   Loaded with the `title-page` component (src/lattice_plugins.py), which every build uses. */
+
+/* `# Table of Contents {.toc}`: the list takes the height of the slide, its entries spread evenly */
+.lt-slide.toc .lt-body>ol{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-evenly;
+  margin:0 0 28px;padding-left:1.6em;font-family:var(--lt-font-head);font-size:46px;font-weight:600;
+  color:var(--lt-accent)}
+.lt-slide.toc .lt-body>ol>li{padding-left:.35em}
+.lt-slide.toc .lt-body>ol h2{font-size:46px}
+
+/* `::: corner-badge` around a `::detour-badge`: the badge sits in the top right corner of the slide,
+   level with its title and out of the flow (it takes no room from the slide's content), smaller and
+   muted until hovered, for a detour the talk does not announce */
+.corner-badge{position:absolute;right:72px;top:66px}
+.corner-badge .lt-detour-badge{font-size:16px;padding:5px 12px;gap:8px;opacity:.55}
+.corner-badge .lt-detour-badge:hover,.corner-badge .lt-detour-badge:focus-visible{opacity:1}
+
+/* `::: thank-you`: the closing words, large, at the bottom of the Conclusion slide */
+.thank-you{margin-top:auto;padding-bottom:10px;text-align:center}
+.thank-you p{margin:0;font-family:var(--lt-font-head);font-size:76px;font-weight:650;line-height:1.1;
+  letter-spacing:-.015em;color:var(--lt-accent)}
