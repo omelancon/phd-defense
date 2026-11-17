@@ -1,0 +1,5 @@
+node p(x: #|@int|#int#|@end|#) returns (y: int);
+let y = x * x + x; tel
+
+-- x:   5    10    #|@real|#3.14#|@end|#
+-- y:   30   110   #|@error|#type error#|@end|#

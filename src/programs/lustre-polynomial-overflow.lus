@@ -1,0 +1,8 @@
+node p(x: int) returns (y: int);
+let y = x * x + x; tel
+
+node p_real(x: real) returns (y: real);
+let y = x * x + x; tel
+
+-- x:   5    10    46341
+-- y:   30   110   #|@overflow|#-2147432674#|@end|#

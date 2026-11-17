@@ -1,0 +1,2 @@
+node p(x: int) returns (y: int);
+let y = x * x + x; tel

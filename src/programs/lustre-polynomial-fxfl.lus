@@ -1,0 +1,8 @@
+node p(x: int) returns (y: int);
+let y = x * x + x; tel
+
+#|@preal|#node p_real(x: real) returns (y: real);
+let y = x * x + x; tel#|@end|#
+
+-- x:   5    10
+-- y:   30   110

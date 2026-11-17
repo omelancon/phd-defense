@@ -151,3 +151,11 @@ Requests for the Lattice developers, from the defense deck.
    Wanted: the fields of `meta` that a render read become part of its cache entry (record the reads on
    `RenderContext.meta`, as `ctx.path` records file dependencies), or simply `meta.title`,
    `meta.author` and `meta.date` in every key.
+
+10. A highlighter for a language Pygments does not know (detour "Or Maybe in Lustre?", src/preface.md)
+
+   Need: Lustre code in a `code-morph`, with its keywords (node, returns, let, tel) highlighted.
+   Today: `lang=` takes Pygments lexer names only, and Pygments has none for Lustre. The deck uses
+   `lang=ada`, the closest: `--` comments and numbers are right, no keyword is highlighted.
+   Wanted: a way for `lattice_plugins.py` to register a lexer (a Pygments `RegexLexer` class under a
+   name usable in `lang=`), or a `keywords:` option on the code components for a small language.
