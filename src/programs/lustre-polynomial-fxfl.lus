@@ -1,8 +1,9 @@
 node p(x: int) returns (y: int);
 let y = x * x + x; tel
+-- x:   5    10    3.14         46341
+-- y:   30   110   type error   -2147432674
 
 #|@preal|#node p_real(x: real) returns (y: real);
-let y = x * x + x; tel#|@end|#
-
--- x:   5    10
--- y:   30   110
+let y = x * x + x; tel
+-- x:   3.14
+-- y:   12.9996#|@end|#

@@ -84,27 +84,25 @@ You turn to Vélus!
 ```code-morph {#poly-lustre lang=ada room=max}
 versions:
   - file: programs/lustre-polynomial.lus
-  - file: programs/lustre-polynomial-flows.lus
-  - file: programs/lustre-polynomial-flows.lus
-    highlight: [int, real, error]
+  - file: programs/lustre-polynomial.lus
+    highlight: [real, error]
+  - file: programs/lustre-polynomial.lus
+    highlight: overflow
   - file: programs/lustre-polynomial-fxfl.lus
     highlight: preal
-  - file: programs/lustre-polynomial-overflow.lus
-    highlight: overflow
 ```
 :::
 
 {.reveal}
-- Statically typed: `int` and `real` do not mix
-- One node per type
-- Overflow is a silent wrap-around (in C, depends on target)
+- Statically typed
+- Wraparound on 32-bit overflow
+- `int` and `real` do not mix
 
 ```timeline
-reveal +1                        # the node
-poly-lustre +1                   # flows of inputs and outputs
+reveal +1                        # the int node, with its flows of inputs and outputs
 poly-lustre +1, reveal +1        # a real input is a type error
-poly-lustre +1, reveal +1        # a second node for real
 poly-lustre +1, reveal +1        # the overflow
+poly-lustre +1, reveal +1        # a second node for real, with its flows
 ```
 ::: /detour
 # Example: My Favorite Polynomial (Attempt 3)
