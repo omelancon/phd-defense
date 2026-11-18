@@ -79,7 +79,7 @@ reveal +1
 
 {.reveal}
 :::group
-You turn to Vélus!
+You turn to Lustre!
 
 ```code-morph {#poly-lustre lang=ada room=max}
 versions:
