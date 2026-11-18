@@ -29,7 +29,7 @@ versions:
 {.reveal}
 - Statically typed for `int`
 - Workaround gymnastics for `float`
-- It does not cover overflows!
+- Oops! Undefined behavior!
 
 ```timeline
 reveal ..2
@@ -95,7 +95,7 @@ versions:
 
 {.reveal}
 - Statically typed
-- Wraparound on 32-bit overflow
+- Wrap-around on 32-bit overflow
 - `int` and `real` do not mix
 
 ```timeline
@@ -124,7 +124,7 @@ You decide to try dynamic languages.
 :::
 
 {.reveal}
-It just works! But what is the catch?
+Finally, the expected result! But what is the catch?
 
 {.reveal}
 ```plot {backend=vega source="plots/polynomial_bench.py:polynomial_bench" width=11 height=1.6}
@@ -178,7 +178,7 @@ reveal +1, perf-morph -2      # more flexible...
 # Object of this Talk {.center}
 
 ```statement
-How to deduce **type information ahead of time** in dynamic languages to **remove run-time type checks**?
+How to deduce **information ahead of time** in about a program to **remove run-time checks**?
 ```
 
 # Table of Contents {.toc}
