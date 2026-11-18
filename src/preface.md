@@ -178,7 +178,7 @@ reveal +1, perf-morph -2      # more flexible...
 # Object of this Talk {.center}
 
 ```statement
-How to deduce **information ahead of time** in about a program to **remove run-time checks**?
+How to deduce **information ahead of time** about a program to **remove run-time checks**?
 ```
 
 # Table of Contents {.toc}
