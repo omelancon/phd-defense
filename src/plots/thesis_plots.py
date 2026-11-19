@@ -372,8 +372,8 @@ def lv_operators_compile_time_all(legend=True, title=None):
 # program without any optimization, for the benchmarks that do not read from heterogeneous data
 # structures (Figure 9) and for those that do (Figure 10). As in the paper: ΛV with the arithmetic
 # heuristic and operators as hyperfunctions in the heuristic's blue (the line is the geometric mean
-# over the benchmarks of the group, the shaded area spans their minimum and maximum), and Bigloo as a
-# red line at the geometric mean of its type checks over the same benchmarks. No SBBV series.
+# over the benchmarks of the group; unlike the paper, no area for their minimum and maximum), and
+# Bigloo as a red line at the geometric mean of its type checks over the same benchmarks. No SBBV series.
 # The data is a copy in data/paper-figures/lv/ (see its README.md).
 PAPER_DATA = DATA.parent / "paper-figures" / "lv"
 # The benchmarks of Figure 9 (NO_HETERO_DS_BENCHMARKS of lambda-versioning/benchmarks/makefile);
@@ -399,8 +399,7 @@ def _lv_paper_typechecks(group: str, legend=True, title=None) -> dict:
     rows = _dict_rows(PAPER_DATA / f"ALL.typechecks.arithmetic.{group}.csv")
     limits = [int(r["version"]) for r in rows]
     bigloo = _bigloo_geomean(group == "hetero-ds")
-    values = [{"limit": int(r["version"]), "series": "ΛV", "value": float(r["geomean"]),
-               "min": float(r["min"]), "max": float(r["max"])} for r in rows]
+    values = [{"limit": int(r["version"]), "series": "ΛV", "value": float(r["geomean"])} for r in rows]
     values += [{"limit": n, "series": "Bigloo", "value": bigloo} for n in (limits[0], limits[-1])]
     color = {"field": "series", "type": "nominal", "scale": PAPER_COLORS,
              "legend": _legend("top-right") if _flag("legend", legend) else None}
@@ -410,22 +409,11 @@ def _lv_paper_typechecks(group: str, legend=True, title=None) -> dict:
         "data": {"values": values},
         "encoding": {"x": _x_axis(limits, "No ΛV"), "y": _y_axis("Relative type checks", [0, 1], ".1f")},
         "layer": [
-            # minimum to maximum over the benchmarks of the group
-            {"transform": only_lv, "mark": {"type": "area", "color": blue, "opacity": 0.16},
-             "encoding": {"y": {"field": "min", "type": "quantitative"}, "y2": {"field": "max"}}},
-            {"transform": only_lv,
-             "mark": {"type": "line", "color": blue, "strokeWidth": 1, "strokeDash": [5, 4], "opacity": 0.7},
-             "encoding": {"y": {"field": "min", "type": "quantitative"}}},
-            {"transform": only_lv,
-             "mark": {"type": "line", "color": blue, "strokeWidth": 1, "strokeDash": [5, 4], "opacity": 0.7},
-             "encoding": {"y": {"field": "max", "type": "quantitative"}}},
             {"mark": {"type": "line", "strokeWidth": 2.5}, "encoding": {"color": color}},
             {"transform": only_lv, "mark": {"type": "point", "filled": True, "size": 55, "color": blue},
              "encoding": {"tooltip": [
                  {"field": "limit", "type": "quantitative", "title": "version limit"},
-                 {"field": "value", "type": "quantitative", "format": ".3f", "title": "geometric mean"},
-                 {"field": "min", "type": "quantitative", "format": ".3f", "title": "minimum"},
-                 {"field": "max", "type": "quantitative", "format": ".3f", "title": "maximum"}]}},
+                 {"field": "value", "type": "quantitative", "format": ".3f", "title": "geometric mean"}]}},
         ],
     }
     title = _title(title, None)

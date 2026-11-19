@@ -14,24 +14,19 @@
 **Why?**
 
 {.reveal}
-1. SBBV propagates information *forward only*.
-    - Propagating from a function's exit site to the call site requires *backward propagation*.
-2. Call sites have a single return point.
+- Call sites have a single return point.
     - This acts as a join point for all exit sites, losing context precision.
 
 {.reveal}
 **Solution**
 
 {.reveal}
-1. Backward propagation from functions' exit sites to call sites.
-2. Duplicate entry points and return points to preserve context precision.
+- Duplicate entry points and return points to preserve context precision.
 
 ```timeline
 reveal +2
 reveal +2
-reveal +1
 reveal +2
-reveal ..end
 ```
 
 # Framing the problem with an example {#lv-framing .small}
@@ -56,7 +51,6 @@ versions:
 :::/column
 :::column {#sq-notes width=0}
 {.reveal}
-- This conditional type information is lost at the return point
 - We want the analysis to define specialized call interfaces:
   {.reveal}
   - If the argument is a **fixnum**, provide one return point for **fixnum** and one for **bignum**
@@ -110,9 +104,6 @@ reveal ..end
 
 {.reveal}
 - Transform the source program into one with **multi-entry/multi-return functions**
-- Context at call sites propagates information to generate specialized entry points
-- Entry points track the exit sites they can reach
-- When a specialized exit site is discovered/removed, its call sites are notified and updated
 
 {.reveal}
 **Algorithm sketch**
@@ -125,7 +116,6 @@ reveal ..end
 
 ```timeline
 reveal +2
-reveal ..5
 reveal +2               # "Algorithm sketch" with its first point
 reveal ..end
 ```
@@ -170,39 +160,8 @@ steps:
   - {to: ex-lv.J1, to_anchor: right, angle: 340, length: 120, label: "as exit sites are found in polynomial"}
   - {to: ex-lv.N1, to_anchor: bottom, angle: 250, length: 230, label: "specialized return points are created"}
   - null
-  - {to: "ex-lv.A1->B1", angle: 100, length: 70, label: "indices define an ordering on which caller and callee agree"}
-  - {to: "ex-lv.A1->B5", angle: 80, length: 70, label: "the same return point can be passed at multiple indices (due to merge)"}
-  - null
   - {to: ex-lv.M1, to_anchor: 200, angle: 235, length: 150, label: "flonum input"}
   - {to: ex-lv.M1, to_anchor: 200, angle: 235, length: 150, label: "fixnum input"}
-```
-
-```arrow {#ex-idx-u}
-steps:
-  - null
-  - {to: ex-lv.U1, to_anchor: bottom, angle: 328, length: 181}
-  - null
-```
-
-```arrow {#ex-idx-w follow=ex-idx-u}
-steps:
-  - null
-  - {to: ex-lv.W1, to_anchor: bottom, angle: 308, length: 127}
-  - null
-```
-
-```arrow {#ex-idx-x follow=ex-idx-u}
-steps:
-  - null
-  - {to: ex-lv.X1, to_anchor: bottom, angle: 266, length: 98, label: "exit contexts are assigned indices"}
-  - null
-```
-
-```arrow {#ex-idx-z follow=ex-idx-u}
-steps:
-  - null
-  - {to: ex-lv.Z1, to_anchor: bottom, angle: 227, length: 137}
-  - null
 ```
 
 ```timeline
@@ -234,12 +193,8 @@ ex-lv 53, ex-notes 17           # J1 is an exit site of polynomial
 ex-notes 18                     # so main gets the return point N1
 ex-notes 19
 ex-lv ..end-2                   # the rest of the run, up to the done frame
-ex-idx-u 1                      # the four exit sites of square, with their followers
-ex-idx-u end, ex-notes 20       # the return edge of index 0
-ex-notes 21                     # B5 is passed at two indices
-ex-notes 22
-ex-lv end-1, ex-notes 23        # path: (read) returns a flonum
-ex-lv end, ex-notes 24          # path: (read) returns a fixnum, no overflow
+ex-lv end-1, ex-notes 20        # path: (read) returns a flonum
+ex-lv end, ex-notes 21          # path: (read) returns a fixnum, no overflow
 ```
 
 # Recursive example: Fibonacci {#lv-fib .small}

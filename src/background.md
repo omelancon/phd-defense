@@ -81,8 +81,6 @@ reveal ..8, findv-morph ..end          # each sub-bullet with its highlight
 **Algorithm sketch:**
 
 {.reveal}
-- Propagate abstract values through the control-flow graph
-- Start from an entry point with a generic context
 - A block's context is *at least* the union of its predecessors'
 - Branches narrow contexts flowing to their successors
 - Repeat until a fixed point is reached
@@ -110,17 +108,9 @@ paths:
 :::/column
 :::/columns
 
-```arrow {#overview-cfg-parts}
-steps:
-  - null
-  - {to: overview-cfg.A, to_anchor: top, length: 60, label: "control-flow graph"}
-  - null
-```
-
 ```arrow {#overview-parts}
 steps:
   - null
-  - {to: overview-cfg.A, to_anchor: top, angle: 120, length: 90, label: "entry point"}
   - {to: overview-cfg.D, to_anchor: left, angle: 200, length: 90, label: "join point"}
   - {to: overview-cfg.A, to_anchor: right, angle: 290, length: 80, label: "branch point"}
   - null
@@ -130,10 +120,8 @@ steps:
 reveal +1
 reveal +1                          # sound approximation
 reveal +1                          # abstract values
-reveal +2, overview-run 1, overview-cfg-parts 1   # "Algorithm sketch" with "Propagate": every block lit, the CFG named
-reveal +1, overview-cfg-parts end, overview-run 2, overview-parts 1   # lights and arrows go away: entry point
-reveal +1, overview-parts 2, overview-run 5        # union at the join point
-reveal +1, overview-parts 3, overview-run 2        # narrowing at the branch point
+reveal +2, overview-parts 1, overview-run 5        # "Algorithm sketch" with union at the join point
+reveal +1, overview-parts 2, overview-run 2        # narrowing at the branch point
 reveal +1, overview-parts end, overview-run 0      # fixed point
 reveal +3                         # "Dynamic languages" with its point; the Union and Narrowing badges appear
 ```

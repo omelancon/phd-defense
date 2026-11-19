@@ -12,4 +12,12 @@
 :::/columns
 
 Type checks executed, relative to the source program without any optimization (lower is better).\
-**Lines**: geometric means, ΛV in blue and Bigloo in red. **Dashed area**: minimum and maximum of ΛV.
+**Lines**: geometric means, ΛV in blue and Bigloo in red.
+
+::: corner-badge
+::detour-badge{ref=lv-setup-detour}
+::: /corner-badge
+
+::: detour {#lv-setup-detour label="Experimental Setup" key=s}
+::include{file="../lv-setup.md"}
+::: /detour
