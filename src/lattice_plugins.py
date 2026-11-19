@@ -126,6 +126,7 @@ class HasseAnim(Component):
 
 class StatementOptions(BaseModel):
     model_config = ConfigDict(extra="forbid")
+    note: str = ""  # a footnote under the sentence, small and muted (mark its anchor with `*` in the sentence)
 
 
 _KEY = re.compile(r"\*\*(.+?)\*\*", re.S)
@@ -136,10 +137,12 @@ class Statement(Component):
     """A key sentence set large on its own slide (the object of the thesis, say).
 
     The body is the sentence as plain text; ``**words**`` are its key phrases, set in the accent
-    colour. Styled by plugins/statement.css with the theme's variables, so it follows the theme.
+    colour. ``note="..."`` adds a footnote under the sentence. Styled by plugins/statement.css with
+    the theme's variables, so it follows the theme.
     """
 
     Options = StatementOptions
+    version = "2"
     body = "text"
     css = [str(HERE / "statement.css")]
 
@@ -148,7 +151,10 @@ class Statement(Component):
         if not text:
             raise ComponentError("write the sentence in the body of the block")
         text = _KEY.sub(r'<span class="lt-statement-key">\1</span>', html.escape(text, quote=False))
-        return RenderResult(f'<div class="lt-statement"><p>{text}</p></div>')
+        note = ""
+        if opts.note.strip():
+            note = f'<div class="lt-statement-note">{html.escape(" ".join(opts.note.split()), quote=False)}</div>'
+        return RenderResult(f'<div class="lt-statement"><div><p>{text}</p>{note}</div></div>')
 
 
 class RelatedWorkNoteOptions(BaseModel):

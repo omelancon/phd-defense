@@ -171,8 +171,8 @@ reveal +1, perf-morph -2      # more flexible...
 
 # Object of this Talk {.center}
 
-```statement
-How to deduce **information ahead of time** about a program to **remove run-time checks**?
+```statement {note="* In this talk, mostly type checks. In general, any branching test."}
+How to deduce **information ahead of time** about a program to **remove run-time checks***?
 ```
 
 # Table of Contents {.toc}

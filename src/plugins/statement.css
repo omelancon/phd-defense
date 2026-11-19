@@ -10,3 +10,6 @@
    the end of a line moves to the next line and strands the words before it, depending on the
    machine's font (the theme's fonts are system fonts) */
 .lt-statement-key{color:var(--lt-accent);font-weight:650}
+/* footnote under the sentence (`note=` option), aligned with the sentence's text */
+.lt-statement-note{margin:-22px 0 40px;padding-left:44px;text-align:left;font-family:var(--lt-font-body);font-size:20px;
+  line-height:1.4;color:var(--lt-muted)}
