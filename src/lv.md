@@ -59,9 +59,9 @@ versions:
 - This conditional type information is lost at the return point
 - We want the analysis to define specialized call interfaces:
   {.reveal}
-  - If the argument is a fixnum, provide one return point for fixnum and one for bignum
-  - If the argument is a flonum, the result is always a flonum
-  - If the argument is unknown, it could be a fixnum, flonum or another number, provide a return point for each
+  - If the argument is a **fixnum**, provide one return point for **fixnum** and one for **bignum**
+  - If the argument is a **flonum**, the result is always a **flonum**
+  - If the argument is **unknown**, it could be a **fixnum**, **flonum** or **another number**, provide a return point for each
 :::/column
 :::column {#sq-col width=0}
 ```bbv-anim {#sq-sbbv program="programs/square.bbv" algorithm=sbbv heuristic=arithmetic limit=3 direction=TB height=480}

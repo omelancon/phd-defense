@@ -22,7 +22,6 @@ align: right
 ::include{file="preface.md"}
 ::include{file="background.md"}
 ::include{file="sbbv.md"}
-::include{file="experiments-sbbv.md"}
 ::include{file="lv.md"}
 ::include{file="experiments-lv.md"}
 ::include{file="improvements.md"}

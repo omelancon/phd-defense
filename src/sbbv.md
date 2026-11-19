@@ -170,8 +170,6 @@ steps:
   - null
   - {to: vp-sbbv.L3, to_anchor: bottom, angle: 290, length: 110, label: "merge"}
   - null
-  - {to: vp-sbbv.L5, to_anchor: bottom, angle: 290, length: 110, label: "merge"}
-  - null
 ```
 
 ```arrow {#vp-paths}
@@ -200,8 +198,7 @@ vp-sbbv 30..46                                      # second iteration; L3 queue
 vp-merges 1                                         # L3 will be merged
 vp-sbbv 47, vp-merges 2                             # L2 and L3 merge into L4 (widened)
 vp-sbbv 48..67                                      # L4 specialized, its path queues L5; over the limit again
-vp-merges 3                                         # L5 will be merged
-vp-sbbv 68, vp-merges 4                             # L4 and L5 merge into L6
+vp-sbbv 68                                          # L4 and L5 merge into L6
 vp-sbbv 69..71                                      # L6 specialized; before B4 jumps to C3
 vp-sbbv 72                                          # C3 is reused
 vp-sbbv 73                                          # done
@@ -267,5 +264,14 @@ width fv-src=0 fv-follow-col=1fr fv-sbbv-col=7fr, fv-goal +1     # SBBV, with th
 fv-sbbv ..end-1                                                      # the whole run of SBBV on findv
 fv-spec 1, fv-sbbv ..end                                           # the increment of the index in the hot loop
 fv-spec ..end                                                      # all arrows
-fv-morph 2, width fv-src=1fr fv-follow-col=0 fv-sbbv-col=0, fv-goal +1               # Reopen the source code
+fv-morph 2, width fv-src=1fr fv-follow-col=0 fv-sbbv-col=0, fv-goal +1, reveal 1     # Reopen the source code; the results badge appears
 ```
+
+{.reveal}
+::: corner-badge
+::detour-badge{ref=sbbv-experiments}
+::: /corner-badge
+
+::: detour {#sbbv-experiments label="Experimental results" key=r}
+::include{file="experiments-sbbv.md"}
+::: /detour
