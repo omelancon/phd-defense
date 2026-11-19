@@ -7,14 +7,13 @@
 # Runs are interleaved (one run of each program per round); prints the median wall-clock time.
 #   usage: ./run.sh [N] [ROUNDS]     N must be a multiple of 1024 (one Lustre reaction = 1024 calls)
 # Results of 2026-11-19 (N = 919227392, chosen so that C takes about 0.5 s; x = 5; 5 rounds;
-# gcc 13.3.0, OCaml 4.14.1, lv6 v6.113.1, Gambit v4.9.8, CPython 3.13.18) are in ../polynomial-bench.csv.
+# gcc 13.3.0, lv6 v6.113.1, Gambit v4.9.8, CPython 3.13.18) are in ../polynomial-bench.csv.
 set -e
 cd "$(dirname "$0")"
 N=${1:-919227392}
 ROUNDS=${2:-5}
 X=5
 gcc -O2 -o c.exe bench_c.c
-ocamlopt -o ml.exe bench_ml.ml
 gsc -exe -o scm.exe bench_scm.scm
 rm -rf lus && mkdir lus && cp bench.lus lus/
 ( cd lus && lv6 bench.lus -n bench -2c -2csf >/dev/null 2>&1 &&
@@ -23,7 +22,7 @@ rm -rf lus && mkdir lus && cp bench.lus lus/
 python3 - "$N" "$X" "$ROUNDS" <<'PY'
 import statistics, subprocess, sys, time
 n, x, rounds = sys.argv[1], sys.argv[2], int(sys.argv[3])
-progs = [("C", ["./c.exe"]), ("OCaml", ["./ml.exe"]), ("LV6", ["./lus.exe"]),
+progs = [("C", ["./c.exe"]), ("LV6", ["./lus.exe"]),
          ("Gambit", ["./scm.exe"]), ("Python", ["python3", "bench_py.py"])]
 times = {name: [] for name, _ in progs}
 outs = {}
@@ -40,4 +39,4 @@ for name, _ in progs:
     ok = got == expected or (name == "LV6" and got % 2**32 == expected % 2**32)
     print(f"{name:7} {statistics.median(times[name]):8.3f} s   (sum {outs[name]}{'' if ok else '  WRONG'})")
 PY
-rm -rf c.exe ml.exe scm.exe lus.exe lus bench_ml.cm* bench_ml.o
+rm -rf c.exe scm.exe lus.exe lus

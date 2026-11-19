@@ -1,4 +1,4 @@
-"""Vega-Lite spec for the polynomial benchmark of the preface (slide "Attempt 4").
+"""Vega-Lite spec for the polynomial benchmark of the preface (slide "Attempt 3").
 
 The data is plots/polynomial-bench.csv, measured by polynomial-bench/run.sh: each program reads
 N and x from standard input, calls p(x) = x*x + x N times (N = 919227392, so that C takes about
@@ -6,7 +6,7 @@ N and x from standard input, calls p(x) = x*x + x N times (N = 919227392, so tha
 runs. The Lustre program is compiled by lv6 to C and run by a small driver (see bench.lus).
 
 Each bar has its own colour (column `color` of the CSV), from the IBM colour-blind safe palette
-used across the deck, matched to the logos where it can be: OCaml orange, Gambit amber, Python blue,
+used across the deck, matched to the logos where it can be: Gambit amber, Python blue,
 and the remaining purple for GCC; LV6 takes the red of the Verimag logo (#e13d25).
 """
 from __future__ import annotations

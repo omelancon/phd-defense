@@ -40,36 +40,7 @@ poly-morph +1
 poly-morph +1, reveal +1
 ```
 
-# Example: My Favorite Polynomial (Attempt 2)
-
-{.reveal}
-:::group
-You turn to OCaml!
-
-```code-morph {#poly-morph2 lang=ocaml room=max}
-versions:
-  - file: programs/ocaml-polynomial.ml
-  - file: programs/ocaml-polynomial-tests.ml
-  - file: programs/ocaml-polynomial-tests.ml
-    highlight: error
-  - file: programs/ocaml-polynomial-fxfl.ml
-```
-:::
-
-{.reveal}
-- Compile-time type error for `float` input
-- There is a fix, but...
-- Still a silent wrap-around for `int` overflow
-
-```timeline
-reveal +1
-poly-morph2 ..1
-poly-morph2 +1, reveal +1
-poly-morph2 +1, reveal +1
-reveal +1
-```
-
-# Example: My Favorite Polynomial (Attempt 3) {#lustre-polynomial}
+# Example: My Favorite Polynomial (Attempt 2) {#lustre-polynomial}
 
 {.reveal}
 :::group
@@ -99,7 +70,7 @@ poly-lustre +1, reveal +1        # the overflow
 poly-lustre +1, reveal +1        # a second node for real, with its flows
 ```
 
-# Example: My Favorite Polynomial (Attempt 4)
+# Example: My Favorite Polynomial (Attempt 3)
 
 {.reveal}
 :::group
