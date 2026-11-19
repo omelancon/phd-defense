@@ -61,11 +61,6 @@ versions:
 - There is a fix, but...
 - Still a silent wrap-around for `int` overflow
 
-{.reveal-with}
-::: group
-::detour-badge{ref=detour-lustre}
-::: /group
-
 ```timeline
 reveal +1
 poly-morph2 ..1
@@ -74,8 +69,7 @@ poly-morph2 +1, reveal +1
 reveal +1
 ```
 
-::: detour {#detour-lustre label="Or Maybe in Lustre?" key=l}
-# Or Maybe in Lustre? {#lustre-polynomial}
+# Example: My Favorite Polynomial (Attempt 3) {#lustre-polynomial}
 
 {.reveal}
 :::group
@@ -89,7 +83,7 @@ versions:
   - file: programs/lustre-polynomial.lus
     highlight: overflow
   - file: programs/lustre-polynomial-fxfl.lus
-    highlight: preal
+    highlight: [real-x, real-y]
 ```
 :::
 
@@ -104,8 +98,8 @@ poly-lustre +1, reveal +1        # a real input is a type error
 poly-lustre +1, reveal +1        # the overflow
 poly-lustre +1, reveal +1        # a second node for real, with its flows
 ```
-::: /detour
-# Example: My Favorite Polynomial (Attempt 3)
+
+# Example: My Favorite Polynomial (Attempt 4)
 
 {.reveal}
 :::group

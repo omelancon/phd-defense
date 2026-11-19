@@ -3,7 +3,7 @@ let y = x * x + x; tel
 -- x:   5    10    3.14         46341
 -- y:   30   110   type error   -2147432674
 
-#|@preal|#node p_real(x: real) returns (y: real);
+node p_real(x: #|@real-x|#real#|@end|#) returns (y: #|@real-y|#real#|@end|#);
 let y = x * x + x; tel
 -- x:   3.14
--- y:   12.9996#|@end|#
+-- y:   12.9996

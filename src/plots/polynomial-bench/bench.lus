@@ -1,0 +1,15 @@
+-- Polynomial benchmark in Lustre (lv6). A Lustre program has no loop: it reacts to a stream
+-- of inputs. lus_driver.c runs N / 1024 reactions with the hidden input x, and each reaction
+-- calls p 1024 times through the red iterator (an array of 1024 copies of x, folded with it).
+-- This was the fastest of the encodings tried; one reaction per call of p (acc = y -> pre acc + y)
+-- pays for the stream memories at every call and was 1.5 to 1.8 times slower.
+node p(x: int) returns (y: int);
+let y = x * x + x; tel
+
+node it(acc, x: int) returns (acc1: int);
+let acc1 = acc + p(x); tel
+
+node bench(x: int) returns (acc: int);
+let
+  acc = red<<it; 1024>>(0 -> pre acc, x^1024);
+tel
