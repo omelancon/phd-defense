@@ -194,9 +194,15 @@ ex-notes 18                     # so main gets the return point N1
 ex-notes 19
 ex-lv ..end-2                   # the rest of the run, up to the done frame
 ex-lv end-1, ex-notes 20        # path: (read) returns a flonum
-ex-lv end, ex-notes 21          # path: (read) returns a fixnum, no overflow
+ex-lv end, ex-notes 21, reveal 1   # path: (read) returns a fixnum, no overflow; the Fibonacci badge appears
 ```
 
+{.reveal}
+::: corner-badge
+::detour-badge{ref=detour-fib}
+::: /corner-badge
+
+::: detour {#detour-fib label="Fibonacci" key=f}
 # Recursive example: Fibonacci {#lv-fib .small}
 
 :::columns
@@ -225,6 +231,7 @@ fib-morph 1                     # expand the operators
 width fib-src=0 fib-col=1fr     # the code collapses; the ΛV run takes the whole width
 fib-lv 1..end                   # the run, one frame per step
 ```
+::: /detour
 
 # Example: findv {#lv-findv .small}
 

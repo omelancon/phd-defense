@@ -73,9 +73,7 @@ reveal ..8, findv-morph ..end          # each sub-bullet with its highlight
 :::columns
 :::column {width=2fr}
 {.reveal}
-- Based on abstract interpretation
-- Technique for sound approximation of program semantics
-- Executes on abstract values (sets of concrete values)
+Executes on abstract values (sets of concrete values)
 
 {.reveal}
 **Algorithm sketch:**
@@ -117,8 +115,6 @@ steps:
 ```
 
 ```timeline
-reveal +1
-reveal +1                          # sound approximation
 reveal +1                          # abstract values
 reveal +2, overview-parts 1, overview-run 5        # "Algorithm sketch" with union at the join point
 reveal +1, overview-parts 2, overview-run 2        # narrowing at the branch point

@@ -151,8 +151,7 @@ versions:
 ::: /column
 ::: column {width=6fr}
 {.reveal}
-- static languages (C, OCaml) test types at compile time
-- dynamic languages (Scheme, JavaScript, Python) check them at run time
+- dynamic languages (Scheme, JavaScript, Python) check types at run time
   {.reveal}
   - type checks
   - overflow checks
@@ -162,8 +161,7 @@ versions:
 
 ```timeline
 reveal 1                      # the question and the program
-reveal +1                     # operators expanded; static languages
-reveal +1, perf-morph +1      # dynamic languages, nothing highlighted
+reveal +1, perf-morph +1      # dynamic languages; operators expanded
 reveal +1, perf-morph +2      # type checks highlighted
 reveal +1, perf-morph +1      # overflow checks highlighted
 reveal +1, perf-morph -2      # more flexible...
