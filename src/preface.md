@@ -95,7 +95,7 @@ versions:
 
 {.reveal}
 - Statically typed
-- Wrap-around on 32-bit overflow
+- Wrap-around on 32-bit overflow (with default C backend)
 - `int` and `real` do not mix
 
 ```timeline
