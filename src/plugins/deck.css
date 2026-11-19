@@ -11,7 +11,7 @@
 /* `::: corner-badge` around a `::detour-badge`: the badge sits in the top right corner of the slide,
    level with its title and out of the flow (it takes no room from the slide's content), smaller and
    muted until hovered, for a detour the talk does not announce */
-.corner-badge{position:absolute;right:72px;top:66px}
+.corner-badge{position:absolute;right:72px;top:66px;display:flex;gap:10px}
 .corner-badge .lt-detour-badge{font-size:16px;padding:5px 12px;gap:8px;opacity:.55}
 .corner-badge .lt-detour-badge:hover,.corner-badge .lt-detour-badge:focus-visible{opacity:1}
 

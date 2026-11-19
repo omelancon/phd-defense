@@ -106,9 +106,15 @@ poly-sbbv 19, poly-versions 3                       # the generic and overflow v
 poly-sbbv 20, poly-versions end
 poly-sbbv ..end-2                                   # the rest of the specialization
 poly-sbbv +1, poly-spec-paths +1                    # the path of a flonum x: one flonum? test
-poly-sbbv +1, poly-spec-paths +1
+poly-sbbv +1, poly-spec-paths +1, reveal 2         # the path of a fixnum x; the Loops badge appears
 ```
 
+{.reveal}
+::: corner-badge
+::detour-badge{ref=detour-loops}
+::: /corner-badge
+
+::: detour {#detour-loops label="Loops" key=l}
 # SBBV: Behavior with loops {#sbbv-with-loops}
 :::columns
 :::column {#vp-src width=5fr}
@@ -207,6 +213,7 @@ vp-sbbv 75, vp-paths 2                              # path: the hot loop, after 
 vp-paths 3                                          # its loop head has no vector? check
 vp-sbbv 73, vp-paths end                            # back to the final graph, no highlight
 ```
+::: /detour
 
 # SBBV: Back to findv {#sbbv-back-to-findv}
 
@@ -236,6 +243,7 @@ show: [label, context, code]
 prims: {pred: {args: [any, any], result: bool}}
 thresholds: [sign, maxfix-1, maxfix]
 paths:
+  - versions: [L1, M1, N1, P1, S1, R1, T1, T2.1]
   - versions: [L6, M4, N1, P3, S3, R3, T3, T2.3]
 ```
 :::/column
@@ -247,6 +255,28 @@ steps:
   - {to: vec-check, to_anchor: top, angle: 15, length: 340, label: "reminder: goal is to eliminate this test"}
   - null
   - {to: ref-fix, to_anchor: right, angle: 15, length: 340, label: "next goal: eliminate these checks!"}
+```
+
+```arrow {#fv-heads}
+steps:
+  - null
+  - {to: fv-sbbv.L2, to_anchor: bottom, angle: 290, length: 110, label: "unrolling the loop, no more check"}
+  - null
+```
+
+```arrow {#fv-merges}
+steps:
+  - null
+  - {to: fv-sbbv.L3, to_anchor: bottom, angle: 290, length: 110, label: "merge"}
+  - null
+```
+
+```arrow {#fv-paths}
+steps:
+  - null
+  - {to: fv-sbbv.S1, to_anchor: top, angle: 70, length: 110, label: "unrolled first iteration"}
+  - {to: fv-sbbv.P3, to_anchor: bottom, angle: 290, length: 110, label: "hot loop"}
+  - null
 ```
 
 ```arrow {#fv-spec}
@@ -261,8 +291,17 @@ steps:
 ```timeline
 fv-morph 1, fv-goal 1                                              # the test to eliminate, highlighted
 width fv-src=0 fv-follow-col=1fr fv-sbbv-col=7fr, fv-goal +1     # SBBV, with the source CFG following, replaces the code
-fv-sbbv ..end-1                                                      # the whole run of SBBV on findv
-fv-spec 1, fv-sbbv ..end                                           # the increment of the index in the hot loop
+fv-sbbv 1..20                                                      # first iteration; T2.1 queues L2 (i: fx {1})
+fv-heads 1                                                         # the second version of the loop head
+fv-sbbv 21..22                                                     # L2 specialized: its vector? test is removed
+fv-sbbv 23, fv-heads end
+fv-sbbv 24..36                                                     # second iteration; L3 queued, L is over the limit
+fv-merges 1                                                        # L3 will be merged
+fv-sbbv 37, fv-merges 2                                            # L2 and L3 merge into L4 (widened)
+fv-sbbv ..end-2                                                    # the rest of the run of SBBV on findv
+fv-sbbv +1, fv-paths 1                                             # path: the unrolled first iteration
+fv-sbbv +1, fv-paths 2                                             # path: the hot loop, after the merges
+fv-paths end, fv-spec 1                                            # the increment of the index in the hot loop
 fv-spec ..end                                                      # all arrows
 fv-morph 2, width fv-src=1fr fv-follow-col=0 fv-sbbv-col=0, fv-goal +1, reveal 1     # Reopen the source code; the results badge appears
 ```

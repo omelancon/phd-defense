@@ -135,10 +135,16 @@ reveal +1, overview-cfg-parts end, overview-run 2, overview-parts 1   # lights a
 reveal +1, overview-parts 2, overview-run 5        # union at the join point
 reveal +1, overview-parts 3, overview-run 2        # narrowing at the branch point
 reveal +1, overview-parts end, overview-run 0      # fixed point
-reveal +2                         # "Dynamic languages" with its point
+reveal +3                         # "Dynamic languages" with its point; the Union and Narrowing badges appear
 ```
 
+{.reveal}
+::: corner-badge
+::detour-badge{ref=detour-union}
+::detour-badge{ref=detour-narrowing}
+::: /corner-badge
 
+::: detour {#detour-union label="Union" key=u}
 # Union of Incoming Contexts {#union-of-incoming-contexts}
 
 :::columns
@@ -218,7 +224,9 @@ union-ai 15..18           # C receives [1, maxfix+1] from B: union with widening
 union-lattice 8..10       # on the lattice: [0, maxfix] ∪ [1, maxfix+1], then widening
 union-ai ..end            # one more round changes nothing: the fixed point, [0, ∞)
 ```
+::: /detour
 
+::: detour {#detour-narrowing label="Narrowing" key=n}
 # Narrowing of Outgoing Contexts {#narrowing-of-outgoing-contexts}
 
 :::columns
@@ -258,6 +266,7 @@ narrow-type 2                            # fixnum?(x) holds: x is a fixnum in B
 narrow-type 3                             # fixnum?(x) fails: x is anything but a fixnum in C
 narrow-type ..end                         # B and C, then the fixed point
 ```
+::: /detour
 
 # Static Analysis of `findv` {#findv-absint}
 
